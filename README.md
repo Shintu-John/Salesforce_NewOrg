@@ -70,6 +70,10 @@ Salesforce_NewOrg/
 - 🚀 **Deployed**: Successfully deployed to NewOrg
 - ⏸️ **On Hold**: Waiting for dependencies or prerequisites
 
+### Scenario Type Legend
+- **Deployment Scenarios**: Code to deploy from OldOrg to NewOrg (bug fixes, new features, enhancements)
+- ⚠️ **Configuration Scenarios**: Existing code needs activation/configuration only (NOT new deployments)
+
 ### Batch 1: High Priority Scenarios (5/5 Ready ✅)
 
 | Scenario | Status | Priority | Estimated Time | Notes |
@@ -87,7 +91,7 @@ Salesforce_NewOrg/
 | [cs-invoicing](cs-invoicing/) | ✅ Ready | 🟡 Medium | 2-3 hours | Migration plan complete - Date/Description auto-population (Oct 10-15, 2025) |
 | [portal-exchange-email](portal-exchange-email/) | ✅ Ready | 🟡 Medium | 2-3 hours | Migration plan complete - SPF/DMARC fix (Oct 16, 2025) |
 | [transport-charges](transport-charges/) | ✅ Ready | 🔴 Critical | 3-4 hours | Migration plan complete - Bug fixes for missing & incorrect charges (Oct 14-15, 2025) |
-| [smartwaste-integration](smartwaste-integration/) | ✅ Ready | 🟡 Medium | 3-4 hours | Migration plan complete - Configuration-only (activate flows + schedule jobs) |
+| [smartwaste-integration](smartwaste-integration/) | ✅ Ready | 🟡 Medium | 3-4 hours | ⚠️ **CONFIGURATION SCENARIO** - Activate existing code (flows + scheduled jobs) - NOT a deployment |
 | quote-management | 📋 Planned | 🟡 Medium | TBD | Quote management improvements |
 | [more coming...] | 📋 Planned | - | TBD | Additional scenarios |
 
