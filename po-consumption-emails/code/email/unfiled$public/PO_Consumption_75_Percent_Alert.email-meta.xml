@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Notification sent when a Purchase Order reaches 75% of its maximum value. Alerts procurement team that PO is approaching limit.</description>
+    <encodingKey>UTF-8</encodingKey>
+    <name>PO Consumption 75 Percent Alert</name>
+    <style>none</style>
+    <subject>Purchase Order {!Order.OrderNumber} - 75% Consumed</subject>
+    <type>text</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

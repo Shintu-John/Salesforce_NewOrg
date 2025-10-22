@@ -1,0 +1,20 @@
+Purchase Order Consumption Alert - 50%
+
+This Purchase Order has reached 50% of its maximum value.
+
+Purchase Order Details:
+• PO Number: {!Order.OrderNumber}
+• PO Owner: {!Order.Owner}
+• Max Value: £{!Order.Max_Value__c}
+• Consumed Amount: £{!Order.Consumed_Amount__c}
+• Consumption Percentage: {!Order.Consumed_Amount_Percent__c}
+• PO Status: {!Order.Status}
+
+Action Required:
+Please review and obtain a new Purchase Order.
+
+View Purchase Order: {!Order.Link}
+
+---
+This is an automated notification from Salesforce.
+Please do not reply to this email.
