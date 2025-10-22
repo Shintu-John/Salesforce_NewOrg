@@ -79,6 +79,280 @@
 
 ---
 
+## Detailed Code Comparison (diff -u Results)
+
+**Analysis Date**: 2025-10-23
+**Comparison Tool**: `diff -u` (unified diff format)
+**Files Compared**:
+- **NewOrg**: /tmp/neworg-gap-analysis/classes/ProducerPlacedOnMarketTriggerHelper_NEWORG.cls (626 lines, Sept 19, 2025)
+- **OldOrg**: /tmp/neworg-gap-analysis/classes/ProducerPlacedOnMarketTriggerHelper_OLDORG.cls (440 lines, Oct 21, 2025)
+
+**Diff Output**: /tmp/neworg-gap-analysis/classes/ProducerPlacedOnMarketTriggerHelper_DIFF.txt
+
+### Diff Statistics
+
+| Metric | Value |
+|--------|-------|
+| **Total Diff Lines** | 1,071 lines |
+| **Code Reduction** | 186 lines removed (30% reduction) |
+| **NewOrg Lines** | 626 lines |
+| **OldOrg Lines** | 440 lines |
+| **Size Difference** | NewOrg 42% LARGER than OldOrg |
+
+### Major Code Changes Identified
+
+#### Change #1: Sharing Model Declaration (Line 1)
+
+**NewOrg (WRONG)**:
+```apex
+public class ProducerPlacedOnMarketTriggerHelper {
+```
+
+**OldOrg (CORRECT)**:
+```apex
+public without sharing class ProducerPlacedOnMarketTriggerHelper {
+```
+
+**Impact**: NewOrg inherits sharing from context, OldOrg explicitly bypasses sharing (correct for trigger helper).
+
+---
+
+#### Change #2: Issue #3 Bug - Wrong Reason Code (Lines 288-297 NewOrg vs 302-313 OldOrg)
+
+**NewOrg (BUGGY - Line 294)**:
+```apex
+else if(comparisonTonnage != null && comparisonTonnage > 0 && (currentTonnage == null || currentTonnage == 0)){
+    String questionName = generateOldCategoryQuestion(quarterWithYear, categoryType);
+    if (existingQuestions == null || !existingQuestions.contains(questionName)) {
+        questionsToInsert.add(new Validation_Question__c(
+            Producer_Placed_on_Market__c = record.Id,
+            Name = questionName,
+            Reason__c = 'New Category',  // BUG: Should be 'Zero Total'
+            Current_Tonnage_Stamp__c =  currentTonnage,
+            Comparision_Tonnage_Stamp__c =comparisonTonnage
+        ));
+    }
+}
+```
+
+**OldOrg (FIXED - Line 309)**:
+```apex
+// Check for DROPPED category (current is zero/null, comparison had value)
+else if(comparisonTonnage != null && comparisonTonnage > 0 && (currentTonnage == null || currentTonnage == 0)){
+    String questionName = generateOldCategoryQuestion(quarterWithYear, categoryType);
+    if (existingQuestions == null || !existingQuestions.contains(questionName)) {
+        questionsToInsert.add(new Validation_Question__c(
+            Producer_Placed_on_Market__c = record.Id,
+            Name = questionName,
+            Reason__c = 'Zero Total',  // FIXED: Correct reason code
+            Current_Tonnage_Stamp__c =  currentTonnage,
+            Comparision_Tonnage_Stamp__c =comparisonTonnage
+        ));
+    }
+}
+```
+
+**Verification Command**:
+```bash
+cd /tmp/neworg-gap-analysis/classes
+grep -n "generateOldCategoryQuestion" -A 8 ProducerPlacedOnMarketTriggerHelper_NEWORG.cls | grep "Reason__c"
+# Expected (WRONG): Reason__c = 'New Category',
+
+grep -n "generateOldCategoryQuestion" -A 8 ProducerPlacedOnMarketTriggerHelper_OLDORG.cls | grep "Reason__c"
+# Expected (CORRECT): Reason__c = 'Zero Total',
+```
+
+**Impact**: NewOrg shows "New Category" for dropped categories (confusing), OldOrg shows "Zero Total" (correct).
+
+---
+
+#### Change #3: Issue #4 - Code Deduplication (Lines 270-329 NewOrg vs 277-338 OldOrg)
+
+**NewOrg (OLD - DUPLICATE LOGIC)**:
+```apex
+// Separate check for last quarter new/dropped categories (lines 270-301)
+if(String.isNotBlank(record.Last_Quarter_Producer_Placed_on_Market__r?.Quarter_with_Year__c)){
+    String quarterWithYear = record.Last_Quarter_Producer_Placed_on_Market__r?.Quarter_with_Year__c;
+    Decimal comparisonTonnage = compareTonnageMap.get(quarterWithYear);
+    // ... new category check
+    // ... dropped category check (WITH BUG)
+}
+
+// Then SEPARATE loop for variances (lines 303-329)
+for (String quarterWithYear: compareTonnageMap.keyset()) {
+    // ... variance checking logic
+}
+```
+
+**OldOrg (NEW - UNIFIED LOOP)**:
+```apex
+// Build map for BOTH last quarter and last year (lines 277-280)
+Map<String, Decimal> compareTonnageMap = new Map<String, Decimal>{
+    record.Last_Quarter_Producer_Placed_on_Market__r?.Quarter_with_Year__c => lastQuarterTonnage,
+    record.Last_Year_Producer_Placed_on_Market__r?.Quarter_with_Year__c => lastYearTonnage
+};
+
+// Single unified loop for ALL comparisons (lines 283-338)
+for (String quarterWithYear: compareTonnageMap.keyset()) {
+    // Explicit null check for defensive programming
+    if(quarterWithYear == null || String.isBlank(quarterWithYear)) continue;
+
+    Decimal comparisonTonnage = compareTonnageMap.get(quarterWithYear);
+
+    // Check for NEW category
+    if(currentTonnage != null && currentTonnage > 0 && ...) { ... }
+    // Check for DROPPED category (FIXED reason code)
+    else if(comparisonTonnage != null && comparisonTonnage > 0 && ...) { ... }
+    // Check for VARIANCE
+    else if (comparisonTonnage != null && currentTonnage != null && ...) { ... }
+}
+```
+
+**Impact**: NewOrg has code duplication (harder to maintain), OldOrg has clean unified logic.
+
+---
+
+#### Change #4: Issue #5 - Boundary Conditions (Lines 354-369 NewOrg vs 362-382 OldOrg)
+
+**NewOrg (WRONG - OVERLAPPING BOUNDARIES)**:
+```apex
+private static Decimal getThreshold(Decimal currentTonnage, Map<String, Decimal> tonnageThresholds) {
+    if (currentTonnage >= 0.25 && currentTonnage <= 1) {  // Overlap at 1
+        return tonnageThresholds.get('0.25to1');
+    } else if (currentTonnage >= 1 && currentTonnage <= 5) {  // Overlap at 1, 5
+        return tonnageThresholds.get('1to5');
+    } else if (currentTonnage >= 5 && currentTonnage <= 15) {  // Overlap at 5, 15
+        return tonnageThresholds.get('5to15');
+    } else if (currentTonnage >= 15 && currentTonnage <= 50) {  // Overlap at 15, 50
+        return tonnageThresholds.get('15to50');
+    } else if (currentTonnage >= 50 && currentTonnage <= 200) {  // Overlap at 50, 200
+        return tonnageThresholds.get('50to200');
+    } else if (currentTonnage > 200) {
+        return tonnageThresholds.get('200plus');
+    }
+    return 0; // Default - BUG: Returns 0 for currentTonnage < 0.25
+}
+```
+
+**OldOrg (CORRECT - NON-OVERLAPPING + HANDLES < 0.25)**:
+```apex
+private static Decimal getThreshold(Decimal currentTonnage, Map<String, Decimal> tonnageThresholds) {
+    // Stakeholder confirmed: Small tonnages (< 0.25) should still be validated
+    // Use highest threshold (500%) for very small tonnages to catch significant variances
+    if (currentTonnage < 0.25) {
+        return tonnageThresholds.get('0.25to1'); // 500% threshold for small tonnages
+    } else if (currentTonnage >= 0.25 && currentTonnage < 1) {  // Non-overlapping
+        return tonnageThresholds.get('0.25to1'); // 500%
+    } else if (currentTonnage >= 1 && currentTonnage < 5) {
+        return tonnageThresholds.get('1to5'); // 350%
+    } else if (currentTonnage >= 5 && currentTonnage < 15) {
+        return tonnageThresholds.get('5to15'); // 300%
+    } else if (currentTonnage >= 15 && currentTonnage < 50) {
+        return tonnageThresholds.get('15to50'); // 250%
+    } else if (currentTonnage >= 50 && currentTonnage < 200) {
+        return tonnageThresholds.get('50to200'); // 200%
+    } else if (currentTonnage >= 200) {  // Changed from > to >=
+        return tonnageThresholds.get('200plus'); // 150%
+    }
+    return 0; // Should never reach here
+}
+```
+
+**Verification Command**:
+```bash
+cd /tmp/neworg-gap-analysis/classes
+grep -n "currentTonnage < 0.25" ProducerPlacedOnMarketTriggerHelper_OLDORG.cls
+# Expected: Line found with 500% threshold logic
+
+grep -n "currentTonnage < 0.25" ProducerPlacedOnMarketTriggerHelper_NEWORG.cls
+# Expected: NOT FOUND (missing small tonnage handling)
+```
+
+**Impact**:
+- **NewOrg**: Tonnages < 0.25 are IGNORED (returns 0, no validation question created)
+- **OldOrg**: Tonnages < 0.25 use 500% threshold (validated correctly)
+
+**Example**:
+- Tonnage = 0.1 tonnes (100 kg)
+  - **NewOrg**: No validation question (0% threshold = ignored)
+  - **OldOrg**: Validation question if variance > 500% (e.g., 0.1 → 0.8 = 800% variance)
+
+---
+
+#### Change #5: Issue #2 - Safety Comments (Line 310 NewOrg vs 316-319 OldOrg)
+
+**NewOrg (NO SAFETY COMMENT)**:
+```apex
+Decimal variance = Math.abs(((currentTonnage - comparisonTonnage) / comparisonTonnage) * 100);
+```
+
+**OldOrg (HAS SAFETY COMMENT)**:
+```apex
+// Check for VARIANCE (both have values)
+else if (comparisonTonnage != null && currentTonnage != null && comparisonTonnage > 0) {
+    // Safe: currentTonnage and comparisonTonnage guaranteed > 0 here due to line 316 check
+    // Formula: |((current - previous) / previous)| * 100 = percentage variance
+    Decimal variance = Math.abs(((currentTonnage - comparisonTonnage) / comparisonTonnage) * 100);
+```
+
+**Impact**: OldOrg documents why division by zero cannot occur, NewOrg doesn't.
+
+---
+
+### Summary of Code Differences
+
+| Change # | Type | NewOrg (WRONG) | OldOrg (CORRECT) | Severity |
+|----------|------|----------------|------------------|----------|
+| 1 | Sharing Model | No `without sharing` keyword | Has `without sharing` | LOW |
+| 2 | Issue #3 Bug | `Reason__c = 'New Category'` for dropped | `Reason__c = 'Zero Total'` for dropped | CRITICAL |
+| 3 | Issue #4 Dedup | Separate loops (code duplication) | Unified loop (DRY principle) | MEDIUM |
+| 4 | Issue #5 Boundary | Overlapping boundaries, no < 0.25 | Non-overlapping, handles < 0.25 | HIGH |
+| 5 | Issue #2 Safety | No safety comments | Has safety comments | LOW |
+
+**Total Issues in NewOrg**: 5 confirmed bugs/gaps
+**Total Lines Changed**: 1,071 lines in diff output
+**Code Reduction**: 30% (626 → 440 lines)
+
+---
+
+## Gap Resolution Checklist
+
+**COMPREHENSIVE CHECKLIST AVAILABLE**: /tmp/neworg-gap-analysis/GAP_RESOLUTION_CHECKLIST.md
+
+**Quick Checklist for Deployment**:
+
+### Phase 1: Deploy Missing Classes
+- [ ] Gap #2: ProducerSharingHelper.cls deployed
+- [ ] Gap #3: ProducerSharingHelperTest.cls deployed
+- [ ] Gap #4: UserSharingBackfillHelper.cls deployed
+- [ ] Gap #5: UserSharingBackfillHelperTest.cls deployed
+
+### Phase 2: Deploy Missing Triggers
+- [ ] Gap #11: Producer_Placed_on_Market__c trigger deployed
+- [ ] Gap #12: User trigger deployed
+- [ ] Gap #13-15: Additional triggers deployed (if any)
+
+### Phase 3: Deploy Updated Trigger Helper
+- [ ] Gap #1: ProducerPlacedOnMarketTriggerHelper.cls updated (v1.0 → v2.4)
+- [ ] Gap #6: Sharing model declaration verified (`without sharing`)
+- [ ] Gap #7: Issue #3 fix verified (`Reason__c = 'Zero Total'` for dropped categories)
+- [ ] Gap #8: Issue #4 fix verified (unified loop)
+- [ ] Gap #9: Issue #5 fix verified (boundary conditions, < 0.25 support)
+- [ ] Gap #10: Issue #2 fix verified (safety comments)
+
+### Phase 4: Verification and Testing
+- [ ] All test classes passed (100% coverage)
+- [ ] Manual Test: Issue #3 fix verified (dropped category reason code)
+- [ ] Manual Test: Issue #5 fix verified (small tonnage < 0.25 validated)
+- [ ] Manual Test: Trigger fires on insert/update
+- [ ] Manual Test: Validation questions created correctly
+- [ ] Production smoke test completed
+- [ ] User acceptance testing completed
+
+**Link to Full Documentation**: /tmp/neworg-gap-analysis/GAP_ANALYSIS_PRODUCER_PORTAL.md
+
+---
+
 ## Detailed Gap Analysis: OldOrg vs NewOrg
 
 ### Based on ACTUAL Query Results from NewOrg (2025-10-23)
