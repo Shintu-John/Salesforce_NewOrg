@@ -9,22 +9,26 @@
 
 ## Related Documentation
 
-**This migration plan consolidates multiple related documentation sources**:
+**This migration plan consolidates the following documentation** (component-based analysis):
 
 1. **EMAIL_TO_CASE_ASSIGNMENT_MASTER.md** - Primary implementation guide from OldOrg
 2. **OldOrg State README**: [/tmp/Salesforce_OldOrg_State/email-to-case-assignment/README.md](../../../Salesforce_OldOrg_State/email-to-case-assignment/README.md) - Current verified state
-3. **CASE_REOPENING_INCIDENT_2025-10-16.md** - Related incident documentation
-4. **DOMESTIC_CUSTOMER_EMAIL_ISSUE_FIX.md** - Email routing fix
-5. **USER_LORNA_BARSBY_EMAIL_FIX.md** - Specific user email correction
-6. **DAILY_REMINDER_EMAILS_COMPLETE_GUIDE.md** - Related case automation
+3. **CASE_REOPENING_INCIDENT_2025-10-16.md** - ✅ **CONSOLIDATED** - Incident when rlsServiceCaseAutoAssignTrigger was temporarily deactivated
+
+**Component Analysis - Why Consolidated**:
+- Core components: rlsServiceCaseAutoAssign.cls, rlsServiceCaseAutoAssignTest.cls, rlsServiceCaseAutoAssignTrigger.trigger
+- Case Reopening Incident is part of version history (V2 - temporary trigger deactivation)
+- Deploying V3 to NewOrg includes all fixes and optimizations from V1-V3
+- Must be deployed as single unit to avoid version conflicts
+
+**Separate Scenarios** (No Component Overlap):
+- ❌ `DOMESTIC_CUSTOMER_EMAIL_ISSUE_FIX.md` - Uses Domestic_Create_Job.flow (different system, see Scenario #18)
+- ❌ `USER_LORNA_BARSBY_EMAIL_FIX.md` - User object only (no case assignment logic, see Scenario #28)
+- ❌ `DAILY_REMINDER_EMAILS_COMPLETE_GUIDE.md` - Different flows and components (see Scenario #5)
 
 **Complete Mapping**: See [/home/john/Projects/Salesforce/Documentation/DOCUMENTATION_MAPPING_AND_SCENARIOS.md](../../Documentation/DOCUMENTATION_MAPPING_AND_SCENARIOS.md) for full documentation relationship analysis.
 
-**Why These Are Related**:
-- All deal with email-to-case processing and case management automation
-- Case reopening incident provides context for trigger deactivation/reactivation in NewOrg
-- Email routing fixes ensure proper case creation before assignment
-- This migration brings V3 functionality (SOQL optimization + Kaylie Morris exemption) to NewOrg
+**Migration Strategy**: Single deployment of V3 (latest version) which includes all V1-V3 functionality
 
 ---
 
