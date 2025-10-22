@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Use_Repeated_Reminders__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Toggle between one-time notifications (unchecked) and repeated reminders (checked). When unchecked, sends one notification per threshold. When checked, sends reminder emails based on Reminder Frequency Hours.</description>
+    <inlineHelpText>Unchecked = One notification per threshold. Checked = Repeated reminders at frequency specified below.</inlineHelpText>
+    <label>Use Repeated Reminders</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>
