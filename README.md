@@ -70,7 +70,7 @@ Salesforce_NewOrg/
 - 🚀 **Deployed**: Successfully deployed to NewOrg
 - ⏸️ **On Hold**: Waiting for dependencies or prerequisites
 
-### Migration Scenarios List
+### Batch 1: High Priority Scenarios (5/5 Ready ✅)
 
 | Scenario | Status | Priority | Estimated Time | Notes |
 |----------|--------|----------|----------------|-------|
@@ -79,8 +79,16 @@ Salesforce_NewOrg/
 | [sage-api-integration](sage-api-integration/) | ✅ Ready | 🔴 High | 3-4 hours | Migration plan complete - OAuth + RLCS fixes |
 | [secondary-transport](secondary-transport/) | ✅ Ready | 🔴 High | 2-3 hours | Migration plan complete - V4 bug fixes critical |
 | [daily-reminder-emails](daily-reminder-emails/) | ✅ Ready | 🔴 High | 2 hours | Migration plan complete - Two-tier consolidated reporting (99.6% email reduction) |
-| cs-invoicing | 📋 Planned | 🟡 Medium | TBD | Invoicing improvements |
-| portal-exchange-email | 📋 Planned | 🟡 Medium | TBD | Exchange email handling |
+
+### Batch 2: Medium Priority Scenarios (3/6 Ready)
+
+| Scenario | Status | Priority | Estimated Time | Notes |
+|----------|--------|----------|----------------|-------|
+| [cs-invoicing](cs-invoicing/) | ✅ Ready | 🟡 Medium | 2-3 hours | Migration plan complete - Date/Description auto-population (Oct 10-15, 2025) |
+| [portal-exchange-email](portal-exchange-email/) | ✅ Ready | 🟡 Medium | 2-3 hours | Migration plan complete - SPF/DMARC fix (Oct 16, 2025) |
+| [transport-charges](transport-charges/) | ✅ Ready | 🔴 Critical | 3-4 hours | Migration plan complete - Bug fixes for missing & incorrect charges (Oct 14-15, 2025) |
+| quote-management | 📋 Planned | 🟡 Medium | TBD | Quote management improvements |
+| smartwaste-integration | 📋 Planned | 🟡 Medium | TBD | SmartWaste integration |
 | [more coming...] | 📋 Planned | - | TBD | Additional scenarios |
 
 ---
@@ -552,12 +560,13 @@ Main Salesforce project: `/home/john/Projects/Salesforce/`
 **Repository Status**: 🚀 Ready for Migration
 **Last Updated**: October 22, 2025
 **Next Steps**:
-1. User reviews migration plans for Batch 1 scenarios
+1. User reviews migration plans for ready scenarios
 2. User approves deployment for each scenario
 3. Execute deployments to NewOrg in priority order
 4. Continue with remaining scenarios
 
 **Total Scenarios to Migrate**: 40+
-**Current Progress**: 5 scenarios ready for deployment
+**Current Progress**: 8 scenarios ready for deployment
 
-**Batch 1 Progress**: 5/5 migration plans complete ✅ (All Batch 1 scenarios ready for deployment)
+**Batch 1 Progress**: 5/5 migration plans complete ✅
+**Batch 2 Progress**: 3/6 migration plans complete (CS Invoicing, Portal Exchange Email, Transport Charges)
