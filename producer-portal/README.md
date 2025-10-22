@@ -731,10 +731,15 @@ sf data query --query "SELECT COUNT(Id) FROM Producer_Contract__Share WHERE RowC
 
 ### Documentation References
 
-- **OldOrg State**: `/tmp/Salesforce_OldOrg_State/producer-portal/README.md`
-- **Main Documentation**: `/home/john/Projects/Salesforce/Documentation/PRODUCER_PORTAL_MASTER_DOCUMENTATION.md`
-- **CLAUDE_WORKFLOW_RULES**: `/home/john/Projects/Salesforce/Documentation/CLAUDE_WORKFLOW_RULES.md`
-- **Deactivated Triggers List**: `/home/john/Projects/Salesforce/Documentation/NEWORG_DEACTIVATED_TRIGGERS.md`
+- **OldOrg State**: `/tmp/Salesforce_OldOrg_State/producer-portal/README.md` - Current state snapshot with verification data
+- **Primary Documentation**: `/home/john/Projects/Salesforce/Documentation/PRODUCER_PORTAL_MASTER_DOCUMENTATION.md` - Comprehensive system documentation (1926 lines)
+- **Troubleshooting Guide**: `/home/john/Projects/Salesforce/Documentation/PRODUCER_PORTAL_ACCESS_ERROR_TROUBLESHOOTING.md` - Access error resolution (Login license issues)
+- **Archived Documentation**: `/home/john/Projects/Salesforce/Documentation/Archive/PRODUCER_PORTAL_*.md` - Historical versions
+- **Workflow Rules**: `/home/john/Projects/Salesforce/Documentation/CLAUDE_WORKFLOW_RULES.md` - Migration standards
+- **Deactivated Triggers**: `/home/john/Projects/Salesforce/Documentation/NEWORG_DEACTIVATED_TRIGGERS.md` - Triggers that must remain inactive
+
+**Related Documentation Analysis**:
+All Producer Portal related documents consolidated into this migration scenario. Troubleshooting guide documents the specific access errors fixed in OldOrg V2-V3 (Oct 20-21, 2025) that are being deployed to NewOrg.
 
 ### Key Contacts
 
