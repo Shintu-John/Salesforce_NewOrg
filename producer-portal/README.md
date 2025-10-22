@@ -9,6 +9,25 @@
 
 ---
 
+## Related Documentation
+
+**This migration plan consolidates multiple documentation sources**:
+
+1. **PRODUCER_PORTAL_MASTER_DOCUMENTATION.md** - Primary comprehensive system documentation (1926 lines)
+2. **PRODUCER_PORTAL_ACCESS_ERROR_TROUBLESHOOTING.md** - Troubleshooting guide documenting fixes implemented in OldOrg
+3. **OldOrg State README**: [/tmp/Salesforce_OldOrg_State/producer-portal/README.md](../../../Salesforce_OldOrg_State/producer-portal/README.md) - Current verified state
+4. **Archive/PRODUCER_PORTAL_*.md** - Historical versions and analysis documents
+
+**Complete Mapping**: See [/home/john/Projects/Salesforce/Documentation/DOCUMENTATION_MAPPING_AND_SCENARIOS.md](../../Documentation/DOCUMENTATION_MAPPING_AND_SCENARIOS.md) for full documentation relationship analysis.
+
+**Why These Are Consolidated**:
+- All documents relate to the same Producer Portal system
+- Troubleshooting guide documents the 5 issues fixed in OldOrg V2-V3 (Oct 20-21, 2025) that this migration deploys
+- This migration brings NewOrg to parity with OldOrg's production-tested implementation
+- Archived documents provide historical context for the system's evolution
+
+---
+
 ## Executive Summary
 
 ### What's Being Migrated

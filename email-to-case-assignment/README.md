@@ -7,6 +7,27 @@
 
 ---
 
+## Related Documentation
+
+**This migration plan consolidates multiple related documentation sources**:
+
+1. **EMAIL_TO_CASE_ASSIGNMENT_MASTER.md** - Primary implementation guide from OldOrg
+2. **OldOrg State README**: [/tmp/Salesforce_OldOrg_State/email-to-case-assignment/README.md](../../../Salesforce_OldOrg_State/email-to-case-assignment/README.md) - Current verified state
+3. **CASE_REOPENING_INCIDENT_2025-10-16.md** - Related incident documentation
+4. **DOMESTIC_CUSTOMER_EMAIL_ISSUE_FIX.md** - Email routing fix
+5. **USER_LORNA_BARSBY_EMAIL_FIX.md** - Specific user email correction
+6. **DAILY_REMINDER_EMAILS_COMPLETE_GUIDE.md** - Related case automation
+
+**Complete Mapping**: See [/home/john/Projects/Salesforce/Documentation/DOCUMENTATION_MAPPING_AND_SCENARIOS.md](../../Documentation/DOCUMENTATION_MAPPING_AND_SCENARIOS.md) for full documentation relationship analysis.
+
+**Why These Are Related**:
+- All deal with email-to-case processing and case management automation
+- Case reopening incident provides context for trigger deactivation/reactivation in NewOrg
+- Email routing fixes ensure proper case creation before assignment
+- This migration brings V3 functionality (SOQL optimization + Kaylie Morris exemption) to NewOrg
+
+---
+
 ## Table of Contents
 
 1. [Executive Summary](#executive-summary)
