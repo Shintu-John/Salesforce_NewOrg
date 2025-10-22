@@ -84,7 +84,7 @@ Salesforce_NewOrg/
 | [secondary-transport](secondary-transport/) | ✅ Ready | 🔴 High | 2-3 hours | Migration plan complete - V4 bug fixes critical |
 | [daily-reminder-emails](daily-reminder-emails/) | ✅ Ready | 🔴 High | 2 hours | Migration plan complete - Two-tier consolidated reporting (99.6% email reduction) |
 
-### Batch 2: Medium Priority Scenarios (5/6 Ready ✅)
+### Batch 2: Medium Priority Scenarios (5/5 Ready ✅)
 
 | Scenario | Status | Priority | Estimated Time | Notes |
 |----------|--------|----------|----------------|-------|
