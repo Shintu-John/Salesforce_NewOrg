@@ -78,7 +78,7 @@ Salesforce_NewOrg/
 | [producer-portal](producer-portal/) | ✅ Ready | 🔴 High | 2-3 hours | Migration plan complete - V3 with all fixes |
 | [sage-api-integration](sage-api-integration/) | ✅ Ready | 🔴 High | 3-4 hours | Migration plan complete - OAuth + RLCS fixes |
 | [secondary-transport](secondary-transport/) | ✅ Ready | 🔴 High | 2-3 hours | Migration plan complete - V4 bug fixes critical |
-| daily-reminder-emails | 📋 Planned | 🔴 High | TBD | Reminder email automation |
+| [daily-reminder-emails](daily-reminder-emails/) | ✅ Ready | 🔴 High | 2 hours | Migration plan complete - Two-tier consolidated reporting (99.6% email reduction) |
 | cs-invoicing | 📋 Planned | 🟡 Medium | TBD | Invoicing improvements |
 | portal-exchange-email | 📋 Planned | 🟡 Medium | TBD | Exchange email handling |
 | [more coming...] | 📋 Planned | - | TBD | Additional scenarios |
@@ -392,7 +392,7 @@ Each migration plan includes:
 
 **Total Scenarios**: 40+ to migrate
 **Completed**: 0
-**In Progress**: 1 (email-to-case-assignment - ready for review)
+**Ready for Deployment**: 5 (Batch 1 complete)
 **Planned**: 40+
 
 **Target Completion Date**: TBD
@@ -558,6 +558,6 @@ Main Salesforce project: `/home/john/Projects/Salesforce/`
 4. Continue with remaining scenarios
 
 **Total Scenarios to Migrate**: 40+
-**Current Progress**: 4 scenarios ready for deployment (Batch 1: 80% complete)
+**Current Progress**: 5 scenarios ready for deployment
 
-**Batch 1 Progress**: 4/5 migration plans complete (Daily Reminder Emails remaining)
+**Batch 1 Progress**: 5/5 migration plans complete ✅ (All Batch 1 scenarios ready for deployment)
