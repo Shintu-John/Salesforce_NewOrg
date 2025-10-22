@@ -84,7 +84,7 @@ Salesforce_NewOrg/
 | [secondary-transport](secondary-transport/) | ✅ Ready | 🔴 High | 2-3 hours | Migration plan complete - V4 bug fixes critical |
 | [daily-reminder-emails](daily-reminder-emails/) | ✅ Ready | 🔴 High | 2 hours | Migration plan complete - Two-tier consolidated reporting (99.6% email reduction) |
 
-### Batch 2: Medium Priority Scenarios (5/6 Ready)
+### Batch 2: Medium Priority Scenarios (5/6 Ready ✅)
 
 | Scenario | Status | Priority | Estimated Time | Notes |
 |----------|--------|----------|----------------|-------|
@@ -93,7 +93,12 @@ Salesforce_NewOrg/
 | [transport-charges](transport-charges/) | ✅ Ready | 🔴 Critical | 3-4 hours | Migration plan complete - Bug fixes for missing & incorrect charges (Oct 14-15, 2025) |
 | [po-consumption-emails](po-consumption-emails/) | ✅ Ready | 🟡 Medium | 3-4 hours | Migration plan complete - PO monitoring with 50%/75%/90% threshold alerts (Oct 14, 2025) |
 | [invoice-email-portal-access](invoice-email-portal-access/) | ✅ Ready | 🟡 Medium | 3-4 hours | Migration plan complete - Invoice portal access (guest-accessible) for customers to view/download invoice PDFs - Automatic ContentDistribution creation (Oct 9, 2025) |
-| quote-management | 📋 Planned | 🟡 Medium | TBD | Quote management improvements |
+
+### Batch 3: Additional Scenarios (1/4 Ready)
+
+| Scenario | Status | Priority | Estimated Time | Notes |
+|----------|--------|----------|----------------|-------|
+| [job-charge-credit-on-account](job-charge-credit-on-account/) | ✅ Ready | 🟡 Medium | 30-45 mins | Migration plan complete - Flow fix for Credit on Account charges - Remove from entry criteria (Oct 22, 2025) |
 | [more coming...] | 📋 Planned | - | TBD | Additional scenarios |
 
 ---
