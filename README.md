@@ -74,13 +74,13 @@ Salesforce_NewOrg/
 
 | Scenario | Status | Priority | Estimated Time | Notes |
 |----------|--------|----------|----------------|-------|
-| [email-to-case-assignment](email-to-case-assignment/) | ✅ Ready | 🔴 High | 45-60 min | Pilot scenario - awaiting approval |
-| producer-portal | 📋 Planned | 🔴 High | TBD | Producer portal functionality |
-| secondary-transport | 📋 Planned | 🟡 Medium | TBD | Charge calculation logic |
+| [email-to-case-assignment](email-to-case-assignment/) | ✅ Ready | 🔴 High | 45-60 min | Migration plan complete |
+| [producer-portal](producer-portal/) | ✅ Ready | 🔴 High | 2-3 hours | Migration plan complete - V3 with all fixes |
+| [sage-api-integration](sage-api-integration/) | ✅ Ready | 🔴 High | 3-4 hours | Migration plan complete - OAuth + RLCS fixes |
+| [secondary-transport](secondary-transport/) | ✅ Ready | 🔴 High | 2-3 hours | Migration plan complete - V4 bug fixes critical |
+| daily-reminder-emails | 📋 Planned | 🔴 High | TBD | Reminder email automation |
 | cs-invoicing | 📋 Planned | 🟡 Medium | TBD | Invoicing improvements |
-| daily-reminder-emails | 📋 Planned | 🟢 Low | TBD | Reminder email automation |
 | portal-exchange-email | 📋 Planned | 🟡 Medium | TBD | Exchange email handling |
-| sage-api-integration | 📋 Planned | 🔴 High | TBD | External API integration |
 | [more coming...] | 📋 Planned | - | TBD | Additional scenarios |
 
 ---
@@ -549,13 +549,15 @@ Main Salesforce project: `/home/john/Projects/Salesforce/`
 
 ---
 
-**Repository Status**: 🚀 Ready for Migration (Pilot scenario ready for review)
+**Repository Status**: 🚀 Ready for Migration
 **Last Updated**: October 22, 2025
 **Next Steps**:
-1. User reviews email-to-case-assignment migration plan
-2. User approves deployment
-3. Execute deployment to NewOrg
+1. User reviews migration plans for Batch 1 scenarios
+2. User approves deployment for each scenario
+3. Execute deployments to NewOrg in priority order
 4. Continue with remaining scenarios
 
 **Total Scenarios to Migrate**: 40+
-**Current Progress**: 1 scenario ready for deployment
+**Current Progress**: 4 scenarios ready for deployment (Batch 1: 80% complete)
+
+**Batch 1 Progress**: 4/5 migration plans complete (Daily Reminder Emails remaining)
