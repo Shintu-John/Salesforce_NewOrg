@@ -107,6 +107,7 @@ Salesforce_NewOrg/
 | [smartwaste-integration](smartwaste-integration/) | ✅ Ready | 🟡 Medium | 3-4 hours | Configuration | Activate existing flows + schedule jobs (code already in NewOrg) |
 | [quote-pricing-notification](quote-pricing-notification/) | ✅ Ready | 🟡 Medium | 2 hours | Configuration Guide | Org-wide email address setup checklist - Prevent email delivery failures in NewOrg based on OldOrg lessons learned |
 | [quote-to-order-process](quote-to-order-process/) | ✅ Ready | 🟢 Low | 1 hour | User Training | Quote-to-Order process training materials - Step-by-step guide for new users - Common mistakes and prevention |
+| [fred-certificate-renewal](fred-certificate-renewal/) | ✅ Ready | 🔴 Critical | 2-3 hours | Certificate Renewal | FRED Integration client certificate renewal procedure - Complete import process + Named Credential configuration + Testing |
 
 ---
 
