@@ -11,9 +11,9 @@
 
 **This migration plan consolidates the following documentation** (component-based analysis):
 
-1. **EMAIL_TO_CASE_ASSIGNMENT_MASTER.md** - Primary implementation guide from OldOrg
+1. **[EMAIL_TO_CASE_ASSIGNMENT_MASTER.md](source-docs/EMAIL_TO_CASE_ASSIGNMENT_MASTER.md)** - Primary implementation guide from OldOrg
 2. **OldOrg State README**: [/tmp/Salesforce_OldOrg_State/email-to-case-assignment/README.md](../../../Salesforce_OldOrg_State/email-to-case-assignment/README.md) - Current verified state
-3. **CASE_REOPENING_INCIDENT_2025-10-16.md** - ✅ **CONSOLIDATED** - Incident when rlsServiceCaseAutoAssignTrigger was temporarily deactivated
+3. **[CASE_REOPENING_INCIDENT_2025-10-16.md](source-docs/CASE_REOPENING_INCIDENT_2025-10-16.md)** - ✅ **CONSOLIDATED** - Incident when rlsServiceCaseAutoAssignTrigger was temporarily deactivated
 
 **Component Analysis - Why Consolidated**:
 - Core components: rlsServiceCaseAutoAssign.cls, rlsServiceCaseAutoAssignTest.cls, rlsServiceCaseAutoAssignTrigger.trigger

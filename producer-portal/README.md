@@ -13,8 +13,8 @@
 
 **This migration plan consolidates multiple documentation sources**:
 
-1. **PRODUCER_PORTAL_MASTER_DOCUMENTATION.md** - Primary comprehensive system documentation (1926 lines)
-2. **PRODUCER_PORTAL_ACCESS_ERROR_TROUBLESHOOTING.md** - Troubleshooting guide documenting fixes implemented in OldOrg
+1. **[PRODUCER_PORTAL_MASTER_DOCUMENTATION.md](source-docs/PRODUCER_PORTAL_MASTER_DOCUMENTATION.md)** - Primary comprehensive system documentation (1926 lines)
+2. **[PRODUCER_PORTAL_ACCESS_ERROR_TROUBLESHOOTING.md](source-docs/PRODUCER_PORTAL_ACCESS_ERROR_TROUBLESHOOTING.md)** - Troubleshooting guide documenting fixes implemented in OldOrg
 3. **OldOrg State README**: [/tmp/Salesforce_OldOrg_State/producer-portal/README.md](../../../Salesforce_OldOrg_State/producer-portal/README.md) - Current verified state
 4. **Archive/PRODUCER_PORTAL_*.md** - Historical versions and analysis documents
 
