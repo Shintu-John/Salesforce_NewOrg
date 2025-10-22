@@ -84,13 +84,14 @@ Salesforce_NewOrg/
 | [secondary-transport](secondary-transport/) | ✅ Ready | 🔴 High | 2-3 hours | Migration plan complete - V4 bug fixes critical |
 | [daily-reminder-emails](daily-reminder-emails/) | ✅ Ready | 🔴 High | 2 hours | Migration plan complete - Two-tier consolidated reporting (99.6% email reduction) |
 
-### Batch 2: Medium Priority Scenarios (3/6 Ready)
+### Batch 2: Medium Priority Scenarios (4/6 Ready)
 
 | Scenario | Status | Priority | Estimated Time | Notes |
 |----------|--------|----------|----------------|-------|
 | [cs-invoicing](cs-invoicing/) | ✅ Ready | 🟡 Medium | 2-3 hours | Migration plan complete - Date/Description auto-population (Oct 10-15, 2025) |
 | [portal-exchange-email](portal-exchange-email/) | ✅ Ready | 🟡 Medium | 2-3 hours | Migration plan complete - SPF/DMARC fix (Oct 16, 2025) |
 | [transport-charges](transport-charges/) | ✅ Ready | 🔴 Critical | 3-4 hours | Migration plan complete - Bug fixes for missing & incorrect charges (Oct 14-15, 2025) |
+| [po-consumption-emails](po-consumption-emails/) | ✅ Ready | 🟡 Medium | 3-4 hours | Migration plan complete - PO monitoring with 50%/75%/90% threshold alerts (Oct 14, 2025) |
 | quote-management | 📋 Planned | 🟡 Medium | TBD | Quote management improvements |
 | [more coming...] | 📋 Planned | - | TBD | Additional scenarios |
 
