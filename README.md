@@ -511,7 +511,6 @@ Main Salesforce project: `/home/john/Projects/Salesforce/`
 ## Support Information
 
 **Migration Project Owner**: John Shintu
-**AI Assistant**: Claude Code (Documentation & Deployment)
 **Organization**: Recycling Lives Group
 
 **For Questions:**
