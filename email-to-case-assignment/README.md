@@ -213,6 +213,212 @@ Before starting deployment, verify the following:
 
 ---
 
+## Pre-Deployment Environment Verification
+
+**CRITICAL**: Execute these verification steps BEFORE starting any deployment. This ensures all dependencies exist in NewOrg and identifies any configuration differences from OldOrg.
+
+### Step 1: Verify Queue Exists
+
+**Query**:
+```bash
+sf data query --query "SELECT Id, DeveloperName, Name FROM Group WHERE Type = 'Queue' AND (DeveloperName LIKE '%Customer%Service%' OR Name LIKE '%Customer%Service%')" --target-org NewOrg
+```
+
+**Expected Result**: Should return 1 queue
+
+**Example Output**:
+```
+Id: 00GXq000...
+DeveloperName: Customer_Service_Email  (or similar)
+Name: Customer Service Email
+```
+
+**✅ If Queue Exists**: Note the exact DeveloperName for reference
+**❌ If Queue Missing**: STOP - Queue must be created before proceeding
+**⚠️ If Name Different**: Note the difference - may need to update Apex code
+
+**Configuration Table**:
+| Component | OldOrg Value | NewOrg Value | Match? | Action |
+|-----------|--------------|--------------|--------|--------|
+| Queue DeveloperName | Customer_Service_Email | [YOUR RESULT] | [ ] Yes / [ ] No | Update code if different |
+| Queue ID | 00GSj000001EAgXMAW | [YOUR RESULT] | N/A | Used by Apex cache |
+
+---
+
+### Step 2: Verify Record Types Exist
+
+**Query**:
+```bash
+sf data query --query "SELECT Id, DeveloperName, Name, IsActive FROM RecordType WHERE SObjectType = 'Case' AND DeveloperName IN ('Email', 'Paperwork_Compliance', 'RLES_Invoicing', 'RLES_Purchase_Ledger') ORDER BY DeveloperName" --target-org NewOrg
+```
+
+**Expected Result**: Should return 4 RecordTypes, all Active
+
+**Example Output**:
+```
+| DeveloperName | Name | IsActive |
+|---------------|------|----------|
+| Email | Email | true |
+| Paperwork_Compliance | RLES Compliance | true |
+| RLES_Invoicing | RLES Invoicing | true |
+| RLES_Purchase_Ledger | RLES Purchase Ledger | true |
+```
+
+**✅ All 4 Present and Active**: Proceed to next step
+**❌ Missing RecordTypes**: Create missing RecordTypes before proceeding
+**⚠️ Some Inactive**: Activate required RecordTypes
+
+**Configuration Table**:
+| RecordType | OldOrg ID | NewOrg ID | Active in NewOrg? | Used By |
+|------------|-----------|-----------|-------------------|---------|
+| Email | 012Sj0000004DZlIAM | [YOUR RESULT] | [ ] Yes | Apex class, Flow 2 |
+| Paperwork_Compliance | 0128e000000oPy2AAE | [YOUR RESULT] | [ ] Yes | Flow 2 |
+| RLES_Invoicing | 012Sj0000006IK1IAM | [YOUR RESULT] | [ ] Yes | Flow 2 |
+| RLES_Purchase_Ledger | 012Sj0000006ILdIAM | [YOUR RESULT] | [ ] Yes | Flow 2 |
+
+---
+
+### Step 3: Verify Customer Service Users
+
+**Query**:
+```bash
+sf data query --query "SELECT Id, Name, Email, IsActive FROM User WHERE Profile.Name LIKE '%Customer%Service%' AND IsActive = true ORDER BY Name" --target-org NewOrg
+```
+
+**Expected Result**: Should return multiple active CS users
+
+**Example Output**:
+```
+| Name | Email | IsActive |
+|------|-------|----------|
+| User 1 | user1@example.com | true |
+| User 2 | user2@example.com | true |
+[etc...]
+```
+
+**✅ Multiple Users Found**: Note the count (OldOrg has 8 users)
+**❌ No Users Found**: STOP - Need to provision CS users first
+**⚠️ Different Count**: Note the difference - affects workload distribution
+
+**Configuration Table**:
+| Metric | OldOrg Value | NewOrg Value | Match? | Notes |
+|--------|--------------|--------------|--------|-------|
+| CS User Count | 8 | [YOUR RESULT] | [ ] Yes / [ ] No | Affects average load |
+| Users Under Threshold | 8/8 (100%) | [TO BE CHECKED POST-DEPLOY] | N/A | Monitor after go-live |
+
+---
+
+### Step 4: Check Current Case Volume
+
+**Query**:
+```bash
+sf data query --query "SELECT COUNT(Id) total FROM Case WHERE Status NOT IN ('Closed', 'Case Closed') AND RecordType.DeveloperName = 'Email'" --target-org NewOrg
+```
+
+**Expected Result**: Returns current open case count
+
+**Example Output**:
+```
+total: [NUMBER]
+```
+
+**Purpose**: Establishes baseline before deployment
+
+**Configuration Table**:
+| Metric | OldOrg (Oct 22) | NewOrg (Before Deploy) | Notes |
+|--------|-----------------|------------------------|-------|
+| Open Email Cases | 73 | [YOUR RESULT] | Baseline for monitoring |
+| Average per User | 9.13 | [CALCULATE] | Divide total by user count |
+| Users Over Threshold | 0 | [TO BE CHECKED] | Should be 0 or low |
+
+---
+
+### Step 5: Verify Trigger Current Status
+
+**Query**:
+```bash
+sf data query --query "SELECT Name, Status, TableEnumOrId FROM ApexTrigger WHERE Name = 'rlsServiceCaseAutoAssignTrigger'" --target-org NewOrg --use-tooling-api
+```
+
+**Expected Result**: Trigger exists and is INACTIVE
+
+**Example Output**:
+```
+Name: rlsServiceCaseAutoAssignTrigger
+Status: Inactive
+TableEnumOrId: Case
+```
+
+**✅ Inactive**: Good - proceed with deployment
+**⚠️ Active**: WARNING - Trigger is already active, may cause issues during deployment
+**❌ Not Found**: Trigger will be created during deployment
+
+---
+
+### Step 6: Check Existing Components (Gap Confirmation)
+
+#### Check Apex Classes
+
+**Query**:
+```bash
+sf data query --query "SELECT Name, LengthWithoutComments, LastModifiedDate FROM ApexClass WHERE Name IN ('rlsServiceCaseAutoAssign', 'rlsServiceCaseAutoAssignTest') ORDER BY Name" --target-org NewOrg --use-tooling-api
+```
+
+**Expected Result**: May return old versions or nothing
+
+**Document Results**:
+| Class | Exists? | Size (chars) | Last Modified | Version |
+|-------|---------|--------------|---------------|---------|
+| rlsServiceCaseAutoAssign | [ ] Yes / [ ] No | [YOUR RESULT] | [YOUR RESULT] | Will be updated to V3 |
+| rlsServiceCaseAutoAssignTest | [ ] Yes / [ ] No | [YOUR RESULT] | [YOUR RESULT] | Will be updated to V3 |
+
+#### Check Custom Setting
+
+**Query**:
+```bash
+sf data query --query "SELECT DeveloperName FROM CustomObject WHERE DeveloperName = 'Case_Auto_Assignment_Settings'" --target-org NewOrg --use-tooling-api
+```
+
+**Expected Result**: Likely returns nothing (custom setting doesn't exist)
+
+**Document Result**:
+| Component | Exists in NewOrg? | Action Required |
+|-----------|-------------------|-----------------|
+| Case_Auto_Assignment_Settings__c | [ ] Yes / [ ] No | Will be created in Phase 1 |
+
+#### Check Case Field
+
+**Query**:
+```bash
+sf data query --query "SELECT QualifiedApiName FROM FieldDefinition WHERE EntityDefinition.QualifiedApiName = 'Case' AND QualifiedApiName = 'Previous_Auto_Assigned_Owner__c'" --target-org NewOrg
+```
+
+**Expected Result**: Likely returns nothing (field doesn't exist)
+
+**Document Result**:
+| Field | Exists in NewOrg? | Action Required |
+|-------|-------------------|-----------------|
+| Previous_Auto_Assigned_Owner__c | [ ] Yes / [ ] No | Will be created in Phase 1 |
+
+---
+
+### Pre-Deployment Verification Summary
+
+**Complete this table before proceeding**:
+
+| Verification Item | Status | Notes |
+|-------------------|--------|-------|
+| ✅ Queue Exists | [ ] Pass / [ ] Fail | DeveloperName: _____________ |
+| ✅ RecordTypes (4) Exist | [ ] Pass / [ ] Fail | All active: [ ] Yes / [ ] No |
+| ✅ CS Users Exist | [ ] Pass / [ ] Fail | Count: _____ |
+| ✅ Trigger is Inactive | [ ] Pass / [ ] Fail | Ready for deployment |
+| ✅ Deployment User Permissions | [ ] Pass / [ ] Fail | Modify All Data confirmed |
+| ✅ No Active Deployments | [ ] Pass / [ ] Fail | Clear to proceed |
+
+**🚨 STOP IF ANY ITEM FAILS**: Resolve all failures before proceeding with deployment.
+
+---
+
 ## Deployment Steps
 
 ### Phase 1: Deploy Custom Setting & Fields (Foundation)
@@ -932,7 +1138,7 @@ sf project delete source --metadata "CustomObject:Case_Auto_Assignment_Settings_
 
 ## Support & Contact
 
-**Migration Owner**: John Shintu (Claude Code AI Assistant)
+**Migration Owner**: John Shintu
 **Original Developer**: Glen Bagshaw
 **Deployment User**: [To be determined]
 
