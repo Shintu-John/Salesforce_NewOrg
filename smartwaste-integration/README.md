@@ -1,9 +1,35 @@
-# SmartWaste Integration - NewOrg Migration Plan
+# SmartWaste Integration - NewOrg Configuration Plan
 
-**Migration Date**: October 22, 2025
+⚠️ **SCENARIO TYPE: CONFIGURATION/ANALYSIS ONLY - NOT A CODE DEPLOYMENT**
+
+**Configuration Date**: October 22, 2025
 **Source**: OldOrg (Recycling Lives Service)
 **Target**: NewOrg (Recycling Lives Group)
-**Status**: 📋 Configuration-Only Migration (Code Already Deployed)
+**Status**: 📋 Configuration-Only (Code Already Deployed)
+
+---
+
+## ⚠️ Important: This is NOT a Deployment Scenario
+
+**What This Document Is**:
+- Configuration guide to activate EXISTING SmartWaste Integration in NewOrg
+- Analysis of configuration gaps (inactive flows, missing scheduled jobs)
+- Step-by-step activation procedure
+
+**What This Is NOT**:
+- NOT a code deployment (all 11 Apex classes already exist in NewOrg)
+- NOT a bug fix implementation
+- NOT new feature development
+
+**SmartWaste Integration Code**:
+- Already deployed in NewOrg (all classes present, matching OldOrg)
+- Code deployed years ago (2021-2025)
+- This document: Activation/configuration guide ONLY
+
+**Why This Scenario Exists**:
+- Code exists but is INACTIVE (flows in Draft, no scheduled jobs)
+- Needs CONFIGURATION to make functional
+- Gap Analysis = configuration gaps, not code gaps
 
 ---
 
