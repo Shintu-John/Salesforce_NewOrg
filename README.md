@@ -2,7 +2,7 @@
 
 > **Production deployment repository** for migrating customizations from OldOrg (Recycling Lives Service) to NewOrg (Recycling Lives Group)
 
-[![Deployment Progress](https://img.shields.io/badge/Deployed-3%2F12%20(25%25)-yellow)](https://github.com/Shintu-John/Salesforce_NewOrg)
+[![Deployment Progress](https://img.shields.io/badge/Deployed-4%2F12%20(33%25)-yellow)](https://github.com/Shintu-John/Salesforce_NewOrg)
 [![Last Deployment](https://img.shields.io/badge/Last%20Deployment-Oct%2023%2C%202025-green)](https://github.com/Shintu-John/Salesforce_NewOrg)
 [![Status](https://img.shields.io/badge/Status-Active-brightgreen)](https://github.com/Shintu-John/Salesforce_NewOrg)
 
@@ -35,7 +35,7 @@ sf apex run -f 04-scenario-name/tests/test_scenario.apex -o NewOrg
 
 ## 📊 Deployment Progress
 
-**Overall:** 3 of 12 scenarios deployed (25%)
+**Overall:** 4 of 12 scenarios deployed (33%)
 **Status:** ✅ Active deployment phase
 **Target Org:** NewOrg (Production)
 
@@ -46,19 +46,19 @@ sf apex run -f 04-scenario-name/tests/test_scenario.apex -o NewOrg
 | 01 | [cs-invoicing](01-cs-invoicing/) | Oct 23 | `0AfSq000003nOU5KAM` | CS invoice automation | [📊](01-cs-invoicing/DEPLOYMENT_HISTORY.md) |
 | 02 | [transport-charges](02-transport-charges/) | Oct 23 | `0AfSq000003nQO7KAM` | £1.7M+ financial protection | [📊](02-transport-charges/DEPLOYMENT_HISTORY.md) |
 | 03 | [secondary-transport](03-secondary-transport/) | Oct 23 | `0AfSq000003nQR3KAM` | Fixed £19K-£29K CSV bug | [📊](03-secondary-transport/DEPLOYMENT_HISTORY.md) |
+| 05 | [email-to-case-assignment](05-email-to-case-assignment/) | Oct 23 | `0AfSq000003nVNVKA2` | Automated case assignment | [📊](05-email-to-case-assignment/DEPLOYMENT_HISTORY.md) |
 
-### 📋 Pending Deployments (9 scenarios)
+### 📋 Pending Deployments (8 scenarios)
 
 <details>
 <summary><b>View Pending Scenarios</b></summary>
 
 #### High Priority
-| # | Scenario | Description |
-|---|----------|-------------|
-| 04 | [portal-exchange-email](04-portal-exchange-email/) | Email exchange workflow fixes |
-| 05 | [email-to-case-assignment](05-email-to-case-assignment/) | Case assignment logic |
-| 06 | [producer-portal](06-producer-portal/) | Producer portal enhancements |
-| 07 | [sage-api-integration](07-sage-api-integration/) | Sage API authentication fixes |
+| # | Scenario | Description | Status |
+|---|----------|-------------|--------|
+| 04 | [portal-exchange-email](04-portal-exchange-email/) | Email exchange workflow fixes | ⏳ Awaiting email verification |
+| 06 | [producer-portal](06-producer-portal/) | Producer portal enhancements | 📋 Ready to deploy |
+| 07 | [sage-api-integration](07-sage-api-integration/) | Sage API authentication fixes | 📋 Ready to deploy |
 
 #### Medium Priority
 | # | Scenario | Description |
