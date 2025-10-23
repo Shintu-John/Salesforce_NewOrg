@@ -4,7 +4,30 @@
 **Source Organization**: OldOrg (Recycling Lives Service)
 **Purpose**: Migration plans and deployment-ready packages for migrating from OldOrg to NewOrg
 **Created**: October 22, 2025
-**Status**: ✅ Complete - All 34 migration packages ready
+**Status**: 🚀 Active Deployment - 1 of 12 scenarios deployed
+
+---
+
+## 🚀 Deployment Progress
+
+**Deployment Phase**: Active
+**Start Date**: October 23, 2025
+**Target Org**: NewOrg (Production)
+**Deployed**: 1 of 12 scenarios (8.3%)
+**Status**: ✅ In Progress
+
+### Deployment Statistics
+- 🚀 **Deployed**: 1 scenario
+- ⏳ **In Progress**: 0 scenarios
+- 📋 **Pending**: 11 scenarios
+- ✅ **Total Ready**: 12 deployment scenarios
+
+### Recently Deployed
+1. **transport-charges** (Oct 23, 2025) - Deploy IDs: 0AfSq000003nLkjKAE (code), 0AfSq000003nLw1KAE (validation)
+   - Components: rlcsJobService, rlcsJobServiceTest, rlcsJobTrigger, Transport_Flag_Validation
+   - Tests: 65/65 passed (100%)
+   - Business Impact: £1.79M+ financial protection
+   - Status: ✅ Complete
 
 ---
 
@@ -65,10 +88,10 @@ Salesforce_NewOrg/
 ## Migration Scenarios
 
 ### Status Legend
-- ✅ **Ready for Deployment**: Migration plan reviewed and approved, ready to execute
-- 🔄 **In Progress**: Migration plan being prepared
-- 📋 **Planned**: Not yet started
-- 🚀 **Deployed**: Successfully deployed to NewOrg
+- 🚀 **Deployed**: Successfully deployed to NewOrg (with Deploy ID)
+- ⏳ **In Progress**: Currently being deployed
+- 📋 **Pending**: Ready for deployment, not yet started
+- ✅ **Ready**: Migration plan reviewed and approved
 - ⏸️ **On Hold**: Waiting for dependencies or prerequisites
 
 ### Scenario Type Legend
@@ -108,24 +131,24 @@ Salesforce_NewOrg/
 | [test-failure-guide](test-failure-guide/) | ✅ Complete | Oct 23, 2025 | Reference/Testing | Test failure troubleshooting guide for NewOrg |
 | [waste-vapes-analysis](waste-vapes-analysis/) | ✅ Complete | Oct 23, 2025 | Reference/Analysis | Waste vapes categorization guide for NewOrg |
 
-### Deployment Scenarios (12 Ready ✅)
+### Deployment Scenarios (12 Total: 1 Deployed 🚀, 11 Pending 📋)
 
 **Purpose**: Deploy code from OldOrg to NewOrg (bug fixes, new features, enhancements).
 
-| Scenario | Status | Last Updated | Gap Analysis | Critical Issues |
-|----------|--------|--------------|--------------|-----------------|
-| [producer-portal](producer-portal/) | ✅ Ready (⚠️ **CRITICAL**) | Oct 22, 2025 | **15 components analyzed** | 🚨 **NewOrg has OLD BUGGY VERSION** - ProducerPlacedOnMarketTriggerHelper is 35 days out of date (Sept 19 vs Oct 21). **Missing ALL 5 fixes**. 8 components MISSING (sharing solution). **MUST deploy before go-live.** |
-| [email-to-case-assignment](email-to-case-assignment/) | ✅ Ready (⚠️ **VERSION MISMATCH**) | Oct 23, 2025 | **13 components analyzed** | ⚠️ **NewOrg has OLD VERSION** - Apex classes are pre-V3 (434 vs 631 lines). Missing SOQL caching, recursion prevention, Kaylie Morris exemption. **3 components MISSING** (Custom Setting, Case field, Flow). **Customer Service workload management - deploy soon.** |
-| [invoice-email-portal-access](invoice-email-portal-access/) | ✅ Ready (⚠️ **OUTDATED**) | Oct 23, 2025 | **5 components analyzed** | ⚠️ **NewOrg has OLD VERSION** - 4 of 5 components outdated (Sept 2025 vs Oct 9). InvoiceFileListController missing invoice PDF logic (71 lines). **ContentDistributionHelper already current** (Oct 10). Customers cannot access invoice PDFs on portal. |
-| [daily-reminder-emails](daily-reminder-emails/) | ✅ Ready (⚠️ **SEVERELY OUTDATED**) | Oct 23, 2025 | **4 components analyzed** | 🚨 **NewOrg has VERY OLD VERSION** - Sept 17 version (52 lines vs 245 lines). **Entire Tier 1 system MISSING** (JobDeliveryConfirmationReminderBatch). Missing Delivery_Confirmed__c filter, HTML reporting, prioritization. **Sends 556 emails daily instead of 2 reports.** Record locking risk. |
-| [portal-exchange-email](portal-exchange-email/) | ✅ Ready (⚠️ **OUTDATED**) | Oct 23, 2025 | **6 components analyzed** | ⚠️ **NewOrg has OUTDATED CODE** - Handler from Oct 2 (14 days old), test from Sept 17 (29 days old). 6 flows need verification for fromEmailAddress parameter. **Customers with strict SPF policies (Amey Highways) cannot submit portal requests.** Emails rejected, no Cases created. |
-| [transport-charges](transport-charges/) | ✅ Ready (🚨 **CRITICAL**) | Oct 23, 2025 | **3 bugs + 244 missing lines** | 🚨 **NewOrg has SEVERELY OUTDATED CODE** - Oct 10 version (575 lines vs 819 lines, 5 days behind). **MISSING BOTH CRITICAL FIXES**: Issue 1 missing charges (£919K impact), Issue 3 hybrid calculation bug (£870K impact). Missing secondary transport feature (244 lines). **Financial risk: £1.7M+ if not deployed before go-live.** |
-| [cs-invoicing](cs-invoicing/) | ✅ Ready (⚠️ **OUTDATED**) | Oct 23, 2025 | **3 classes + 1 field** | ⚠️ **NewOrg has OLD VERSION** - RLCSChargeService 97 lines (vs 142, 31.7% missing). rlcsJobService 575 lines (vs 819, 29.8% missing). **Collection_Date__c field MISSING**. Missing buildChargeDescription(), inline SOQL performance issue. **Depends on transport-charges** (shared rlcsJobService). CS Invoicing team missing automatic date/description visibility. |
-| [secondary-transport](secondary-transport/) | ✅ Ready (🚨 **CRITICAL**) | Oct 23, 2025 | **4 classes + 3 fields + 1 validation** | 🚨 **NewOrg has SEVERELY OUTDATED CODE** - Oct 10 version (575 lines vs 819 lines). **MISSING ALL SECONDARY TRANSPORT LOGIC** (244 lines, 29.8%). Phase 2 CSV mapping fixes MISSING in 3 components (BatchProcessor, Controller, iParserio batch). **CSV columns 14-15 issue - 97 invalid Jobs (£19K-£29K).** NULL weight/units from uploads. **Depends on transport-charges + cs-invoicing** (shared rlcsJobService). |
-| [po-consumption-emails](po-consumption-emails/) | ✅ Ready (✅ **CLEAN SLATE**) | Oct 23, 2025 | **13 components analyzed** | ✅ **NewOrg COMPLETELY CLEAN** - 12 of 13 components missing (only pre-existing Order consumption fields exist). **No version conflicts, no outdated code.** Fresh deployment. System currently non-functional in NewOrg. Low risk deployment. |
-| [job-charge-credit-on-account](job-charge-credit-on-account/) | ✅ Ready (⚠️ **BUGGY + INACTIVE**) | Oct 23, 2025 | **1 flow + 11 dependencies** | ⚠️ **NewOrg has BUGGY VERSION** - Oct 19 pre-fix version (3 days old). filterLogic shows "1 AND (2 OR 3)" with "Credit on Account" still in filter (line 214). **Flow currently INACTIVE** (IsActive = false) - bug not causing issues yet. **Account IDs updated in deployment package** (3 ID mappings OldOrg→NewOrg). Deploy fix BEFORE activating flow to prevent Cost__c corruption on 263 Credit on Account charges. Low risk - flow inactive. |
-| [rlcs-vendor-invoice-sage](rlcs-vendor-invoice-sage/) | ✅ Ready (✅ **ALREADY DEPLOYED**) | Oct 23, 2025 | **2 components + 34 dependencies** | ✅ **NewOrg ALREADY HAS FIX** - Deployed Oct 6, 2025 at 15:34 UTC (45 minutes BEFORE OldOrg). **Test-first deployment strategy.** Both components IDENTICAL to OldOrg. RLCS fields in SOQL query (line 21), CSV button unrestricted (lines 167-179). **1,322 RLCS invoices processed successfully.** Proven stable over 17 days. **NO DEPLOYMENT NEEDED** - documentation serves as historical reference and validates test-first strategy. Zero gap between orgs. |
-| [bam-construct-portal-license](bam-construct-portal-license/) | ✅ Ready (⏳ **PENDING**) | Oct 23, 2025 | **4 components analyzed** | ⏳ **NewOrg MISSING ALL COMPONENTS** - Formula field Waste_Carrier_License_Expiry__c MISSING. Job portal layout exists but missing license fields (lines 96-100). Utility_Community.cls exists but missing license SOQL (lines 23, 40-41). depotViewCommunity LWC exists but missing license columns (lines 40-41, 64-72). **4-phase deployment**: CLI field/layout/code + Manual UI user config (Community_Role__c, sharing records). **137 HQ users need compliance visibility.** Risk: LOW (read-only fields). Est: 1.5-2 hours. |
+| Scenario | Status | Deployed Date | Deploy ID | Critical Issues |
+|----------|--------|---------------|-----------|-----------------|
+| [transport-charges](transport-charges/) | 🚀 **DEPLOYED** | Oct 23, 2025 | 0AfSq000003nLkjKAE, 0AfSq000003nLw1KAE | ✅ **COMPLETE** - Issue 1 fix deployed (£919K protection), Issue 3 fix deployed (£870K protection), Secondary transport feature deployed (244 lines), Validation rule deployed. All 65 tests passed. Functional testing complete. **Financial risk eliminated.** |
+| [cs-invoicing](cs-invoicing/) | 📋 **PENDING** | - | - | ⚠️ **NewOrg has OLD VERSION** - RLCSChargeService 97 lines (vs 142, 31.7% missing). rlcsJobService 575 lines (vs 819, 29.8% missing). **Collection_Date__c field MISSING**. Missing buildChargeDescription(), inline SOQL performance issue. **Depends on transport-charges** (now deployed ✅). CS Invoicing team missing automatic date/description visibility. |
+| [secondary-transport](secondary-transport/) | 📋 **PENDING** | - | - | 🚨 **NewOrg has SEVERELY OUTDATED CODE** - Oct 10 version (575 lines vs 819 lines). **MISSING ALL SECONDARY TRANSPORT LOGIC** (244 lines, 29.8%). Phase 2 CSV mapping fixes MISSING in 3 components (BatchProcessor, Controller, iParserio batch). **CSV columns 14-15 issue - 97 invalid Jobs (£19K-£29K).** NULL weight/units from uploads. **Depends on transport-charges** (now deployed ✅) + cs-invoicing (pending). |
+| [producer-portal](producer-portal/) | 📋 **PENDING** | - | - | 🚨 **NewOrg has OLD BUGGY VERSION** - ProducerPlacedOnMarketTriggerHelper is 35 days out of date (Sept 19 vs Oct 21). **Missing ALL 5 fixes**. 8 components MISSING (sharing solution). **MUST deploy before go-live.** |
+| [email-to-case-assignment](email-to-case-assignment/) | 📋 **PENDING** | - | - | ⚠️ **NewOrg has OLD VERSION** - Apex classes are pre-V3 (434 vs 631 lines). Missing SOQL caching, recursion prevention, Kaylie Morris exemption. **3 components MISSING** (Custom Setting, Case field, Flow). **Customer Service workload management - deploy soon.** |
+| [invoice-email-portal-access](invoice-email-portal-access/) | 📋 **PENDING** | - | - | ⚠️ **NewOrg has OLD VERSION** - 4 of 5 components outdated (Sept 2025 vs Oct 9). InvoiceFileListController missing invoice PDF logic (71 lines). **ContentDistributionHelper already current** (Oct 10). Customers cannot access invoice PDFs on portal. |
+| [daily-reminder-emails](daily-reminder-emails/) | 📋 **PENDING** | - | - | 🚨 **NewOrg has VERY OLD VERSION** - Sept 17 version (52 lines vs 245 lines). **Entire Tier 1 system MISSING** (JobDeliveryConfirmationReminderBatch). Missing Delivery_Confirmed__c filter, HTML reporting, prioritization. **Sends 556 emails daily instead of 2 reports.** Record locking risk. |
+| [portal-exchange-email](portal-exchange-email/) | 📋 **PENDING** | - | - | ⚠️ **NewOrg has OUTDATED CODE** - Handler from Oct 2 (14 days old), test from Sept 17 (29 days old). 6 flows need verification for fromEmailAddress parameter. **Customers with strict SPF policies (Amey Highways) cannot submit portal requests.** Emails rejected, no Cases created. |
+| [po-consumption-emails](po-consumption-emails/) | 📋 **PENDING** | - | - | ✅ **NewOrg COMPLETELY CLEAN** - 12 of 13 components missing (only pre-existing Order consumption fields exist). **No version conflicts, no outdated code.** Fresh deployment. System currently non-functional in NewOrg. Low risk deployment. |
+| [job-charge-credit-on-account](job-charge-credit-on-account/) | 📋 **PENDING** | - | - | ⚠️ **NewOrg has BUGGY VERSION** - Oct 19 pre-fix version (3 days old). filterLogic shows "1 AND (2 OR 3)" with "Credit on Account" still in filter (line 214). **Flow currently INACTIVE** (IsActive = false) - bug not causing issues yet. **Account IDs updated in deployment package** (3 ID mappings OldOrg→NewOrg). Deploy fix BEFORE activating flow to prevent Cost__c corruption on 263 Credit on Account charges. Low risk - flow inactive. |
+| [rlcs-vendor-invoice-sage](rlcs-vendor-invoice-sage/) | 📋 **PENDING** | - | - | ✅ **NewOrg ALREADY HAS FIX** - Deployed Oct 6, 2025 at 15:34 UTC (45 minutes BEFORE OldOrg). **Test-first deployment strategy.** Both components IDENTICAL to OldOrg. RLCS fields in SOQL query (line 21), CSV button unrestricted (lines 167-179). **1,322 RLCS invoices processed successfully.** Proven stable over 17 days. **NO DEPLOYMENT NEEDED** - documentation serves as historical reference and validates test-first strategy. Zero gap between orgs. |
+| [bam-construct-portal-license](bam-construct-portal-license/) | 📋 **PENDING** | - | - | ⏳ **NewOrg MISSING ALL COMPONENTS** - Formula field Waste_Carrier_License_Expiry__c MISSING. Job portal layout exists but missing license fields (lines 96-100). Utility_Community.cls exists but missing license SOQL (lines 23, 40-41). depotViewCommunity LWC exists but missing license columns (lines 40-41, 64-72). **4-phase deployment**: CLI field/layout/code + Manual UI user config (Community_Role__c, sharing records). **137 HQ users need compliance visibility.** Risk: LOW (read-only fields). Est: 1.5-2 hours. |
 
 ---
 

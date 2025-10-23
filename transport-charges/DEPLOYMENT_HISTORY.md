@@ -182,11 +182,31 @@ sf data query --query "SELECT ValidationName, Active, ErrorMessage FROM Validati
 - ✅ No conflicts with existing code
 - ✅ Validation rule doesn't break existing functionality
 
+### Functional Testing (Validation Rule):
+**Date**: October 23, 2025, 15:26:32 UTC
+**Test Script**: `/tmp/test_validation_rule.apex`
+**Test Method**: Anonymous Apex execution
+
+**Test Results**:
+- ✅ **Test 1: Both flags true** - PASSED (validation rule fired correctly, prevented insert)
+  - Error: "Transport charge cannot be both Per Tonne and Per Unit"
+  - OrderItem with both Transport_Per_Tonne__c=true AND Transport_Per_Unit__c=true was correctly rejected
+- ✅ **Test 2: Only Per Tonne flag** - PASSED (OrderItem created successfully)
+  - OrderItem ID: 802Sq00000InkiUIAR
+  - Transport_Per_Tonne__c=true, Transport_Per_Unit__c=false
+- ✅ **Test 3: Only Per Unit flag** - PASSED (OrderItem created successfully)
+  - OrderItem ID: 802Sq00000InkiVIAR
+  - Transport_Per_Tonne__c=false, Transport_Per_Unit__c=true
+- ✅ **Test 4: Neither flag** - PASSED (OrderItem created successfully)
+  - OrderItem ID: 802Sq00000InkiWIAR
+  - Transport_Per_Tonne__c=false, Transport_Per_Unit__c=false
+
+**Verdict**: ✅ Validation rule is working correctly in production
+
 ### Manual Testing Required:
-- ⏳ Create test Job with transport charges
-- ⏳ Verify charges calculated correctly
-- ⏳ Test validation rule (try to set both flags)
-- ⏳ Verify secondary transport functionality
+- ⏳ Create real Job with transport charges in production
+- ⏳ Verify charges calculated correctly with real data
+- ⏳ Test secondary transport functionality with real scenarios
 
 ---
 
@@ -196,11 +216,12 @@ sf data query --query "SELECT ValidationName, Active, ErrorMessage FROM Validati
 - ✅ Phase 1: Code deployment complete
 - ✅ Phase 2: Validation rule deployed
 - ✅ Verification queries executed
+- ✅ Functional testing of validation rule complete (all 4 tests passed)
 - ✅ Documentation updated
+- ✅ Changes committed to GitHub repo
 
 ### Remaining:
-- ⏳ Manual functional testing
-- ⏳ User acceptance testing
+- ⏳ User acceptance testing with real production data
 - ⏳ Monitor production logs for 24-48 hours
 - ⏳ Deploy to dependent scenarios (cs-invoicing, secondary-transport)
 
