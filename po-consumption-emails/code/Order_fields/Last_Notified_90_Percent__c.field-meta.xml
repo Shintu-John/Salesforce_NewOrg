@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Last_Notified_90_Percent__c</fullName>
+    <description>Tracks the date/time of last 90% consumption notification sent. Used when notification mode is set to repeated reminders to calculate when next reminder should be sent.</description>
+    <inlineHelpText>Timestamp of last 90% notification. Used for repeated reminders mode only.</inlineHelpText>
+    <label>Last Notified - 90%</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>DateTime</type>
+</CustomField>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Notified_90_Percent__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Tracks if 90% consumption notification has been sent for this Purchase Order. Used when notification mode is set to one-time notifications (not repeated reminders).</description>
+    <inlineHelpText>Automatically checked when 90% notification is sent. Uncheck to manually resend notification if needed.</inlineHelpText>
+    <label>Notified - 90%</label>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PO_ID__c</fullName>
+    <caseSensitive>false</caseSensitive>
+    <description>18-character Salesforce ID of the Order (Purchase Order) record to monitor for consumption notifications.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Enter the 18-character Salesforce ID of the Purchase Order. You can find this in the URL when viewing the PO.</inlineHelpText>
+    <label>PO ID</label>
+    <length>18</length>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>true</unique>
+</CustomField>
