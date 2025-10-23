@@ -12,17 +12,17 @@
 
 ### For New Deployments
 ```bash
-# 1. Copy templates
-cp Templates/DEPLOYMENT_HISTORY_TEMPLATE.md your-scenario/DEPLOYMENT_HISTORY.md
+# 1. Copy templates (use next available number, e.g., 04-scenario-name)
+cp Templates/DEPLOYMENT_HISTORY_TEMPLATE.md 04-scenario-name/DEPLOYMENT_HISTORY.md
 
 # 2. Deploy code
-sf project deploy start -d your-scenario/code -o NewOrg --test-level RunLocalTests
+sf project deploy start -d 04-scenario-name/code -o NewOrg --test-level RunLocalTests
 
 # 3. Verify Field-Level Security (Critical!)
-./Scripts/verify-fls.sh your-scenario ObjectName
+./Scripts/verify-fls.sh 04-scenario-name ObjectName
 
 # 4. Run functional tests
-sf apex run -f your-scenario/tests/test_scenario.apex -o NewOrg
+sf apex run -f 04-scenario-name/tests/test_scenario.apex -o NewOrg
 ```
 
 ### Key Resources
@@ -41,11 +41,11 @@ sf apex run -f your-scenario/tests/test_scenario.apex -o NewOrg
 
 ### ✅ Completed Deployments
 
-| Scenario | Date | Deploy ID | Impact | Docs |
-|----------|------|-----------|--------|------|
-| [secondary-transport](secondary-transport/) | Oct 23 | `0AfSq000003nQR3KAM` | Fixed £19K-£29K CSV bug | [📊](secondary-transport/DEPLOYMENT_HISTORY.md) |
-| [transport-charges](transport-charges/) | Oct 23 | `0AfSq000003nQO7KAM` | £1.7M+ financial protection | [📊](transport-charges/DEPLOYMENT_HISTORY.md) |
-| [cs-invoicing](cs-invoicing/) | Oct 23 | `0AfSq000003nOU5KAM` | CS invoice automation | [📊](cs-invoicing/DEPLOYMENT_HISTORY.md) |
+| # | Scenario | Date | Deploy ID | Impact | Docs |
+|---|----------|------|-----------|--------|------|
+| 01 | [cs-invoicing](01-cs-invoicing/) | Oct 23 | `0AfSq000003nOU5KAM` | CS invoice automation | [📊](01-cs-invoicing/DEPLOYMENT_HISTORY.md) |
+| 02 | [transport-charges](02-transport-charges/) | Oct 23 | `0AfSq000003nQO7KAM` | £1.7M+ financial protection | [📊](02-transport-charges/DEPLOYMENT_HISTORY.md) |
+| 03 | [secondary-transport](03-secondary-transport/) | Oct 23 | `0AfSq000003nQR3KAM` | Fixed £19K-£29K CSV bug | [📊](03-secondary-transport/DEPLOYMENT_HISTORY.md) |
 
 ### 📋 Pending Deployments (9 scenarios)
 
@@ -53,19 +53,25 @@ sf apex run -f your-scenario/tests/test_scenario.apex -o NewOrg
 <summary><b>View Pending Scenarios</b></summary>
 
 #### High Priority
-- **portal-exchange-email** - Email exchange workflow fixes
-- **email-to-case-assignment** - Case assignment logic
-- **producer-portal** - Producer portal enhancements
-- **sage-api-integration** - Sage API authentication fixes
+| # | Scenario | Description |
+|---|----------|-------------|
+| 04 | [portal-exchange-email](04-portal-exchange-email/) | Email exchange workflow fixes |
+| 05 | [email-to-case-assignment](05-email-to-case-assignment/) | Case assignment logic |
+| 06 | [producer-portal](06-producer-portal/) | Producer portal enhancements |
+| 07 | [sage-api-integration](07-sage-api-integration/) | Sage API authentication fixes |
 
 #### Medium Priority
-- **daily-reminder-emails** - Daily email reminder system
-- **po-consumption-emails** - PO consumption notifications
-- **invoice-email-portal-access** - Invoice email access controls
-- **job-charge-credit-on-account** - Job charge credit logic
+| # | Scenario | Description |
+|---|----------|-------------|
+| 08 | [daily-reminder-emails](08-daily-reminder-emails/) | Daily email reminder system |
+| 09 | [po-consumption-emails](09-po-consumption-emails/) | PO consumption notifications |
+| 10 | [invoice-email-portal-access](10-invoice-email-portal-access/) | Invoice email access controls |
+| 11 | [job-charge-credit-on-account](11-job-charge-credit-on-account/) | Job charge credit logic |
 
 #### Low Priority
-- **smartwaste-integration** - SmartWaste integration analysis
+| # | Scenario | Description |
+|---|----------|-------------|
+| 12 | [smartwaste-integration](12-smartwaste-integration/) | SmartWaste integration analysis |
 
 </details>
 
@@ -90,13 +96,19 @@ deployment-execution/
 │   └── Guides/
 │       └── FLS_VERIFICATION_GUIDE.md
 │
-└── 📦 [scenario-folders]/    # Individual deployments
+└── 📦 [##-scenario-name]/    # Individual deployments (numbered by priority)
     ├── README.md              # Gap analysis & plan
     ├── DEPLOYMENT_HISTORY.md  # Deployment log
     ├── FUNCTIONAL_TEST_RESULTS.md
     ├── code/                  # Deployed Apex/metadata
     └── tests/                 # Functional tests
 ```
+
+**Folder Numbering Convention:**
+- `01-03`: Completed deployments (in deployment order)
+- `04-07`: High priority pending scenarios
+- `08-11`: Medium priority pending scenarios
+- `12+`: Low priority / reference scenarios
 
 ---
 
