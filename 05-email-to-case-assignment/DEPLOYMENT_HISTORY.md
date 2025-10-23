@@ -489,23 +489,132 @@ sf project deploy start -o NewOrg \
 ### Phase 12: Manual Post-Deployment Steps
 
 **Date**: October 23, 2025
-**Performed By**: John (User)
+**Performed By**: John (User) and Claude (for Custom Setting)
 
-**1. Flow Activation**:
+**1. Custom Setting Org Default Creation**:
+- **Component**: `Case_Auto_Assignment_Settings__c` org default value
+- **Method**: Anonymous Apex execution
+- **Value**: `Max_Open_Cases_Per_User__c = 20`
+
+**Command Executed**:
+```apex
+Case_Auto_Assignment_Settings__c settings = new Case_Auto_Assignment_Settings__c(
+    SetupOwnerId = UserInfo.getOrganizationId(),
+    Max_Open_Cases_Per_User__c = 20
+);
+insert settings;
+```
+
+**Result**: ✅ Custom Setting org default created successfully
+
+**Verification**:
+```apex
+Case_Auto_Assignment_Settings__c verify = Case_Auto_Assignment_Settings__c.getInstance();
+// Returns: Max_Open_Cases_Per_User__c = 20.0
+```
+
+**Why Required**: Custom Settings object was deployed in Phase 6, but **org default data** must be created separately. Without this, the assignment logic would use hardcoded fallback values.
+
+**Alternative Method**: Could also be created via UI (Setup → Custom Settings → Case Auto Assignment Settings → Manage → New)
+
+**2. Flow Activation**:
 - Navigated to: Setup → Flows → "Case_Remove_Case_Owner_if_Reopen_24_Hours"
 - Clicked "Activate" button
 - **Status**: ✅ Flow activated and running
 
-**2. Field-Level Security**:
+**3. Field-Level Security**:
 - Navigated to: Setup → Object Manager → Case → Fields → Previous_Auto_Assigned_Owner__c
 - Clicked "Set Field-Level Security"
 - Granted visibility to System Administrator profile
 - **Status**: ✅ FLS configured
 
 **Reason for Manual Steps**:
+- Custom Settings data must be created separately from metadata
 - Flows deploy as inactive in production for safety
 - FLS requires Profile/PermissionSet metadata deployment (risky in production)
 - Manual UI approach safer than metadata deployment for production orgs
+
+---
+
+### Phase 13: Functional Testing
+
+**Date**: October 23, 2025, 21:46 BST
+**Test Script**: [functional_test_case_assignment.apex](tests/functional_test_case_assignment.apex)
+**Execution Method**: Anonymous Apex via Salesforce CLI
+**Status**: ⚠️ **PARTIALLY COMPLETE** - Revealed production readiness blocker
+
+**Test Results Summary**:
+
+| Test | Status | Result |
+|------|--------|--------|
+| Pre-Test Verification | ✅ PASSED | All prerequisites verified |
+| Test 1: Basic Assignment | ❌ FAILED | 0 eligible users found |
+| Test 2: Workload Distribution | ❌ FAILED | 0/5 cases assigned |
+| Test 3: Previous Owner Reassignment | ⚠️ INCONCLUSIVE | Cannot test without eligible users |
+| Test 4: User Exclusion Flag | ⚠️ SKIPPED | Requires 2+ CS users |
+| Cleanup | ✅ PASSED | All 7 test cases deleted |
+
+**Pre-Test Verification Results**:
+- ✅ Custom Settings: `Max_Open_Cases_Per_User__c = 20`
+- ✅ Customer Service users: 1 found (Kaylie Morris, ID: 005Sq000003oTBhIAM)
+- ✅ Queue: Customer Service Email (ID: 00GSq000003BmxFMAS)
+- ✅ Record Type: Email (ID: 012d3000000BUE5AAO)
+- ✅ Flow: Activation assumed (manually activated in Phase 12)
+- ✅ Test Account: WATES CONSTRUCTION LIMITED (ID: 001Sq00000XZj7KIAT)
+
+**Test 1 Failure Details**:
+- **Expected**: Case assigned to Kaylie Morris
+- **Actual**: Case remained in queue (Case Number: 00325191)
+- **Root Cause**: Apex filter `LastLoginDate >= :today` excluded all users
+- **Debug Log**: "Found 0 eligible users for case assignment."
+
+**Test 2 Failure Details**:
+- **Expected**: 5 cases distributed across users
+- **Actual**: 0/5 cases assigned, all remained in queue
+- **Root Cause**: Same as Test 1 - no eligible users
+- **Additional Finding**: Recursion prevention triggered correctly ("Assignment logic already executed in this transaction")
+
+**🚨 CRITICAL FINDING: Production Readiness Blocker**
+
+**Issue**: Case assignment system cannot function until Customer Service users log into NewOrg
+
+**Root Cause**: The Apex code filters eligible users with this criteria:
+```apex
+WHERE Profile.Name LIKE '%Customer Service%'
+AND LastLoginDate >= :today  // Requires login within last 30 days
+AND (Dont_Auto_Assign_Cases__c = false OR Dont_Auto_Assign_Cases__c = null)
+AND IsActive = true
+```
+
+Where `:today` is calculated as `Date.today().addDays(-30)` (30 days ago).
+
+**Current State**:
+- Kaylie Morris exists in NewOrg
+- She is an active Customer Service user
+- BUT: Her `LastLoginDate` is older than 30 days
+- Result: Query returns 0 eligible users
+
+**Impact**:
+- ❌ No cases will be auto-assigned until Customer Service users log in
+- ❌ Cases will remain in queue indefinitely
+- ❌ System appears deployed but is non-functional
+
+**Required Actions Before Production Use**:
+1. **Have all Customer Service users log into NewOrg** (this updates their `LastLoginDate`)
+2. **Re-run functional tests** to verify assignment works with eligible users
+3. **Monitor production** for first few case assignments
+
+**Alternative Solutions**:
+- Option A: Have CS team log in (RECOMMENDED - preserves intended behavior)
+- Option B: Modify Last LoginDate filter to use longer period (e.g., 60 or 90 days)
+- Option C: Temporarily remove LastLoginDate filter (NOT RECOMMENDED - defeats purpose)
+
+**Cleanup Verification**:
+- ✅ All test cases deleted successfully
+- ✅ Test data removed from production
+- ✅ No manual cleanup required
+
+**Detailed Results**: See [FUNCTIONAL_TEST_RESULTS.md](FUNCTIONAL_TEST_RESULTS.md)
 
 ---
 
@@ -637,7 +746,7 @@ Auto_Assign_Case (Action) - We can't find an action with the name and action typ
 - ✅ `Case_Remove_Case_Owner_if_Reopen_24_Hours` (Active)
   - Type: Record-Triggered Flow
   - Trigger: Case record update
-  - Purpose: Auto-assign cases when reopened after 24+ hours
+  - Purpose: Auto-assign cases when reopened after 14+ hours (note: file name says 24 but actual logic is 14)
   - Status: Active (manually activated)
 
 **Validation Rules**:
@@ -711,10 +820,10 @@ Auto_Assign_Case (Action) - We can't find an action with the name and action typ
    - Create case
    - Verify user is excluded from assignment
 
-4. Test case reopening after 24 hours
+4. Test case reopening after 14 hours
    - Create case and assign to user
    - Close case
-   - Reopen case after 24+ hours
+   - Reopen case after 14+ hours
    - Verify Flow triggers and case is reassigned
 
 5. Test with no eligible users
@@ -907,13 +1016,35 @@ sf data query --query "SELECT ValidationName, Active, CreatedDate, CreatedBy.Nam
 
 **Flow**: `Case_Remove_Case_Owner_if_Reopen_24_Hours`
 
-**Trigger**: Case reopened after 24+ hours
+**Trigger**: Case reopened after 14+ hours (note: file name is misleading - actual threshold is 14 hours, not 24)
 
-**Action**: Automatically reassigns case to available Customer Service user
+**How It Works (Two-Layered Logic)**:
+
+**Layer 1: Flow Trigger (14+ hours check)**
+- Flow formula: `(Most_Recent_Message__c - Previous_Email_Time__c) * 24 > 14`
+- Triggers ONLY when time difference is **greater than 14 hours**
+- Flow actions:
+  1. Moves case to Customer Service Email queue
+  2. Sets `Previous_Auto_Assigned_Owner__c` to current owner
+  3. Calls `rlsServiceCaseAutoAssignHandler` (invokes Apex)
+
+**Layer 2: Apex Same-Day Check (calendar day check)**
+- Apex checks if `Most_Recent_Message__c` is **same calendar day as today**
+- If YES and previous owner is under threshold:
+  - Case reassigned to previous owner
+- If NO or previous owner over threshold:
+  - Case assigned to user with lowest workload
+
+**Example Scenarios**:
+- **Case closed 10 AM, reopened 8 PM same day**: Flow does NOT trigger (< 14 hours), case stays with current owner
+- **Case closed 10 AM Monday, reopened 2 PM Tuesday**: Flow triggers (> 14 hours), moves to queue, Apex checks if still same calendar day (NO - different day), assigns to user with lowest workload
+- **Case closed 11 PM Monday, reopened 2 PM Tuesday**: Flow triggers (> 14 hours), moves to queue, Apex checks same day (NO), assigns to lowest workload
+- **Manual queue assignment same day**: If manually assigned to queue on same day with `Previous_Auto_Assigned_Owner__c` set, Apex reassigns to previous owner (if eligible)
 
 **Business Value**:
-- Prevents stale case ownership
+- Prevents stale case ownership (14+ hour threshold)
 - Ensures reopened cases get immediate attention
+- Preserves same-day continuity when possible
 - Reduces manual reassignment work
 
 ---
