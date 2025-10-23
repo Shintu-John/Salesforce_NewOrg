@@ -317,16 +317,6 @@ sf data query --query "SELECT Definition.DeveloperName, Status FROM Flow WHERE D
 
 ---
 
-## Workflow Documentation
-
-For complete workflow instructions, see:
-- [CLAUDE_WORKFLOW_RULES.md](../Documentation/CLAUDE_WORKFLOW_RULES.md)
-- [IMPLEMENTATION_VERIFICATION_CHECKLIST.md](../Documentation/IMPLEMENTATION_VERIFICATION_CHECKLIST.md)
-- [SCENARIO_MIGRATION_CHECKLIST.md](../Documentation/SCENARIO_MIGRATION_CHECKLIST.md)
-- [MIGRATION_PROGRESS.md](../Documentation/MIGRATION_PROGRESS.md)
-
----
-
 ## Important Notes
 
 ### Pre-Deployment Checklist
@@ -369,8 +359,6 @@ After deploying any scenario:
 ## Quick Links
 
 - [OldOrg State Documentation](https://github.com/Shintu-John/Salesforce_OldOrg_State.git)
-- [Salesforce Project Documentation](../Documentation/)
-- [Migration Progress Tracking](../Documentation/MIGRATION_PROGRESS.md)
 
 ---
 
