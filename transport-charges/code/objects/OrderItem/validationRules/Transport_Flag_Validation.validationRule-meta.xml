@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Transport_Flag_Validation</fullName>
+    <active>true</active>
+    <description>Prevents both Transport_Per_Tonne__c and Transport_Per_Unit__c from being true at the same time. A transport charge must be calculated either per tonne OR per unit, not both.</description>
+    <errorConditionFormula>AND(
+    Transport_Per_Tonne__c,
+    Transport_Per_Unit__c
+)</errorConditionFormula>
+    <errorDisplayField>Transport_Per_Tonne__c</errorDisplayField>
+    <errorMessage>Transport charge cannot be both Per Tonne and Per Unit. Please select only one calculation method.</errorMessage>
+</ValidationRule>
