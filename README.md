@@ -79,7 +79,7 @@ Salesforce_NewOrg/
 
 ## Current Scenarios (Fresh Start - Oct 22, 2025)
 
-### Configuration Scenarios (4 Complete ✅)
+### Configuration Scenarios (5 Complete ✅)
 
 **Purpose**: Configuration guides for existing systems (NOT code deployments)
 
@@ -89,6 +89,7 @@ Salesforce_NewOrg/
 | [quote-pricing-notification](quote-pricing-notification/) | ✅ Complete | Oct 22, 2025 | Configuration | Email notification configuration - Manual UI setup for org-wide email address |
 | [quote-to-order-process](quote-to-order-process/) | ✅ Complete | Oct 22, 2025 | Training | Quote-to-Order user training - No configuration changes needed |
 | [fred-certificate-renewal](fred-certificate-renewal/) | ✅ Complete | Oct 22, 2025 | Configuration | FRED Integration certificate renewal procedure - Certificate management guide |
+| [sage-api-integration](sage-api-integration/) | ✅ Complete | Oct 23, 2025 | Configuration/OAuth | Sage API OAuth authentication configuration - Setup → Named Credentials → SIA → Authenticate with NewOrg Sage credentials. Use NewOrg-specific subscription keys, site IDs, company IDs. Test with Anonymous Apex. 60-day re-authentication cycle. Est: 30-45 minutes |
 
 ### Deployment Scenarios (12 Ready ✅)
 
