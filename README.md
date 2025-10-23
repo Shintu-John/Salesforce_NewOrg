@@ -90,7 +90,7 @@ Salesforce_NewOrg/
 | [quote-to-order-process](quote-to-order-process/) | ✅ Complete | Oct 22, 2025 | Training | Quote-to-Order user training - No configuration changes needed |
 | [fred-certificate-renewal](fred-certificate-renewal/) | ✅ Complete | Oct 22, 2025 | Configuration | FRED Integration certificate renewal procedure - Certificate management guide |
 
-### Deployment Scenarios (11 Ready ✅)
+### Deployment Scenarios (12 Ready ✅)
 
 **Purpose**: Deploy code from OldOrg to NewOrg (bug fixes, new features, enhancements).
 
@@ -107,6 +107,7 @@ Salesforce_NewOrg/
 | [po-consumption-emails](po-consumption-emails/) | ✅ Ready (✅ **CLEAN SLATE**) | Oct 23, 2025 | **13 components analyzed** | ✅ **NewOrg COMPLETELY CLEAN** - 12 of 13 components missing (only pre-existing Order consumption fields exist). **No version conflicts, no outdated code.** Fresh deployment. System currently non-functional in NewOrg. Low risk deployment. |
 | [job-charge-credit-on-account](job-charge-credit-on-account/) | ✅ Ready (⚠️ **BUGGY + INACTIVE**) | Oct 23, 2025 | **1 flow + 11 dependencies** | ⚠️ **NewOrg has BUGGY VERSION** - Oct 19 pre-fix version (3 days old). filterLogic shows "1 AND (2 OR 3)" with "Credit on Account" still in filter (line 214). **Flow currently INACTIVE** (IsActive = false) - bug not causing issues yet. **Account IDs updated in deployment package** (3 ID mappings OldOrg→NewOrg). Deploy fix BEFORE activating flow to prevent Cost__c corruption on 263 Credit on Account charges. Low risk - flow inactive. |
 | [rlcs-vendor-invoice-sage](rlcs-vendor-invoice-sage/) | ✅ Ready (✅ **ALREADY DEPLOYED**) | Oct 23, 2025 | **2 components + 34 dependencies** | ✅ **NewOrg ALREADY HAS FIX** - Deployed Oct 6, 2025 at 15:34 UTC (45 minutes BEFORE OldOrg). **Test-first deployment strategy.** Both components IDENTICAL to OldOrg. RLCS fields in SOQL query (line 21), CSV button unrestricted (lines 167-179). **1,322 RLCS invoices processed successfully.** Proven stable over 17 days. **NO DEPLOYMENT NEEDED** - documentation serves as historical reference and validates test-first strategy. Zero gap between orgs. |
+| [bam-construct-portal-license](bam-construct-portal-license/) | ✅ Ready (⏳ **PENDING**) | Oct 23, 2025 | **4 components analyzed** | ⏳ **NewOrg MISSING ALL COMPONENTS** - Formula field Waste_Carrier_License_Expiry__c MISSING. Job portal layout exists but missing license fields (lines 96-100). Utility_Community.cls exists but missing license SOQL (lines 23, 40-41). depotViewCommunity LWC exists but missing license columns (lines 40-41, 64-72). **4-phase deployment**: CLI field/layout/code + Manual UI user config (Community_Role__c, sharing records). **137 HQ users need compliance visibility.** Risk: LOW (read-only fields). Est: 1.5-2 hours. |
 
 **Next Deployment Scenarios to Prepare** (Priority Order):
 
