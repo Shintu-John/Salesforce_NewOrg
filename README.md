@@ -96,7 +96,8 @@ Salesforce_NewOrg/
 
 | Scenario | Status | Last Updated | Gap Analysis | Critical Issues |
 |----------|--------|--------------|--------------|-----------------|
-| [producer-portal](producer-portal/) | ✅ Ready (⚠️ **CRITICAL**) | Oct 23, 2025 | **15 components analyzed** | 🚨 **NewOrg has OLD BUGGY VERSION** - ProducerPlacedOnMarketTriggerHelper is 35 days out of date (Sept 19 vs Oct 21). **Missing ALL 5 fixes**. 8 components MISSING (sharing solution). **MUST deploy before go-live.** |
+| [producer-portal](producer-portal/) | ✅ Ready (⚠️ **CRITICAL**) | Oct 22, 2025 | **15 components analyzed** | 🚨 **NewOrg has OLD BUGGY VERSION** - ProducerPlacedOnMarketTriggerHelper is 35 days out of date (Sept 19 vs Oct 21). **Missing ALL 5 fixes**. 8 components MISSING (sharing solution). **MUST deploy before go-live.** |
+| [email-to-case-assignment](email-to-case-assignment/) | ✅ Ready (⚠️ **VERSION MISMATCH**) | Oct 23, 2025 | **13 components analyzed** | ⚠️ **NewOrg has OLD VERSION** - Apex classes are pre-V3 (434 vs 631 lines). Missing SOQL caching, recursion prevention, Kaylie Morris exemption. **3 components MISSING** (Custom Setting, Case field, Flow). **Customer Service workload management - deploy soon.** |
 
 **Next Scenarios to Prepare** (Priority Order):
 
