@@ -102,19 +102,19 @@ Salesforce_NewOrg/
 | [daily-reminder-emails](daily-reminder-emails/) | ✅ Ready (⚠️ **SEVERELY OUTDATED**) | Oct 23, 2025 | **4 components analyzed** | 🚨 **NewOrg has VERY OLD VERSION** - Sept 17 version (52 lines vs 245 lines). **Entire Tier 1 system MISSING** (JobDeliveryConfirmationReminderBatch). Missing Delivery_Confirmed__c filter, HTML reporting, prioritization. **Sends 556 emails daily instead of 2 reports.** Record locking risk. |
 | [portal-exchange-email](portal-exchange-email/) | ✅ Ready (⚠️ **OUTDATED**) | Oct 23, 2025 | **6 components analyzed** | ⚠️ **NewOrg has OUTDATED CODE** - Handler from Oct 2 (14 days old), test from Sept 17 (29 days old). 6 flows need verification for fromEmailAddress parameter. **Customers with strict SPF policies (Amey Highways) cannot submit portal requests.** Emails rejected, no Cases created. |
 
-**Next Scenarios to Prepare** (Priority Order):
+**Next Deployment Scenarios to Prepare** (Priority Order):
 
 | # | Scenario | Source Documentation | Complexity | Est. Time |
 |---|----------|---------------------|------------|-----------|
-| 1 | ~~email-to-case-assignment~~ | ~~EMAIL_TO_CASE_ASSIGNMENT_MASTER.md~~ | ~~High~~ | **✅ COMPLETE** (Oct 23, 2025) |
-| 2 | ~~invoice-email-portal-access~~ | ~~INVOICE_EMAIL_PORTAL_ACCESS_SOLUTION.md~~ | ~~Low~~ | **✅ COMPLETE** (Oct 23, 2025) |
-| 3 | sage-api-integration | SAGE_API_HTTP_401_AUTHENTICATION_FIX.md | Medium | **CONFIGURATION** (not deployment) |
-| 4 | ~~daily-reminder-emails~~ | ~~DAILY_REMINDER_EMAILS_COMPLETE_GUIDE.md~~ | ~~Medium~~ | **✅ COMPLETE** (Oct 23, 2025) |
-| 5 | ~~portal-exchange-email~~ | ~~PORTAL_EXCHANGE_EMAIL_FIX_COMPLETE_GUIDE.md~~ | ~~Medium~~ | **✅ COMPLETE** (Oct 23, 2025) |
-| 6 | transport-charges | TRANSPORT_CHARGE_ISSUES_CONSOLIDATED.md | Medium | 1.5-2 hours |
-| 7 | secondary-transport | SECONDARY_TRANSPORT_IMPLEMENTATION.md | Medium | 1.5-2 hours |
-| 8 | po-consumption-emails | PO_CONSUMPTION_EMAIL_NOTIFICATIONS.md | Low | 1-1.5 hours |
-| 9 | job-charge-credit-on-account | JOB_CHARGE_CREDIT_ON_ACCOUNT_FIX.md | Low | 1 hour |
+| 6 | cs-invoicing | CS_INVOICING_DATE_DESCRIPTION_FIELDS.md (Backup/) | Medium | 1.5-2 hours |
+| 7 | transport-charges | TRANSPORT_CHARGE_ISSUES_CONSOLIDATED.md (Backup/) | Medium | 1.5-2 hours |
+| 8 | secondary-transport | SECONDARY_TRANSPORT_IMPLEMENTATION.md (Backup/) | Medium | 1.5-2 hours |
+| 9 | po-consumption-emails | PO_CONSUMPTION_EMAIL_NOTIFICATIONS.md (Backup/) | Low | 1-1.5 hours |
+| 10 | job-charge-credit-on-account | JOB_CHARGE_CREDIT_ON_ACCOUNT_FIX.md (Backup/) | Low | 1 hour |
+| 11 | rlcs-vendor-invoice-sage | RLCS_VENDOR_INVOICE_SAGE_EXPORT_FIX.md (Documentation/) | Medium | 1.5-2 hours |
+
+**Configuration Scenarios Available**:
+- sage-api-integration (SAGE_API_HTTP_401_AUTHENTICATION_FIX.md) - OAuth re-authentication, NO code deployment
 
 ---
 
@@ -373,7 +373,9 @@ After deploying any scenario:
 
 **Repository Status**: 🚨 CRITICAL - Version Mismatch Detected
 **Last Updated**: October 23, 2025
-**Total Scenarios**: 5 complete (1 deployment + 4 configuration)
-**Progress**: 13.9% complete (5/36 scenarios)
-**CRITICAL ALERT**: producer-portal has 35-day-old buggy version in NewOrg - MUST deploy updates
-**Next Steps**: Review producer-portal critical gap analysis, then continue with email-to-case-assignment
+**Total Scenarios**: 9 complete (5 deployment + 4 configuration)
+**Deployment Scenarios**: 5 of 18 ready for deployment (27.8%)
+**Configuration Scenarios**: 4 of 8 complete (50.0%)
+**Overall Progress**: 25.7% complete (9/35 scenarios)
+**CRITICAL ALERT**: Multiple scenarios have outdated versions in NewOrg - producer-portal (35 days old), daily-reminder-emails (33 days old), portal-exchange-email (14-29 days old)
+**Next Deployment Preparation**: cs-invoicing (Medium Priority #6)
