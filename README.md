@@ -79,7 +79,7 @@ Salesforce_NewOrg/
 
 ## Current Scenarios (Fresh Start - Oct 22, 2025)
 
-### Configuration Scenarios (8 Complete ✅)
+### Configuration Scenarios (22 Complete ✅)
 
 **Purpose**: Configuration guides for existing systems (NOT code deployments)
 
@@ -93,6 +93,20 @@ Salesforce_NewOrg/
 | [case-reopening-incident](case-reopening-incident/) | ✅ Complete | Oct 23, 2025 | Prevention Guide | NewOrg prevention checklist based on OldOrg incident - Verify ALL profiles have Case record type access - Test case reopening flows - Monitor for NULL record types - Flow enhancement recommendation (check IsClosed) - Pre-go-live testing procedures |
 | [domestic-customer-email](domestic-customer-email/) | ✅ Complete | Oct 23, 2025 | Prevention Guide | Person Account configuration checklist - Verify PersonEmail field on Domestic Customer layout - Test email entry before go-live - Ensure field is Edit (not Read-only) |
 | [user-lorna-barsby-email](user-lorna-barsby-email/) | ✅ Complete | Oct 23, 2025 | User Management Guide | User creation procedure - Verify email addresses before creating users - Cannot update email for unverified users - Solution: Deactivate + Create new if email correction needed |
+| [dashboard-access](dashboard-access/) | ✅ Complete | Oct 23, 2025 | Reference/Permissions | Dashboard folder access permissions guide for NewOrg |
+| [nathan-blake-adoc](nathan-blake-adoc/) | ✅ Complete | Oct 23, 2025 | Reference/Permissions | ADOC permission configuration reference for NewOrg |
+| [orderitem-data-model](orderitem-data-model/) | ✅ Complete | Oct 23, 2025 | Reference/Data Model | OrderItem data model reference for bulk update operations |
+| [outlook-email-sync](outlook-email-sync/) | ✅ Complete | Oct 23, 2025 | Reference/Integration | Outlook email sync configuration guide for NewOrg |
+| [producer-portal-troubleshooting](producer-portal-troubleshooting/) | ✅ Complete | Oct 23, 2025 | Reference/Troubleshooting | Producer Portal troubleshooting guide for NewOrg |
+| [rebekah-stewart-quote](rebekah-stewart-quote/) | ✅ Complete | Oct 23, 2025 | Reference/Issue | Quote line item issue resolution guide |
+| [rebekah-stewart-smartwaste](rebekah-stewart-smartwaste/) | ✅ Complete | Oct 23, 2025 | Reference/Permissions | SmartWaste report access configuration guide |
+| [sharepoint-file-access](sharepoint-file-access/) | ✅ Complete | Oct 23, 2025 | Reference/Integration | SharePoint file access setup guide for NewOrg |
+| [sharepoint-file-sync](sharepoint-file-sync/) | ✅ Complete | Oct 23, 2025 | Reference/Integration | SharePoint file sync configuration guide for NewOrg |
+| [shn-website-quotes](shn-website-quotes/) | ✅ Complete | Oct 23, 2025 | Reference/Process | SHN Website quotes process guide for NewOrg |
+| [si13024-rollup](si13024-rollup/) | ✅ Complete | Oct 23, 2025 | Reference/Issue | SI13024 rollup configuration guide for NewOrg |
+| [supplier-contact-access](supplier-contact-access/) | ✅ Complete | Oct 23, 2025 | Reference/Analysis | Supplier contact access configuration guide for NewOrg |
+| [test-failure-guide](test-failure-guide/) | ✅ Complete | Oct 23, 2025 | Reference/Testing | Test failure troubleshooting guide for NewOrg |
+| [waste-vapes-analysis](waste-vapes-analysis/) | ✅ Complete | Oct 23, 2025 | Reference/Analysis | Waste vapes categorization guide for NewOrg |
 
 ### Deployment Scenarios (12 Ready ✅)
 
