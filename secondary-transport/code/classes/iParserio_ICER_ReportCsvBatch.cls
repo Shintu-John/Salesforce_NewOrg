@@ -109,9 +109,19 @@ public class iParserio_ICER_ReportCsvBatch implements Database.Batchable<sObject
                     job.AATF_Received_Date__c = iParserio_Helper.convertToDate(row.get(DATE_RECEIVED));
                 }
                 job.CSV_Document__c = key.split('~')[0];
+
+                // ALSO populate Job-level fields for Material_Weight_Tonnes__c and Unit_Count__c
+                // This ensures charges calculate correctly (trigger will recalculate when these fields change)
+                if(row.containsKey(MATERIAL_WEIGHT_TONNES) && String.isNotBlank(row.get(MATERIAL_WEIGHT_TONNES))){
+                    job.Material_Weight_Tonnes__c = iParserio_Helper.convertToDecimal(row.get(MATERIAL_WEIGHT_TONNES));
+                }
+                if(row.containsKey(UNIT_COUNT) && String.isNotBlank(row.get(UNIT_COUNT))){
+                    job.Unit_Count__c = iParserio_Helper.convertToInteger(row.get(UNIT_COUNT));
+                }
+
                 jobsToUpdate.put(job.Id, job);
-                
-                
+
+
                 //MATERIAL CATEGORY BREAKDOWN
                 Material_Category_Breakdown__c categoryBreakDownRec = new Material_Category_Breakdown__c();
                 categoryBreakDownRec.RLCS_Job__c = job.Id;

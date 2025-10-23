@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>RLCSJobAATFBatchProcessor</members>
+        <members>RLCSJobAATFBatchProcessorTest</members>
+        <members>RLCSJobAATFController</members>
+        <members>RLCSJobAATFControllerTest</members>
+        <members>iParserio_ICER_ReportCsvBatch</members>
+        <members>iParserio_ICER_ReportCsvBatchTest</members>
+        <name>ApexClass</name>
+    </types>
+    <version>65.0</version>
+</package>

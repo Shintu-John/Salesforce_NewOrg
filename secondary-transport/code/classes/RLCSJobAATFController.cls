@@ -232,29 +232,61 @@ public with sharing class RLCSJobAATFController {
                 // Find the indices for Weightbridge Reference and Consignment Note Ticket
                 Integer weighbridgeIndex = -1;
                 Integer consignmentNoteTicketIndex = -1;
-                
+                Integer weeeTonnesIndex = -1;
+                Integer weeeUnitsIndex = -1;
+
                 // Check if we have at least 12 columns
                 if (row.size() >= 12) {
                     weighbridgeIndex = 10; // 11th column (0-based index)
                     consignmentNoteTicketIndex = 11; // 12th column (0-based index)
                 }
-                
+
+                // Check if we have columns 14 and 15 for WEEE Tonnes and WEEE Units
+                if (row.size() >= 15) {
+                    weeeTonnesIndex = 13; // 14th column (0-based index) - "WEEE Tonnes"
+                    weeeUnitsIndex = 14; // 15th column (0-based index) - "WEEE Units"
+                }
+
                 // Create Job record with additional fields
                 RLCS_Job__c job = new RLCS_Job__c(
                     Order__c = orderId,
                     Order_Product__c = orderProductId
                 );
-                
+
                 // Add Weightbridge Reference if available
                 if (weighbridgeIndex >= 0 && weighbridgeIndex < row.size()) {
                     job.Weightbridge_Reference__c = row[weighbridgeIndex].trim();
                 }
-                
+
                 // Add Consignment Note Ticket if available
                 if (consignmentNoteTicketIndex >= 0 && consignmentNoteTicketIndex < row.size()) {
                     job.Consignment_Note_Reference_Ticket__c = row[consignmentNoteTicketIndex].trim();
                 }
-                
+
+                // Add Material Weight (Tonnes) if available
+                if (weeeTonnesIndex >= 0 && weeeTonnesIndex < row.size()) {
+                    String weightValue = row[weeeTonnesIndex].trim();
+                    if (String.isNotBlank(weightValue)) {
+                        try {
+                            job.Material_Weight_Tonnes__c = Decimal.valueOf(weightValue);
+                        } catch (Exception e) {
+                            System.debug('Error parsing WEEE Tonnes value: ' + weightValue + ' - ' + e.getMessage());
+                        }
+                    }
+                }
+
+                // Add Unit Count if available
+                if (weeeUnitsIndex >= 0 && weeeUnitsIndex < row.size()) {
+                    String unitsValue = row[weeeUnitsIndex].trim();
+                    if (String.isNotBlank(unitsValue)) {
+                        try {
+                            job.Unit_Count__c = Integer.valueOf(unitsValue);
+                        } catch (Exception e) {
+                            System.debug('Error parsing WEEE Units value: ' + unitsValue + ' - ' + e.getMessage());
+                        }
+                    }
+                }
+
                 jobsToInsert.add(job);
                 validRowIndices.add(i);
             }
