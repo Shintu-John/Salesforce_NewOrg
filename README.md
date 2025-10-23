@@ -74,30 +74,69 @@ This repository contains **migration plans and deployment packages** for migrati
 ## Repository Structure
 
 ```
-Salesforce_NewOrg/
+deployment-execution/
 ├── README.md (this file)
-├── producer-portal/                     ← Each scenario gets its own folder
-│   ├── README.md                        ← Complete migration plan with gap analysis
-│   ├── source-docs/                     ← Original documentation (archived)
-│   │   └── ORIGINAL_DOCS.md
-│   └── code/                            ← Deployment-ready code (verified)
-│       ├── classes/
-│       ├── triggers/
-│       ├── flows/
-│       └── objects/
-├── email-to-case-assignment/            ← Another scenario
-│   ├── README.md
-│   ├── source-docs/
-│   └── code/
-└── [more scenarios...]
+├── Templates/                           🆕 Deployment templates
+│   ├── DEPLOYMENT_HISTORY_TEMPLATE.md
+│   ├── FUNCTIONAL_TEST_TEMPLATE.apex
+│   └── FUNCTIONAL_TEST_RESULTS_TEMPLATE.md
+├── Scripts/                             🆕 Automation scripts
+│   ├── verify-fls.sh                    🆕 Automated FLS verification
+│   └── generate-deployment-summary.sh   🆕 Auto-generate summaries
+├── Documentation/                       🆕 Organized documentation
+│   ├── DEPLOYMENT_WORKFLOW.md           Complete deployment workflow
+│   ├── DEPLOYMENT_CONTINUATION_PROMPT.md
+│   ├── Guides/                          🆕 Step-by-step guides
+│   │   └── FLS_VERIFICATION_GUIDE.md    🆕 FLS setup guide
+│   └── Archive/                         🆕 Historical documentation
+├── manifest/
+│   └── package-fls-check.xml            FLS verification manifest
+├── FLS_STATUS_REPORT.md                 🆕 FLS analysis report
+├── REPO_IMPROVEMENTS_SUMMARY.md         🆕 Improvement summary
+└── [scenario folders]/
+    ├── README.md                        Gap analysis & deployment plan
+    ├── DEPLOYMENT_HISTORY.md            Detailed deployment log
+    ├── FUNCTIONAL_TEST_RESULTS.md       Test results documentation
+    ├── code/                            Deployment-ready code
+    │   ├── classes/
+    │   ├── triggers/
+    │   └── objects/
+    └── tests/                           🆕 Functional test scripts
+        └── test_scenario.apex
 ```
+
+### Key Folders
+
+#### 🆕 Templates/
+Reusable templates for new deployments:
+- Copy templates to new scenario folders
+- Ensures consistent documentation
+- Prevents missing critical steps
+
+#### 🆕 Scripts/
+Automation tools to improve deployment quality:
+- **verify-fls.sh**: Check Field-Level Security after deployment
+- **generate-deployment-summary.sh**: Create deployment summaries
+
+#### 🆕 Documentation/Guides/
+Step-by-step guides for complex tasks:
+- **FLS_VERIFICATION_GUIDE.md**: Complete FLS setup and verification guide
+- More guides to be added as patterns emerge
+
+#### Scenario Folders
+Each deployment scenario (e.g., `secondary-transport/`):
+- **README.md**: Gap analysis, deployment plan, verification steps
+- **DEPLOYMENT_HISTORY.md**: Detailed deployment log with issues/resolutions
+- **FUNCTIONAL_TEST_RESULTS.md**: Test results and verification
+- **code/**: Deployed Apex classes, triggers, objects
+- **tests/**: Functional test scripts (Anonymous Apex)
 
 ### Folder Naming Convention
 
 - **Matches OldOrg State repo**: Same folder names for easy cross-reference
 - **Flat structure**: All scenarios at root level
 - **Kebab-case names**: `email-to-case-assignment`, `producer-portal`
-- **README.md standard**: Always use README.md (never DEPLOYMENT_VERIFICATION.md or GAP_ANALYSIS.md)
+- **README.md standard**: Always use README.md for scenario documentation
 
 ---
 
@@ -170,15 +209,62 @@ Salesforce_NewOrg/
 
 ## How to Use This Repository
 
-### For Migration Execution
+### 🆕 For New Deployments (Using Templates)
 
-1. **Review OldOrg State**: Check companion repo to understand current implementation
-2. **Review Migration Plan**: Read scenario README.md for gap analysis and steps
+1. **Copy Templates**:
+   ```bash
+   cd deployment-execution
+   cp Templates/DEPLOYMENT_HISTORY_TEMPLATE.md new-scenario/DEPLOYMENT_HISTORY.md
+   cp Templates/FUNCTIONAL_TEST_TEMPLATE.apex new-scenario/tests/test_scenario.apex
+   cp Templates/FUNCTIONAL_TEST_RESULTS_TEMPLATE.md new-scenario/FUNCTIONAL_TEST_RESULTS.md
+   ```
+
+2. **Review Gap Analysis**: Read scenario README.md from OldOrg State repo
+
+3. **Execute Deployment**: Follow [DEPLOYMENT_WORKFLOW.md](Documentation/DEPLOYMENT_WORKFLOW.md)
+
+4. **Verify FLS** (🆕 Critical Step):
+   ```bash
+   ./Scripts/verify-fls.sh scenario-name ObjectName
+   ```
+   See [FLS Verification Guide](Documentation/Guides/FLS_VERIFICATION_GUIDE.md)
+
+5. **Run Functional Tests**: Execute test scripts from `tests/` folder
+
+6. **Generate Summary**:
+   ```bash
+   ./Scripts/generate-deployment-summary.sh scenario-name
+   ```
+
+7. **Update Documentation**: Complete DEPLOYMENT_HISTORY.md using template
+
+8. **Commit to GitHub**: Follow git workflow from DEPLOYMENT_WORKFLOW.md Step 6.6
+
+### For Existing Deployments (Standard Workflow)
+
+1. **Review OldOrg State**: Check `/tmp/Salesforce_OldOrg_State/scenario-name/`
+2. **Review Migration Plan**: Read scenario README.md for gap analysis
 3. **Pre-Deployment Verification**: Run environment checks
 4. **Execute CLI Steps**: Run automated deployment commands
-5. **Execute Manual UI Steps**: Follow step-by-step UI instructions
-6. **Post-Deployment Testing**: Verify deployment success
-7. **Update Progress**: Mark scenario as deployed
+5. **🆕 Verify FLS**: `./Scripts/verify-fls.sh scenario ObjectName`
+6. **Execute Manual UI Steps**: Set FLS, update page layouts
+7. **Post-Deployment Testing**: Run functional tests
+8. **Update Progress**: Update README.md, commit to GitHub
+
+### 🆕 For FLS Verification
+
+**After deploying custom fields, always verify FLS:**
+
+```bash
+# Automated verification (recommended)
+./Scripts/verify-fls.sh secondary-transport OrderItem
+
+# Manual verification via metadata
+sf project retrieve start --manifest manifest/package-fls-check.xml -o NewOrg
+grep -A 2 "Field__c" fls-verify/profiles/Admin.profile-meta.xml
+```
+
+**Complete guide:** [FLS_VERIFICATION_GUIDE.md](Documentation/Guides/FLS_VERIFICATION_GUIDE.md)
 
 ### For Gap Analysis
 

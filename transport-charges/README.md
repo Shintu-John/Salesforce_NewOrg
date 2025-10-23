@@ -7,6 +7,14 @@
 **Status**: ✅ **DEPLOYED TO NEWORG** - October 23, 2025
 **Deploy IDs**: 0AfSq000003nLkjKAE (code), 0AfSq000003nLw1KAE (validation rule)
 
+## 📋 Quick Links
+
+- 📊 **[Deployment History](./DEPLOYMENT_HISTORY.md)** - Complete deployment log with 3 bug fixes
+- ✅ **[Functional Test Results](./FUNCTIONAL_TEST_RESULTS.md)** - 8/8 tests passed (£1.7M+ protected)
+- 🧪 **[Test Scripts](./tests/)** - Functional test scripts for all 3 issues
+- 📝 **[Deployed Code](./code/)** - rlcsJobService.cls (819 lines) and validation rule
+- 🔙 **[Main README](../README.md)** - Repository overview and deployment progress
+
 ---
 
 ## 🎉 Deployment Summary

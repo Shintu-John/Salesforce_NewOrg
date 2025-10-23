@@ -1,5 +1,15 @@
 # Secondary Transport: NewOrg Gap Analysis & Migration Plan
 
+## 📋 Quick Links
+
+- 📊 **[Deployment History](./DEPLOYMENT_HISTORY.md)** - Complete deployment log with issues and resolutions
+- ✅ **[Functional Test Results](./FUNCTIONAL_TEST_RESULTS.md)** - Test execution and verification
+- 🧪 **[Test Scripts](./tests/)** - Functional test scripts (Anonymous Apex)
+- 📝 **[Deployed Code](./code/)** - Production-ready Apex classes and metadata
+- 🔙 **[Main README](../README.md)** - Repository overview and deployment progress
+
+---
+
 ## Gap Analysis Summary
 
 **Analysis Date:** 2025-10-23

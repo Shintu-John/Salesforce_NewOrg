@@ -1,5 +1,15 @@
 # CS Invoicing: NewOrg Gap Analysis & Migration Plan
 
+## 📋 Quick Links
+
+- 📊 **[Deployment History](./DEPLOYMENT_HISTORY.md)** - Complete deployment log
+- ✅ **[Functional Test Results](./FUNCTIONAL_TEST_RESULTS.md)** - 3/3 tests passed
+- 🧪 **[Test Scripts](./tests/)** - Functional test scripts
+- 📝 **[Deployed Code](./code/)** - RLCSChargeService and related classes
+- 🔙 **[Main README](../README.md)** - Repository overview and deployment progress
+
+---
+
 ## 🎉 Deployment Summary
 **Deployment Date**: October 23, 2025
 **Deployment Status**: ✅ COMPLETE
