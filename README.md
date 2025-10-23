@@ -4,7 +4,7 @@
 **Source Organization**: OldOrg (Recycling Lives Service)
 **Purpose**: Migration plans and deployment-ready packages for migrating from OldOrg to NewOrg
 **Created**: October 22, 2025
-**Status**: 🚀 Active Deployment - 2 of 12 scenarios deployed
+**Status**: 🚀 Active Deployment - 3 of 12 scenarios deployed
 
 ---
 
@@ -13,24 +13,33 @@
 **Deployment Phase**: Active
 **Start Date**: October 23, 2025
 **Target Org**: NewOrg (Production)
-**Deployed**: 2 of 12 scenarios (16.7%)
+**Deployed**: 3 of 12 scenarios (25%)
 **Status**: ✅ In Progress
 
 ### Deployment Statistics
-- 🚀 **Deployed**: 2 scenarios
+- 🚀 **Deployed**: 3 scenarios
 - ⏳ **In Progress**: 0 scenarios
-- 📋 **Pending**: 10 scenarios
+- 📋 **Pending**: 9 scenarios
 - ✅ **Total Ready**: 12 deployment scenarios
 
 ### Recently Deployed
-1. **cs-invoicing** (Oct 23, 2025) - Deploy ID: 0AfSq000003nOU5KAM
+
+1. **secondary-transport** (Oct 23, 2025) - Deploy ID: 0AfSq000003nQR3KAM
+   - Components: RLCSJobAATFBatchProcessor, RLCSJobAATFController, iParserio_ICER_ReportCsvBatch, iParserio_ICER_ReportCsvBatchTest (custom-written)
+   - Tests: 20/20 unit tests passed, 4/4 functional tests passed (100%)
+   - Business Impact: Fixed CSV upload bug (prevented £19K-£29K issue), secondary transport charges working
+   - Test Coverage Fix: Rewrote iParserio_ICER_ReportCsvBatchTest from 41.86% to 75%+
+   - Manual Config: FLS and page layout updates for 3 OrderItem fields
+   - Status: ✅ Complete
+
+2. **cs-invoicing** (Oct 23, 2025) - Deploy ID: 0AfSq000003nOU5KAM
    - Components: RLCSChargeService, RLCSCreditInvoiceAction, RLCS_ChargeTrigger (activated), Collection_Date__c field
    - Tests: 83/83 passed (100%)
    - Business Impact: Auto-population of invoice charge dates and descriptions for CS team
    - Test Data Fixes: Updated RLCSChargeServiceTest and RLCSCreditInvoiceActionTest for NewOrg environment
    - Status: ✅ Complete
 
-2. **transport-charges** (Oct 23, 2025) - Deploy IDs: 0AfSq000003nLkjKAE (code), 0AfSq000003nLw1KAE (validation)
+3. **transport-charges** (Oct 23, 2025) - Deploy IDs: 0AfSq000003nLkjKAE (code), 0AfSq000003nLw1KAE (validation)
    - Components: rlcsJobService, rlcsJobServiceTest, rlcsJobTrigger, Transport_Flag_Validation
    - Tests: 65/65 passed (100%)
    - Business Impact: £1.79M+ financial protection
