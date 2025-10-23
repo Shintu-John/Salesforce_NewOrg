@@ -109,20 +109,6 @@ Salesforce_NewOrg/
 | [rlcs-vendor-invoice-sage](rlcs-vendor-invoice-sage/) | ✅ Ready (✅ **ALREADY DEPLOYED**) | Oct 23, 2025 | **2 components + 34 dependencies** | ✅ **NewOrg ALREADY HAS FIX** - Deployed Oct 6, 2025 at 15:34 UTC (45 minutes BEFORE OldOrg). **Test-first deployment strategy.** Both components IDENTICAL to OldOrg. RLCS fields in SOQL query (line 21), CSV button unrestricted (lines 167-179). **1,322 RLCS invoices processed successfully.** Proven stable over 17 days. **NO DEPLOYMENT NEEDED** - documentation serves as historical reference and validates test-first strategy. Zero gap between orgs. |
 | [bam-construct-portal-license](bam-construct-portal-license/) | ✅ Ready (⏳ **PENDING**) | Oct 23, 2025 | **4 components analyzed** | ⏳ **NewOrg MISSING ALL COMPONENTS** - Formula field Waste_Carrier_License_Expiry__c MISSING. Job portal layout exists but missing license fields (lines 96-100). Utility_Community.cls exists but missing license SOQL (lines 23, 40-41). depotViewCommunity LWC exists but missing license columns (lines 40-41, 64-72). **4-phase deployment**: CLI field/layout/code + Manual UI user config (Community_Role__c, sharing records). **137 HQ users need compliance visibility.** Risk: LOW (read-only fields). Est: 1.5-2 hours. |
 
-**Next Deployment Scenarios to Prepare** (Priority Order):
-
-| # | Scenario | Source Documentation | Complexity | Est. Time |
-|---|----------|---------------------|------------|-----------|
-| 6 | ~~transport-charges~~ | ~~TRANSPORT_CHARGE_ISSUES_CONSOLIDATED.md (Backup/)~~ | ~~Medium~~ | **✅ COMPLETE** (Oct 23, 2025) |
-| 7 | ~~cs-invoicing~~ | ~~CS_INVOICING_DATE_DESCRIPTION_FIELDS.md (Backup/)~~ | ~~Medium~~ | **✅ COMPLETE** (Oct 23, 2025) |
-| 8 | ~~secondary-transport~~ | ~~SECONDARY_TRANSPORT_IMPLEMENTATION.md (Backup/)~~ | ~~Medium~~ | **✅ COMPLETE** (Oct 23, 2025) |
-| 9 | ~~po-consumption-emails~~ | ~~PO_CONSUMPTION_EMAIL_NOTIFICATIONS.md (Backup/)~~ | ~~Low~~ | **✅ COMPLETE** (Oct 23, 2025) |
-| 10 | ~~job-charge-credit-on-account~~ | ~~JOB_CHARGE_CREDIT_ON_ACCOUNT_FIX.md (Backup/)~~ | ~~Low~~ | **✅ COMPLETE** (Oct 23, 2025) |
-| 11 | ~~rlcs-vendor-invoice-sage~~ | ~~RLCS_VENDOR_INVOICE_SAGE_EXPORT_FIX.md (Documentation/)~~ | ~~Medium~~ | **✅ COMPLETE** (Oct 23, 2025) |
-
-**Configuration Scenarios Available**:
-- sage-api-integration (SAGE_API_HTTP_401_AUTHENTICATION_FIX.md) - OAuth re-authentication, NO code deployment
-
 ---
 
 ## Fresh Start - Enhanced Workflow (Oct 22, 2025)
