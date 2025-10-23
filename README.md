@@ -90,7 +90,7 @@ Salesforce_NewOrg/
 | [quote-to-order-process](quote-to-order-process/) | ✅ Complete | Oct 22, 2025 | Training | Quote-to-Order user training - No configuration changes needed |
 | [fred-certificate-renewal](fred-certificate-renewal/) | ✅ Complete | Oct 22, 2025 | Configuration | FRED Integration certificate renewal procedure - Certificate management guide |
 
-### Deployment Scenarios (9 Ready ✅)
+### Deployment Scenarios (10 Ready ✅)
 
 **Purpose**: Deploy code from OldOrg to NewOrg (bug fixes, new features, enhancements).
 
@@ -105,6 +105,7 @@ Salesforce_NewOrg/
 | [cs-invoicing](cs-invoicing/) | ✅ Ready (⚠️ **OUTDATED**) | Oct 23, 2025 | **3 classes + 1 field** | ⚠️ **NewOrg has OLD VERSION** - RLCSChargeService 97 lines (vs 142, 31.7% missing). rlcsJobService 575 lines (vs 819, 29.8% missing). **Collection_Date__c field MISSING**. Missing buildChargeDescription(), inline SOQL performance issue. **Depends on transport-charges** (shared rlcsJobService). CS Invoicing team missing automatic date/description visibility. |
 | [secondary-transport](secondary-transport/) | ✅ Ready (🚨 **CRITICAL**) | Oct 23, 2025 | **4 classes + 3 fields + 1 validation** | 🚨 **NewOrg has SEVERELY OUTDATED CODE** - Oct 10 version (575 lines vs 819 lines). **MISSING ALL SECONDARY TRANSPORT LOGIC** (244 lines, 29.8%). Phase 2 CSV mapping fixes MISSING in 3 components (BatchProcessor, Controller, iParserio batch). **CSV columns 14-15 issue - 97 invalid Jobs (£19K-£29K).** NULL weight/units from uploads. **Depends on transport-charges + cs-invoicing** (shared rlcsJobService). |
 | [po-consumption-emails](po-consumption-emails/) | ✅ Ready (✅ **CLEAN SLATE**) | Oct 23, 2025 | **13 components analyzed** | ✅ **NewOrg COMPLETELY CLEAN** - 12 of 13 components missing (only pre-existing Order consumption fields exist). **No version conflicts, no outdated code.** Fresh deployment. System currently non-functional in NewOrg. Low risk deployment. |
+| [job-charge-credit-on-account](job-charge-credit-on-account/) | ✅ Ready (⚠️ **BUGGY + INACTIVE**) | Oct 23, 2025 | **1 flow + 11 dependencies** | ⚠️ **NewOrg has BUGGY VERSION** - Oct 19 pre-fix version (3 days old). filterLogic shows "1 AND (2 OR 3)" with "Credit on Account" still in filter (line 214). **Flow currently INACTIVE** (IsActive = false) - bug not causing issues yet. **Account IDs updated in deployment package** (3 ID mappings OldOrg→NewOrg). Deploy fix BEFORE activating flow to prevent Cost__c corruption on 263 Credit on Account charges. Low risk - flow inactive. |
 
 **Next Deployment Scenarios to Prepare** (Priority Order):
 
@@ -114,7 +115,7 @@ Salesforce_NewOrg/
 | 7 | ~~cs-invoicing~~ | ~~CS_INVOICING_DATE_DESCRIPTION_FIELDS.md (Backup/)~~ | ~~Medium~~ | **✅ COMPLETE** (Oct 23, 2025) |
 | 8 | ~~secondary-transport~~ | ~~SECONDARY_TRANSPORT_IMPLEMENTATION.md (Backup/)~~ | ~~Medium~~ | **✅ COMPLETE** (Oct 23, 2025) |
 | 9 | ~~po-consumption-emails~~ | ~~PO_CONSUMPTION_EMAIL_NOTIFICATIONS.md (Backup/)~~ | ~~Low~~ | **✅ COMPLETE** (Oct 23, 2025) |
-| 10 | job-charge-credit-on-account | JOB_CHARGE_CREDIT_ON_ACCOUNT_FIX.md (Backup/) | Low | 1 hour |
+| 10 | ~~job-charge-credit-on-account~~ | ~~JOB_CHARGE_CREDIT_ON_ACCOUNT_FIX.md (Backup/)~~ | ~~Low~~ | **✅ COMPLETE** (Oct 23, 2025) |
 | 11 | rlcs-vendor-invoice-sage | RLCS_VENDOR_INVOICE_SAGE_EXPORT_FIX.md (Documentation/) | Medium | 1.5-2 hours |
 
 **Configuration Scenarios Available**:
