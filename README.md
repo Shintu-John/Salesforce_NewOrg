@@ -79,7 +79,7 @@ Salesforce_NewOrg/
 
 ## Current Scenarios (Fresh Start - Oct 22, 2025)
 
-### Configuration Scenarios (5 Complete ✅)
+### Configuration Scenarios (8 Complete ✅)
 
 **Purpose**: Configuration guides for existing systems (NOT code deployments)
 
@@ -90,6 +90,9 @@ Salesforce_NewOrg/
 | [quote-to-order-process](quote-to-order-process/) | ✅ Complete | Oct 22, 2025 | Training | Quote-to-Order user training - No configuration changes needed |
 | [fred-certificate-renewal](fred-certificate-renewal/) | ✅ Complete | Oct 22, 2025 | Configuration | FRED Integration certificate renewal procedure - Certificate management guide |
 | [sage-api-integration](sage-api-integration/) | ✅ Complete | Oct 23, 2025 | Configuration/OAuth | Sage API OAuth authentication configuration - Setup → Named Credentials → SIA → Authenticate with NewOrg Sage credentials. Use NewOrg-specific subscription keys, site IDs, company IDs. Test with Anonymous Apex. 60-day re-authentication cycle. Est: 30-45 minutes |
+| [case-reopening-incident](case-reopening-incident/) | ✅ Complete | Oct 23, 2025 | Prevention Guide | NewOrg prevention checklist based on OldOrg incident - Verify ALL profiles have Case record type access - Test case reopening flows - Monitor for NULL record types - Flow enhancement recommendation (check IsClosed) - Pre-go-live testing procedures |
+| [domestic-customer-email](domestic-customer-email/) | ✅ Complete | Oct 23, 2025 | Prevention Guide | Person Account configuration checklist - Verify PersonEmail field on Domestic Customer layout - Test email entry before go-live - Ensure field is Edit (not Read-only) |
+| [user-lorna-barsby-email](user-lorna-barsby-email/) | ✅ Complete | Oct 23, 2025 | User Management Guide | User creation procedure - Verify email addresses before creating users - Cannot update email for unverified users - Solution: Deactivate + Create new if email correction needed |
 
 ### Deployment Scenarios (12 Ready ✅)
 
