@@ -1,455 +1,262 @@
-# Salesforce NewOrg Migration Repository
+# Salesforce NewOrg Migration
 
-**Target Organization**: NewOrg (Recycling Lives Group)
-**Source Organization**: OldOrg (Recycling Lives Service)
-**Purpose**: Migration plans and deployment-ready packages for migrating from OldOrg to NewOrg
-**Created**: October 22, 2025
-**Status**: 🚀 Active Deployment - 3 of 12 scenarios deployed
+> **Production deployment repository** for migrating customizations from OldOrg (Recycling Lives Service) to NewOrg (Recycling Lives Group)
 
----
-
-## 🚀 Deployment Progress
-
-**Deployment Phase**: Active
-**Start Date**: October 23, 2025
-**Target Org**: NewOrg (Production)
-**Deployed**: 3 of 12 scenarios (25%)
-**Status**: ✅ In Progress
-
-### Deployment Statistics
-- 🚀 **Deployed**: 3 scenarios
-- ⏳ **In Progress**: 0 scenarios
-- 📋 **Pending**: 9 scenarios
-- ✅ **Total Ready**: 12 deployment scenarios
-
-### Recently Deployed
-
-1. **secondary-transport** (Oct 23, 2025) - Deploy ID: 0AfSq000003nQR3KAM
-   - Components: RLCSJobAATFBatchProcessor, RLCSJobAATFController, iParserio_ICER_ReportCsvBatch, iParserio_ICER_ReportCsvBatchTest (custom-written)
-   - Tests: 20/20 unit tests passed, 4/4 functional tests passed (100%)
-   - Business Impact: Fixed CSV upload bug (prevented £19K-£29K issue), secondary transport charges working
-   - Test Coverage Fix: Rewrote iParserio_ICER_ReportCsvBatchTest from 41.86% to 75%+
-   - Manual Config: FLS and page layout updates for 3 OrderItem fields
-   - Status: ✅ Complete
-
-2. **cs-invoicing** (Oct 23, 2025) - Deploy ID: 0AfSq000003nOU5KAM
-   - Components: RLCSChargeService, RLCSCreditInvoiceAction, RLCS_ChargeTrigger (activated), Collection_Date__c field
-   - Tests: 83/83 passed (100%)
-   - Business Impact: Auto-population of invoice charge dates and descriptions for CS team
-   - Test Data Fixes: Updated RLCSChargeServiceTest and RLCSCreditInvoiceActionTest for NewOrg environment
-   - Status: ✅ Complete
-
-3. **transport-charges** (Oct 23, 2025) - Deploy IDs: 0AfSq000003nLkjKAE (code), 0AfSq000003nLw1KAE (validation)
-   - Components: rlcsJobService, rlcsJobServiceTest, rlcsJobTrigger, Transport_Flag_Validation
-   - Tests: 65/65 passed (100%)
-   - Business Impact: £1.79M+ financial protection
-   - Status: ✅ Complete
+[![Deployment Progress](https://img.shields.io/badge/Deployed-3%2F12%20(25%25)-yellow)](https://github.com/Shintu-John/Salesforce_NewOrg)
+[![Last Deployment](https://img.shields.io/badge/Last%20Deployment-Oct%2023%2C%202025-green)](https://github.com/Shintu-John/Salesforce_NewOrg)
+[![Status](https://img.shields.io/badge/Status-Active-brightgreen)](https://github.com/Shintu-John/Salesforce_NewOrg)
 
 ---
 
-## Repository Purpose
+## 🚀 Quick Start
 
-This repository contains **migration plans and deployment packages** for migrating all customizations and features from **OldOrg** (legacy system) to **NewOrg** (future production system).
+### For New Deployments
+```bash
+# 1. Copy templates
+cp Templates/DEPLOYMENT_HISTORY_TEMPLATE.md your-scenario/DEPLOYMENT_HISTORY.md
 
-### Why This Repository Exists
+# 2. Deploy code
+sf project deploy start -d your-scenario/code -o NewOrg --test-level RunLocalTests
 
-1. **Migration Execution**: Provides step-by-step deployment instructions for each scenario
-2. **Gap Analysis**: Documents differences between OldOrg and NewOrg
-3. **Deployment Scripts**: Contains ready-to-execute commands for migration (CLI and Manual UI)
-4. **Risk Management**: Includes rollback plans and risk mitigation strategies
-5. **Quality Assurance**: Provides comprehensive testing and verification procedures
+# 3. Verify Field-Level Security (Critical!)
+./Scripts/verify-fls.sh your-scenario ObjectName
 
-### What This Repository Contains
+# 4. Run functional tests
+sf apex run -f your-scenario/tests/test_scenario.apex -o NewOrg
+```
 
-- **Migration plans** for each scenario (gap analysis, deployment steps, verification)
-- **Deployment-ready code** (verified code from OldOrg, ready to deploy to NewOrg)
-- **CLI deployment commands** with exact syntax
-- **Manual UI instructions** for steps that can't be automated
-- **Rollback procedures** for each migration
-- **Testing plans** for post-deployment verification
-- **Working links** to OldOrg State documentation
+### Key Resources
+- 📖 **[Deployment Workflow](Documentation/DEPLOYMENT_WORKFLOW.md)** - Complete step-by-step guide
+- 🔐 **[FLS Verification Guide](Documentation/Guides/FLS_VERIFICATION_GUIDE.md)** - Field-Level Security setup
+- 📋 **[Templates](Templates/)** - Reusable deployment templates
+- 🤖 **[Scripts](Scripts/)** - Automation tools
 
 ---
 
-## Repository Structure
+## 📊 Deployment Progress
+
+**Overall:** 3 of 12 scenarios deployed (25%)
+**Status:** ✅ Active deployment phase
+**Target Org:** NewOrg (Production)
+
+### ✅ Completed Deployments
+
+| Scenario | Date | Deploy ID | Impact | Docs |
+|----------|------|-----------|--------|------|
+| [secondary-transport](secondary-transport/) | Oct 23 | `0AfSq000003nQR3KAM` | Fixed £19K-£29K CSV bug | [📊](secondary-transport/DEPLOYMENT_HISTORY.md) |
+| [transport-charges](transport-charges/) | Oct 23 | `0AfSq000003nQO7KAM` | £1.7M+ financial protection | [📊](transport-charges/DEPLOYMENT_HISTORY.md) |
+| [cs-invoicing](cs-invoicing/) | Oct 23 | `0AfSq000003nOU5KAM` | CS invoice automation | [📊](cs-invoicing/DEPLOYMENT_HISTORY.md) |
+
+### 📋 Pending Deployments (9 scenarios)
+
+<details>
+<summary><b>View Pending Scenarios</b></summary>
+
+#### High Priority
+- **portal-exchange-email** - Email exchange workflow fixes
+- **email-to-case-assignment** - Case assignment logic
+- **producer-portal** - Producer portal enhancements
+- **sage-api-integration** - Sage API authentication fixes
+
+#### Medium Priority
+- **daily-reminder-emails** - Daily email reminder system
+- **po-consumption-emails** - PO consumption notifications
+- **invoice-email-portal-access** - Invoice email access controls
+- **job-charge-credit-on-account** - Job charge credit logic
+
+#### Low Priority
+- **smartwaste-integration** - SmartWaste integration analysis
+
+</details>
+
+---
+
+## 📁 Repository Structure
 
 ```
 deployment-execution/
-├── README.md (this file)
-├── Templates/                           🆕 Deployment templates
+├── 📋 Templates/              # Reusable deployment templates
 │   ├── DEPLOYMENT_HISTORY_TEMPLATE.md
 │   ├── FUNCTIONAL_TEST_TEMPLATE.apex
 │   └── FUNCTIONAL_TEST_RESULTS_TEMPLATE.md
-├── Scripts/                             🆕 Automation scripts
-│   ├── verify-fls.sh                    🆕 Automated FLS verification
-│   └── generate-deployment-summary.sh   🆕 Auto-generate summaries
-├── Documentation/                       🆕 Organized documentation
-│   ├── DEPLOYMENT_WORKFLOW.md           Complete deployment workflow
-│   ├── DEPLOYMENT_CONTINUATION_PROMPT.md
-│   ├── Guides/                          🆕 Step-by-step guides
-│   │   └── FLS_VERIFICATION_GUIDE.md    🆕 FLS setup guide
-│   └── Archive/                         🆕 Historical documentation
-├── manifest/
-│   └── package-fls-check.xml            FLS verification manifest
-├── FLS_STATUS_REPORT.md                 🆕 FLS analysis report
-├── REPO_IMPROVEMENTS_SUMMARY.md         🆕 Improvement summary
-└── [scenario folders]/
-    ├── README.md                        Gap analysis & deployment plan
-    ├── DEPLOYMENT_HISTORY.md            Detailed deployment log
-    ├── FUNCTIONAL_TEST_RESULTS.md       Test results documentation
-    ├── code/                            Deployment-ready code
-    │   ├── classes/
-    │   ├── triggers/
-    │   └── objects/
-    └── tests/                           🆕 Functional test scripts
-        └── test_scenario.apex
+│
+├── 🤖 Scripts/                # Automation tools
+│   ├── verify-fls.sh          # FLS verification
+│   └── generate-deployment-summary.sh
+│
+├── 📚 Documentation/          # Guides and workflows
+│   ├── DEPLOYMENT_WORKFLOW.md
+│   ├── ACTIVATED_TRIGGERS_TEST_CLASSES.md
+│   └── Guides/
+│       └── FLS_VERIFICATION_GUIDE.md
+│
+└── 📦 [scenario-folders]/    # Individual deployments
+    ├── README.md              # Gap analysis & plan
+    ├── DEPLOYMENT_HISTORY.md  # Deployment log
+    ├── FUNCTIONAL_TEST_RESULTS.md
+    ├── code/                  # Deployed Apex/metadata
+    └── tests/                 # Functional tests
 ```
 
-### Key Folders
+---
 
-#### 🆕 Templates/
-Reusable templates for new deployments:
-- Copy templates to new scenario folders
-- Ensures consistent documentation
-- Prevents missing critical steps
+## 🛠️ How to Deploy
 
-#### 🆕 Scripts/
-Automation tools to improve deployment quality:
-- **verify-fls.sh**: Check Field-Level Security after deployment
-- **generate-deployment-summary.sh**: Create deployment summaries
+### Standard Deployment Workflow
 
-#### 🆕 Documentation/Guides/
-Step-by-step guides for complex tasks:
-- **FLS_VERIFICATION_GUIDE.md**: Complete FLS setup and verification guide
-- More guides to be added as patterns emerge
+1. **Review Gap Analysis**
+   ```bash
+   # Check OldOrg State for scenario details
+   cat /tmp/Salesforce_OldOrg_State/scenario-name/README.md
+   ```
 
-#### Scenario Folders
-Each deployment scenario (e.g., `secondary-transport/`):
-- **README.md**: Gap analysis, deployment plan, verification steps
-- **DEPLOYMENT_HISTORY.md**: Detailed deployment log with issues/resolutions
-- **FUNCTIONAL_TEST_RESULTS.md**: Test results and verification
-- **code/**: Deployed Apex classes, triggers, objects
-- **tests/**: Functional test scripts (Anonymous Apex)
+2. **Prepare Deployment**
+   ```bash
+   # Copy templates
+   cp Templates/DEPLOYMENT_HISTORY_TEMPLATE.md scenario/
+   cp Templates/FUNCTIONAL_TEST_TEMPLATE.apex scenario/tests/
+   ```
 
-### Folder Naming Convention
+3. **Deploy to NewOrg**
+   ```bash
+   sf project deploy start \
+     -d scenario/code \
+     -o NewOrg \
+     --test-level RunLocalTests
+   ```
 
-- **Matches OldOrg State repo**: Same folder names for easy cross-reference
-- **Flat structure**: All scenarios at root level
-- **Kebab-case names**: `email-to-case-assignment`, `producer-portal`
-- **README.md standard**: Always use README.md for scenario documentation
+4. **🚨 Critical: Set Field-Level Security**
+   ```bash
+   # Automated verification
+   ./Scripts/verify-fls.sh scenario ObjectName
+
+   # Manual UI steps if needed
+   # See: Documentation/Guides/FLS_VERIFICATION_GUIDE.md
+   ```
+
+5. **Run Functional Tests**
+   ```bash
+   sf apex run -f scenario/tests/test_scenario.apex -o NewOrg
+   ```
+
+6. **Document & Commit**
+   ```bash
+   # Complete DEPLOYMENT_HISTORY.md
+   # Update this README with deployment progress
+   git add scenario/ README.md
+   git commit -m "Deploy scenario: [description]"
+   git push
+   ```
+
+**Full workflow:** [DEPLOYMENT_WORKFLOW.md](Documentation/DEPLOYMENT_WORKFLOW.md)
 
 ---
 
-## Migration Scenarios
+## 🔧 Tools & Automation
 
-### Status Legend
-- 🚀 **Deployed**: Successfully deployed to NewOrg (with Deploy ID)
-- ⏳ **In Progress**: Currently being deployed
-- 📋 **Pending**: Ready for deployment, not yet started
-- ✅ **Ready**: Migration plan reviewed and approved
-- ⏸️ **On Hold**: Waiting for dependencies or prerequisites
-
-### Scenario Type Legend
-- **Deployment Scenarios**: Code to deploy from OldOrg to NewOrg (bug fixes, new features, enhancements)
-- ⚠️ **Configuration Scenarios**: Existing code needs activation/configuration only (NOT new deployments)
-
----
-
-## Current Scenarios (Fresh Start - Oct 22, 2025)
-
-### Configuration Scenarios (22 Complete ✅)
-
-**Purpose**: Configuration guides for existing systems (NOT code deployments)
-
-| Scenario | Status | Last Updated | Type | Description |
-|----------|--------|--------------|------|-------------|
-| [smartwaste-integration](smartwaste-integration/) | ✅ Complete | Oct 22, 2025 | Configuration | SmartWaste configuration guide - Activate flows, schedule jobs. No code deployment needed |
-| [quote-pricing-notification](quote-pricing-notification/) | ✅ Complete | Oct 22, 2025 | Configuration | Email notification configuration - Manual UI setup for org-wide email address |
-| [quote-to-order-process](quote-to-order-process/) | ✅ Complete | Oct 22, 2025 | Training | Quote-to-Order user training - No configuration changes needed |
-| [fred-certificate-renewal](fred-certificate-renewal/) | ✅ Complete | Oct 22, 2025 | Configuration | FRED Integration certificate renewal procedure - Certificate management guide |
-| [sage-api-integration](sage-api-integration/) | ✅ Complete | Oct 23, 2025 | Configuration/OAuth | Sage API OAuth authentication configuration - Setup → Named Credentials → SIA → Authenticate with NewOrg Sage credentials. Use NewOrg-specific subscription keys, site IDs, company IDs. Test with Anonymous Apex. 60-day re-authentication cycle. Est: 30-45 minutes |
-| [case-reopening-incident](case-reopening-incident/) | ✅ Complete | Oct 23, 2025 | Prevention Guide | NewOrg prevention checklist based on OldOrg incident - Verify ALL profiles have Case record type access - Test case reopening flows - Monitor for NULL record types - Flow enhancement recommendation (check IsClosed) - Pre-go-live testing procedures |
-| [domestic-customer-email](domestic-customer-email/) | ✅ Complete | Oct 23, 2025 | Prevention Guide | Person Account configuration checklist - Verify PersonEmail field on Domestic Customer layout - Test email entry before go-live - Ensure field is Edit (not Read-only) |
-| [user-lorna-barsby-email](user-lorna-barsby-email/) | ✅ Complete | Oct 23, 2025 | User Management Guide | User creation procedure - Verify email addresses before creating users - Cannot update email for unverified users - Solution: Deactivate + Create new if email correction needed |
-| [dashboard-access](dashboard-access/) | ✅ Complete | Oct 23, 2025 | Reference/Permissions | Dashboard folder access permissions guide for NewOrg |
-| [nathan-blake-adoc](nathan-blake-adoc/) | ✅ Complete | Oct 23, 2025 | Reference/Permissions | ADOC permission configuration reference for NewOrg |
-| [orderitem-data-model](orderitem-data-model/) | ✅ Complete | Oct 23, 2025 | Reference/Data Model | OrderItem data model reference for bulk update operations |
-| [outlook-email-sync](outlook-email-sync/) | ✅ Complete | Oct 23, 2025 | Reference/Integration | Outlook email sync configuration guide for NewOrg |
-| [producer-portal-troubleshooting](producer-portal-troubleshooting/) | ✅ Complete | Oct 23, 2025 | Reference/Troubleshooting | Producer Portal troubleshooting guide for NewOrg |
-| [rebekah-stewart-quote](rebekah-stewart-quote/) | ✅ Complete | Oct 23, 2025 | Reference/Issue | Quote line item issue resolution guide |
-| [rebekah-stewart-smartwaste](rebekah-stewart-smartwaste/) | ✅ Complete | Oct 23, 2025 | Reference/Permissions | SmartWaste report access configuration guide |
-| [sharepoint-file-access](sharepoint-file-access/) | ✅ Complete | Oct 23, 2025 | Reference/Integration | SharePoint file access setup guide for NewOrg |
-| [sharepoint-file-sync](sharepoint-file-sync/) | ✅ Complete | Oct 23, 2025 | Reference/Integration | SharePoint file sync configuration guide for NewOrg |
-| [shn-website-quotes](shn-website-quotes/) | ✅ Complete | Oct 23, 2025 | Reference/Process | SHN Website quotes process guide for NewOrg |
-| [si13024-rollup](si13024-rollup/) | ✅ Complete | Oct 23, 2025 | Reference/Issue | SI13024 rollup configuration guide for NewOrg |
-| [supplier-contact-access](supplier-contact-access/) | ✅ Complete | Oct 23, 2025 | Reference/Analysis | Supplier contact access configuration guide for NewOrg |
-| [test-failure-guide](test-failure-guide/) | ✅ Complete | Oct 23, 2025 | Reference/Testing | Test failure troubleshooting guide for NewOrg |
-| [waste-vapes-analysis](waste-vapes-analysis/) | ✅ Complete | Oct 23, 2025 | Reference/Analysis | Waste vapes categorization guide for NewOrg |
-
-### Deployment Scenarios (12 Total: 1 Deployed 🚀, 11 Pending 📋)
-
-**Purpose**: Deploy code from OldOrg to NewOrg (bug fixes, new features, enhancements).
-
-| Scenario | Status | Deployed Date | Deploy ID | Critical Issues |
-|----------|--------|---------------|-----------|-----------------|
-| [transport-charges](transport-charges/) | 🚀 **DEPLOYED** | Oct 23, 2025 | 0AfSq000003nLkjKAE, 0AfSq000003nLw1KAE | ✅ **COMPLETE** - Issue 1 fix deployed (£919K protection), Issue 3 fix deployed (£870K protection), Secondary transport feature deployed (244 lines), Validation rule deployed. All 65 tests passed. Functional testing complete. **Financial risk eliminated.** |
-| [cs-invoicing](cs-invoicing/) | 🚀 **DEPLOYED** | Oct 23, 2025 | 0AfSq000003nOU5KAM | ✅ **COMPLETE** - RLCSChargeService deployed (142 lines), RLCSCreditInvoiceAction deployed (153 lines), RLCS_ChargeTrigger activated, Collection_Date__c field created. All 83 tests passed (100%). Test data fixes applied for NewOrg environment (Order_Product__c setup). CS Invoicing team now has automatic date/description population on invoice charges. **Dependency on transport-charges satisfied ✅**. |
-| [secondary-transport](secondary-transport/) | 📋 **PENDING** | - | - | 🚨 **NewOrg has SEVERELY OUTDATED CODE** - Oct 10 version (575 lines vs 819 lines). **MISSING ALL SECONDARY TRANSPORT LOGIC** (244 lines, 29.8%). Phase 2 CSV mapping fixes MISSING in 3 components (BatchProcessor, Controller, iParserio batch). **CSV columns 14-15 issue - 97 invalid Jobs (£19K-£29K).** NULL weight/units from uploads. **Depends on transport-charges** (now deployed ✅) + **cs-invoicing** (now deployed ✅). **READY TO DEPLOY**. |
-| [producer-portal](producer-portal/) | 📋 **PENDING** | - | - | 🚨 **NewOrg has OLD BUGGY VERSION** - ProducerPlacedOnMarketTriggerHelper is 35 days out of date (Sept 19 vs Oct 21). **Missing ALL 5 fixes**. 8 components MISSING (sharing solution). **MUST deploy before go-live.** |
-| [email-to-case-assignment](email-to-case-assignment/) | 📋 **PENDING** | - | - | ⚠️ **NewOrg has OLD VERSION** - Apex classes are pre-V3 (434 vs 631 lines). Missing SOQL caching, recursion prevention, Kaylie Morris exemption. **3 components MISSING** (Custom Setting, Case field, Flow). **Customer Service workload management - deploy soon.** |
-| [invoice-email-portal-access](invoice-email-portal-access/) | 📋 **PENDING** | - | - | ⚠️ **NewOrg has OLD VERSION** - 4 of 5 components outdated (Sept 2025 vs Oct 9). InvoiceFileListController missing invoice PDF logic (71 lines). **ContentDistributionHelper already current** (Oct 10). Customers cannot access invoice PDFs on portal. |
-| [daily-reminder-emails](daily-reminder-emails/) | 📋 **PENDING** | - | - | 🚨 **NewOrg has VERY OLD VERSION** - Sept 17 version (52 lines vs 245 lines). **Entire Tier 1 system MISSING** (JobDeliveryConfirmationReminderBatch). Missing Delivery_Confirmed__c filter, HTML reporting, prioritization. **Sends 556 emails daily instead of 2 reports.** Record locking risk. |
-| [portal-exchange-email](portal-exchange-email/) | 📋 **PENDING** | - | - | ⚠️ **NewOrg has OUTDATED CODE** - Handler from Oct 2 (14 days old), test from Sept 17 (29 days old). 6 flows need verification for fromEmailAddress parameter. **Customers with strict SPF policies (Amey Highways) cannot submit portal requests.** Emails rejected, no Cases created. |
-| [po-consumption-emails](po-consumption-emails/) | 📋 **PENDING** | - | - | ✅ **NewOrg COMPLETELY CLEAN** - 12 of 13 components missing (only pre-existing Order consumption fields exist). **No version conflicts, no outdated code.** Fresh deployment. System currently non-functional in NewOrg. Low risk deployment. |
-| [job-charge-credit-on-account](job-charge-credit-on-account/) | 📋 **PENDING** | - | - | ⚠️ **NewOrg has BUGGY VERSION** - Oct 19 pre-fix version (3 days old). filterLogic shows "1 AND (2 OR 3)" with "Credit on Account" still in filter (line 214). **Flow currently INACTIVE** (IsActive = false) - bug not causing issues yet. **Account IDs updated in deployment package** (3 ID mappings OldOrg→NewOrg). Deploy fix BEFORE activating flow to prevent Cost__c corruption on 263 Credit on Account charges. Low risk - flow inactive. |
-| [rlcs-vendor-invoice-sage](rlcs-vendor-invoice-sage/) | 📋 **PENDING** | - | - | ✅ **NewOrg ALREADY HAS FIX** - Deployed Oct 6, 2025 at 15:34 UTC (45 minutes BEFORE OldOrg). **Test-first deployment strategy.** Both components IDENTICAL to OldOrg. RLCS fields in SOQL query (line 21), CSV button unrestricted (lines 167-179). **1,322 RLCS invoices processed successfully.** Proven stable over 17 days. **NO DEPLOYMENT NEEDED** - documentation serves as historical reference and validates test-first strategy. Zero gap between orgs. |
-| [bam-construct-portal-license](bam-construct-portal-license/) | 📋 **PENDING** | - | - | ⏳ **NewOrg MISSING ALL COMPONENTS** - Formula field Waste_Carrier_License_Expiry__c MISSING. Job portal layout exists but missing license fields (lines 96-100). Utility_Community.cls exists but missing license SOQL (lines 23, 40-41). depotViewCommunity LWC exists but missing license columns (lines 40-41, 64-72). **4-phase deployment**: CLI field/layout/code + Manual UI user config (Community_Role__c, sharing records). **137 HQ users need compliance visibility.** Risk: LOW (read-only fields). Est: 1.5-2 hours. |
-
----
-
-## How to Use This Repository
-
-### 🆕 For New Deployments (Using Templates)
-
-1. **Copy Templates**:
-   ```bash
-   cd deployment-execution
-   cp Templates/DEPLOYMENT_HISTORY_TEMPLATE.md new-scenario/DEPLOYMENT_HISTORY.md
-   cp Templates/FUNCTIONAL_TEST_TEMPLATE.apex new-scenario/tests/test_scenario.apex
-   cp Templates/FUNCTIONAL_TEST_RESULTS_TEMPLATE.md new-scenario/FUNCTIONAL_TEST_RESULTS.md
-   ```
-
-2. **Review Gap Analysis**: Read scenario README.md from OldOrg State repo
-
-3. **Execute Deployment**: Follow [DEPLOYMENT_WORKFLOW.md](Documentation/DEPLOYMENT_WORKFLOW.md)
-
-4. **Verify FLS** (🆕 Critical Step):
-   ```bash
-   ./Scripts/verify-fls.sh scenario-name ObjectName
-   ```
-   See [FLS Verification Guide](Documentation/Guides/FLS_VERIFICATION_GUIDE.md)
-
-5. **Run Functional Tests**: Execute test scripts from `tests/` folder
-
-6. **Generate Summary**:
-   ```bash
-   ./Scripts/generate-deployment-summary.sh scenario-name
-   ```
-
-7. **Update Documentation**: Complete DEPLOYMENT_HISTORY.md using template
-
-8. **Commit to GitHub**: Follow git workflow from DEPLOYMENT_WORKFLOW.md Step 6.6
-
-### For Existing Deployments (Standard Workflow)
-
-1. **Review OldOrg State**: Check `/tmp/Salesforce_OldOrg_State/scenario-name/`
-2. **Review Migration Plan**: Read scenario README.md for gap analysis
-3. **Pre-Deployment Verification**: Run environment checks
-4. **Execute CLI Steps**: Run automated deployment commands
-5. **🆕 Verify FLS**: `./Scripts/verify-fls.sh scenario ObjectName`
-6. **Execute Manual UI Steps**: Set FLS, update page layouts
-7. **Post-Deployment Testing**: Run functional tests
-8. **Update Progress**: Update README.md, commit to GitHub
-
-### 🆕 For FLS Verification
-
-**After deploying custom fields, always verify FLS:**
+### FLS Verification Script
+Automatically check Field-Level Security after deployment:
 
 ```bash
-# Automated verification (recommended)
-./Scripts/verify-fls.sh secondary-transport OrderItem
+./Scripts/verify-fls.sh scenario-name ObjectName
 
-# Manual verification via metadata
-sf project retrieve start --manifest manifest/package-fls-check.xml -o NewOrg
-grep -A 2 "Field__c" fls-verify/profiles/Admin.profile-meta.xml
+# Example output:
+# | Field API Name                    | Readable | Editable | Status      |
+# |-----------------------------------|----------|----------|-------------|
+# | Custom_Field__c                   | ✅ Yes   | ✅ Yes   | ✅ CORRECT  |
+# | Another_Field__c                  | ✅ Yes   | ⚠️  No   | ⚠️  READ-ONLY|
 ```
 
-**Complete guide:** [FLS_VERIFICATION_GUIDE.md](Documentation/Guides/FLS_VERIFICATION_GUIDE.md)
+**Why this matters:** Custom fields deploy WITHOUT Field-Level Security by default!
 
-### For Gap Analysis
+**Guide:** [FLS_VERIFICATION_GUIDE.md](Documentation/Guides/FLS_VERIFICATION_GUIDE.md)
 
-1. Review "Gap Analysis" section in each README
-2. Identify components missing in NewOrg
-3. Plan prerequisite deployments
-4. Understand environment differences
+### Deployment Summary Generator
+Generate concise deployment summaries:
 
-### For Rollback
-
-1. Check "Rollback Procedure" section in each README
-2. Follow step-by-step rollback instructions
-3. Verify rollback success
-
----
-
-## Migration Plan Documentation Standard
-
-Each scenario folder contains:
-
-### Folder Structure
-
-```
-scenario-name/
-├── README.md                        ← Complete migration plan
-├── source-docs/                     ← Original documentation (archived)
-│   └── ORIGINAL_DOCS.md
-└── code/                            ← Deployment-ready verified code
-    ├── classes/
-    ├── triggers/
-    ├── flows/
-    └── objects/
-```
-
-### README.md Structure
-
-1. **Executive Summary**: What's being migrated, key changes
-2. **Source Documentation**: Links to OldOrg State and source docs
-3. **Gap Analysis**: OldOrg vs NewOrg comparison
-   - Components in OldOrg (with verification)
-   - Components in NewOrg (current state)
-   - Missing components
-   - Version mismatches
-4. **Pre-Deployment Verification**: Environment checks
-5. **Deployment Steps**:
-   - ✅ CLI Steps (automated with exact commands)
-   - ⚠️ Manual UI Steps (with detailed instructions)
-6. **Post-Deployment Verification**: Testing and validation
-7. **Rollback Procedure**: How to undo the migration
-8. **Related Documentation**: Links to OldOrg State, source docs, related scenarios
-9. **Risk Assessment**: Potential issues and mitigation
-
----
-
-## Deployment Step Standards
-
-### ✅ CLI Steps (Automated)
-
-Each CLI step includes:
-- **Exact command** ready to copy/paste
-- **Expected output** (what success looks like)
-- **Verification query** (confirm deployment)
-- **Error handling** (what to do if it fails)
-
-Example:
 ```bash
-# Step 1.1: Deploy Apex Class
-sf project deploy start \
-  --source-dir "scenario-name/code/classes/ClassName.cls" \
-  --target-org NewOrg \
-  --test-level RunSpecifiedTests \
-  --tests ClassNameTest \
-  --wait 10
-
-# Verification:
-sf data query --query "SELECT Name, Status FROM ApexClass WHERE Name = 'ClassName'" --target-org NewOrg --use-tooling-api
-```
-
-### ⚠️ Manual UI Steps (User Performs)
-
-Each manual step includes:
-- **Why manual**: Explanation of why CLI can't handle this
-- **Step-by-step instructions**: Navigate to X > Click Y > Enter Z
-- **Screenshots/Details**: Visual or detailed description
-- **Verification query**: Confirm configuration via CLI
-
-Example:
-```
-Step 2.1: Activate Flow (⚠️ Manual UI Step)
-
-Why Manual: Flows always deploy as Inactive. Must be manually activated.
-
-Instructions:
-1. Navigate to: Setup > Flows > [Flow Name]
-2. Click "Activate"
-3. Confirm activation
-
-Verification:
-sf data query --query "SELECT Definition.DeveloperName, Status FROM Flow WHERE Definition.DeveloperName = 'FlowName' AND Status = 'Active'" --target-org NewOrg --use-tooling-api
+./Scripts/generate-deployment-summary.sh scenario-name
 ```
 
 ---
 
-## Migration Context
+## 🎯 Key Learnings from Deployments
 
-### OldOrg → NewOrg Migration
+### Critical Post-Deployment Steps
 
-**OldOrg (Source)**:
-- Organization: Recycling Lives Service
-- URL: recyclinglives.my.salesforce.com
-- Status: Current production system
-- Role: Source of all customizations to migrate
+1. **🚨 Set Field-Level Security**
+   - Custom fields deploy WITHOUT FLS
+   - Always run `./Scripts/verify-fls.sh` after deployment
+   - Fields must be both Visible AND Editable (not Read-Only)
 
-**NewOrg (Target)**:
-- Organization: Recycling Lives Group
-- Status: Future production system undergoing migration
-- Role: Target for all migrated customizations
+2. **🚨 Update Page Layouts**
+   - Custom fields do NOT auto-appear on layouts
+   - Manually add fields via Setup → Object Manager → Page Layouts
 
-**This Repository's Role**:
-- Contains **deployment packages** ready for NewOrg
-- Provides **step-by-step migration instructions**
-- Documents **gap analysis** and environment differences
-- Offers **rollback plans** for each migration
+3. **Test Coverage Requirements**
+   - Production orgs require 75% minimum coverage
+   - Shallow smoke tests are insufficient
+   - May need to rewrite test classes comprehensively
 
----
+### Best Practices
 
-## Related Repositories
-
-### Companion Repository
-
-**Salesforce_OldOrg_State** (https://github.com/Shintu-John/Salesforce_OldOrg_State.git)
-- Documents **current state** of OldOrg implementations
-- Contains **verified code** with line-by-line confirmation
-- Provides **business logic** and configuration details
-- Maintains **historical record** of implementations
-
-**Use Together**:
-1. Review OldOrg state documentation (OldOrg_State repo)
-2. Review migration plan (this repo)
-3. Execute deployment (this repo)
-4. Update progress tracking
+- ✅ Always use templates for consistency
+- ✅ Verify FLS before functional testing
+- ✅ Document all manual configuration steps
+- ✅ Run functional tests beyond unit tests
+- ✅ Commit deployment history immediately
 
 ---
 
-## Important Notes
+## 📚 Documentation
 
-### Pre-Deployment Checklist
+### Essential Guides
+- **[Deployment Workflow](Documentation/DEPLOYMENT_WORKFLOW.md)** - Complete deployment process (all 7 phases)
+- **[FLS Verification Guide](Documentation/Guides/FLS_VERIFICATION_GUIDE.md)** - Field-Level Security setup and troubleshooting
+- **[Continuation Prompt](Documentation/DEPLOYMENT_CONTINUATION_PROMPT.md)** - Resume deployment work after context loss
 
-Before deploying any scenario:
+### Reference Documents
+- **[Activated Triggers](Documentation/ACTIVATED_TRIGGERS_TEST_CLASSES.md)** - Triggers activated during deployments
+- **[FLS Status Report](FLS_STATUS_REPORT.md)** - FLS analysis from secondary-transport deployment
+- **[Repo Improvements Summary](REPO_IMPROVEMENTS_SUMMARY.md)** - Repository enhancement details
 
-1. ✅ **Backup NewOrg**: Create backup of affected components
-2. ✅ **Review Gap Analysis**: Understand what's missing/different
-3. ✅ **Check Dependencies**: Ensure prerequisites are met
-4. ✅ **Review Rollback Plan**: Know how to undo changes
-5. ✅ **Schedule Deployment**: Choose appropriate maintenance window
-6. ✅ **Notify Stakeholders**: Inform affected users
-
-### Post-Deployment Checklist
-
-After deploying any scenario:
-
-1. ✅ **Run Verification Queries**: Confirm deployment success
-2. ✅ **Test Functionality**: Verify feature works as expected
-3. ✅ **Check Logs**: Review deployment logs for warnings
-4. ✅ **Update Progress**: Mark scenario as deployed
-5. ✅ **Document Issues**: Record any problems encountered
-6. ✅ **Notify Stakeholders**: Confirm successful deployment
+### Templates
+- **[DEPLOYMENT_HISTORY_TEMPLATE.md](Templates/DEPLOYMENT_HISTORY_TEMPLATE.md)** - Standard deployment documentation
+- **[FUNCTIONAL_TEST_TEMPLATE.apex](Templates/FUNCTIONAL_TEST_TEMPLATE.apex)** - Reusable test script structure
+- **[FUNCTIONAL_TEST_RESULTS_TEMPLATE.md](Templates/FUNCTIONAL_TEST_RESULTS_TEMPLATE.md)** - Test results documentation
 
 ---
 
-## Support Information
+## 🔗 Related Repositories
 
-**Documentation Owner**: John Shintu
-**Organization Admins**: [NewOrg Administrators]
-**Migration Project**: OldOrg → NewOrg Migration (2025)
-
-**For Questions**:
-- Scenario-specific: See individual README files
-- OldOrg state: See Salesforce_OldOrg_State repository
-- General: Contact organization administrators
+- **[Salesforce_OldOrg_State](https://github.com/Shintu-John/Salesforce_OldOrg_State)** - Source org documentation (READ-ONLY reference)
 
 ---
 
-## Quick Links
+## 📞 Support
 
-- [OldOrg State Documentation](https://github.com/Shintu-John/Salesforce_OldOrg_State.git)
+**Project Lead:** John Shintu
+**Email:** shintu.john@recyclinglives.com
+**Working Directory:** `/home/john/Projects/Salesforce/deployment-execution`
+
+### Getting Help
+
+1. **Deployment Issues:** Check [DEPLOYMENT_WORKFLOW.md](Documentation/DEPLOYMENT_WORKFLOW.md)
+2. **FLS Problems:** See [FLS_VERIFICATION_GUIDE.md](Documentation/Guides/FLS_VERIFICATION_GUIDE.md)
+3. **Scenario-Specific:** Review scenario's DEPLOYMENT_HISTORY.md
 
 ---
+
+## 📜 License
+
+Internal use - Recycling Lives Group
+
+---
+
+<div align="center">
+
+**Last Updated:** October 23, 2025
+**Repository Version:** 2.0 (Template-based deployment workflow)
+**Next Milestone:** 6/12 scenarios (50%) by end of October 2025
+
+</div>
