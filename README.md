@@ -26,7 +26,6 @@ sf apex run -f 04-scenario-name/tests/test_scenario.apex -o NewOrg
 ```
 
 ### Key Resources
-- 📖 **[Deployment Workflow](Documentation/DEPLOYMENT_WORKFLOW.md)** - Complete step-by-step guide
 - 🔐 **[FLS Verification Guide](Documentation/Guides/FLS_VERIFICATION_GUIDE.md)** - Field-Level Security setup
 - 📋 **[Templates](Templates/)** - Reusable deployment templates
 - 🤖 **[Scripts](Scripts/)** - Automation tools
@@ -91,7 +90,6 @@ deployment-execution/
 │   └── generate-deployment-summary.sh
 │
 ├── 📚 Documentation/          # Guides and workflows
-│   ├── DEPLOYMENT_WORKFLOW.md
 │   ├── ACTIVATED_TRIGGERS_TEST_CLASSES.md
 │   └── Guides/
 │       └── FLS_VERIFICATION_GUIDE.md
@@ -160,7 +158,7 @@ deployment-execution/
    git push
    ```
 
-**Full workflow:** [DEPLOYMENT_WORKFLOW.md](Documentation/DEPLOYMENT_WORKFLOW.md)
+**For detailed deployment steps:** See individual scenario DEPLOYMENT_HISTORY.md files for real-world examples
 
 ---
 
@@ -223,9 +221,7 @@ Generate concise deployment summaries:
 ## 📚 Documentation
 
 ### Essential Guides
-- **[Deployment Workflow](Documentation/DEPLOYMENT_WORKFLOW.md)** - Complete deployment process (all 7 phases)
 - **[FLS Verification Guide](Documentation/Guides/FLS_VERIFICATION_GUIDE.md)** - Field-Level Security setup and troubleshooting
-- **[Continuation Prompt](Documentation/DEPLOYMENT_CONTINUATION_PROMPT.md)** - Resume deployment work after context loss
 
 ### Reference Documents
 - **[Activated Triggers](Documentation/ACTIVATED_TRIGGERS_TEST_CLASSES.md)** - Triggers activated during deployments
@@ -253,9 +249,9 @@ Generate concise deployment summaries:
 
 ### Getting Help
 
-1. **Deployment Issues:** Check [DEPLOYMENT_WORKFLOW.md](Documentation/DEPLOYMENT_WORKFLOW.md)
-2. **FLS Problems:** See [FLS_VERIFICATION_GUIDE.md](Documentation/Guides/FLS_VERIFICATION_GUIDE.md)
-3. **Scenario-Specific:** Review scenario's DEPLOYMENT_HISTORY.md
+1. **FLS Problems:** See [FLS_VERIFICATION_GUIDE.md](Documentation/Guides/FLS_VERIFICATION_GUIDE.md)
+2. **Scenario-Specific:** Review scenario's DEPLOYMENT_HISTORY.md
+3. **General Deployment:** Check completed scenarios (01-05) for working examples
 
 ---
 
