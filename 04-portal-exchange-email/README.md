@@ -4,6 +4,26 @@
 **Priority**: High (Customer-Facing Portal)
 **Complexity**: Medium
 **Estimated Deployment Time**: 1.5-2 hours
+**Status**: ⏳ **PENDING VERIFICATION** - Manual prerequisites completed, awaiting email verification
+
+---
+
+## 🚨 Deployment Status - October 23, 2025
+
+### ✅ Completed Manual Prerequisites (October 23, 2025):
+1. **Custom Label Created**: `From_Address_Portal_Exchanges` with value `portal-exchanges@recyclinglives-services.com`
+2. **Org-Wide Email Address Created**: `portal-exchanges@recyclinglives-services.com` with Display Name "Portal Exchanges"
+
+### ⏳ Awaiting Verification:
+- **Org-Wide Email Verification**: Verification email sent, pending user to click verification link
+- **Estimated Time**: 5-10 minutes once email is accessed
+
+### 📋 Next Steps After Verification:
+1. Confirm Org-Wide Email status = **Verified** in Setup
+2. Deploy Apex classes and trigger (NewCaseEmailPopACCandContactHandler, NewCaseEmailPopACCandContactHandlerTest, NewCaseEmailPopACCandContact)
+3. Deploy 6 Flows with fromEmailAddress parameter
+4. Perform functional testing of portal email functionality
+5. Document deployment in DEPLOYMENT_HISTORY.md
 
 ---
 

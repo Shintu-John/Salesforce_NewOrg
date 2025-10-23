@@ -73,7 +73,10 @@ private class rlsServiceCaseAutoAssignTest {
             Group testQueue = createTestQueue();
             
             // Create a test account
-            Account testAccount = new Account(Name = 'Test Account');
+            Account testAccount = new Account(
+                Name = 'Test Account',
+                comp_house__Company_Number__c = '12345678'
+            );
             insert testAccount;
             
             // Create test cases assigned to the queue
@@ -160,7 +163,10 @@ private class rlsServiceCaseAutoAssignTest {
     static void testNoEligibleCases() {
         System.runAs(createSystemAdminUser()) {
             // Create cases with incorrect criteria
-            Account testAccount = new Account(Name = 'Test Account');
+            Account testAccount = new Account(
+                Name = 'Test Account',
+                comp_house__Company_Number__c = '12345678'
+            );
             insert testAccount;
             
             // Create a case but DON'T assign it to the CS queue
@@ -199,7 +205,10 @@ private class rlsServiceCaseAutoAssignTest {
             Group testQueue = createTestQueue();
             
             // Create a test account
-            Account testAccount = new Account(Name = 'Test Account');
+            Account testAccount = new Account(
+                Name = 'Test Account',
+                comp_house__Company_Number__c = '12345678'
+            );
             insert testAccount;
             
             // Create a test case assigned to the queue
@@ -245,7 +254,10 @@ private class rlsServiceCaseAutoAssignTest {
             Group testQueue = createTestQueue();
             
             // Create a test account
-            Account testAccount = new Account(Name = 'Test Account');
+            Account testAccount = new Account(
+                Name = 'Test Account',
+                comp_house__Company_Number__c = '12345678'
+            );
             insert testAccount;
             
             // Get our test users
@@ -374,23 +386,33 @@ private class rlsServiceCaseAutoAssignTest {
      * way to prepare users for testing by adding test code helper
      */
     private static void prepareEligibleUsersForTest() {
+        // Exclude real Customer Service users from auto-assignment during tests
+        List<User> realUsers = new List<User>();
+        for (User u : [SELECT Id, Dont_Auto_Assign_Cases__c FROM User WHERE IsActive = true AND (LastName = 'Morris' OR LastName = 'Miller')]) {
+            realUsers.add(u);
+        }
+
+        for (User u : realUsers) {
+            u.Dont_Auto_Assign_Cases__c = true;
+        }
+        if (!realUsers.isEmpty()) {
+            update realUsers;
+        }
+
         // To simulate LastLoginDate being set to today, we'll simply execute one login via System.runAs
         // for each user that needs to be eligible. This will set their LastLoginDate to today's date.
         List<User> users = [
-            SELECT Id, Name 
-            FROM User 
+            SELECT Id, Name
+            FROM User
             WHERE LastName LIKE 'CSUser%' AND Dont_Auto_Assign_Cases__c = false
         ];
-        
+
         for (User u : users) {
             System.runAs(u) {
                 // Simply running as the user registers a login
                 System.debug('Running as user: ' + u.Id + ' to simulate login');
             }
         }
-        
-        // This is where we would add a test seam if we were to modify the main code
-        // Example: rlsServiceCaseAutoAssign.isTestMode = true;
     }
 
     /**
@@ -407,7 +429,10 @@ private class rlsServiceCaseAutoAssignTest {
 
             Id emailRecordTypeId = Schema.SObjectType.Case.getRecordTypeInfosByName().get(RECORD_TYPE_NAME).getRecordTypeId();
             Group testQueue = createTestQueue();
-            Account testAccount = new Account(Name = 'Test Account');
+            Account testAccount = new Account(
+                Name = 'Test Account',
+                comp_house__Company_Number__c = '12345678'
+            );
             insert testAccount;
 
             // Get test users
@@ -468,7 +493,10 @@ private class rlsServiceCaseAutoAssignTest {
 
             Id emailRecordTypeId = Schema.SObjectType.Case.getRecordTypeInfosByName().get(RECORD_TYPE_NAME).getRecordTypeId();
             Group testQueue = createTestQueue();
-            Account testAccount = new Account(Name = 'Test Account');
+            Account testAccount = new Account(
+                Name = 'Test Account',
+                comp_house__Company_Number__c = '12345678'
+            );
             insert testAccount;
 
             // Get test users
@@ -539,7 +567,10 @@ private class rlsServiceCaseAutoAssignTest {
 
             Id emailRecordTypeId = Schema.SObjectType.Case.getRecordTypeInfosByName().get(RECORD_TYPE_NAME).getRecordTypeId();
             Group testQueue = createTestQueue();
-            Account testAccount = new Account(Name = 'Test Account');
+            Account testAccount = new Account(
+                Name = 'Test Account',
+                comp_house__Company_Number__c = '12345678'
+            );
             insert testAccount;
 
             // Get test user
@@ -586,7 +617,10 @@ private class rlsServiceCaseAutoAssignTest {
 
             Id emailRecordTypeId = Schema.SObjectType.Case.getRecordTypeInfosByName().get(RECORD_TYPE_NAME).getRecordTypeId();
             Group testQueue = createTestQueue();
-            Account testAccount = new Account(Name = 'Test Account');
+            Account testAccount = new Account(
+                Name = 'Test Account',
+                comp_house__Company_Number__c = '12345678'
+            );
             insert testAccount;
 
             // Get test users
@@ -650,7 +684,10 @@ private class rlsServiceCaseAutoAssignTest {
 
             Id emailRecordTypeId = Schema.SObjectType.Case.getRecordTypeInfosByName().get(RECORD_TYPE_NAME).getRecordTypeId();
             Group testQueue = createTestQueue();
-            Account testAccount = new Account(Name = 'Test Account');
+            Account testAccount = new Account(
+                Name = 'Test Account',
+                comp_house__Company_Number__c = '12345678'
+            );
             insert testAccount;
 
             // Get test user
@@ -708,7 +745,8 @@ private class rlsServiceCaseAutoAssignTest {
             // Create account with CS Contact
             Account keyAccount = new Account(
                 Name = 'Key Account',
-                CS_Contact__c = csContact.Id
+                CS_Contact__c = csContact.Id,
+                comp_house__Company_Number__c = '12345678'
             );
             insert keyAccount;
 
@@ -759,7 +797,8 @@ private class rlsServiceCaseAutoAssignTest {
             // Create account with CS Contact (first user)
             Account keyAccount = new Account(
                 Name = 'Key Account',
-                CS_Contact__c = testUsers[0].Id
+                CS_Contact__c = testUsers[0].Id,
+                comp_house__Company_Number__c = '12345678'
             );
             insert keyAccount;
 
@@ -839,7 +878,8 @@ private class rlsServiceCaseAutoAssignTest {
             // Create account with Kaylie as CS Contact
             Account keyAccount = new Account(
                 Name = 'Key Account - Kaylie',
-                CS_Contact__c = kaylieMorris.Id
+                CS_Contact__c = kaylieMorris.Id,
+                comp_house__Company_Number__c = '12345678'
             );
             insert keyAccount;
 
@@ -893,7 +933,10 @@ private class rlsServiceCaseAutoAssignTest {
             Group testQueue = createTestQueue();
 
             // Create test account
-            Account testAccount = new Account(Name = 'Test Account');
+            Account testAccount = new Account(
+                Name = 'Test Account',
+                comp_house__Company_Number__c = '12345678'
+            );
             insert testAccount;
 
             // Create test case
