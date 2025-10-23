@@ -90,7 +90,7 @@ Salesforce_NewOrg/
 | [quote-to-order-process](quote-to-order-process/) | ✅ Complete | Oct 22, 2025 | Training | Quote-to-Order user training - No configuration changes needed |
 | [fred-certificate-renewal](fred-certificate-renewal/) | ✅ Complete | Oct 22, 2025 | Configuration | FRED Integration certificate renewal procedure - Certificate management guide |
 
-### Deployment Scenarios (5 Ready ✅)
+### Deployment Scenarios (6 Ready ✅)
 
 **Purpose**: Deploy code from OldOrg to NewOrg (bug fixes, new features, enhancements).
 
@@ -101,13 +101,14 @@ Salesforce_NewOrg/
 | [invoice-email-portal-access](invoice-email-portal-access/) | ✅ Ready (⚠️ **OUTDATED**) | Oct 23, 2025 | **5 components analyzed** | ⚠️ **NewOrg has OLD VERSION** - 4 of 5 components outdated (Sept 2025 vs Oct 9). InvoiceFileListController missing invoice PDF logic (71 lines). **ContentDistributionHelper already current** (Oct 10). Customers cannot access invoice PDFs on portal. |
 | [daily-reminder-emails](daily-reminder-emails/) | ✅ Ready (⚠️ **SEVERELY OUTDATED**) | Oct 23, 2025 | **4 components analyzed** | 🚨 **NewOrg has VERY OLD VERSION** - Sept 17 version (52 lines vs 245 lines). **Entire Tier 1 system MISSING** (JobDeliveryConfirmationReminderBatch). Missing Delivery_Confirmed__c filter, HTML reporting, prioritization. **Sends 556 emails daily instead of 2 reports.** Record locking risk. |
 | [portal-exchange-email](portal-exchange-email/) | ✅ Ready (⚠️ **OUTDATED**) | Oct 23, 2025 | **6 components analyzed** | ⚠️ **NewOrg has OUTDATED CODE** - Handler from Oct 2 (14 days old), test from Sept 17 (29 days old). 6 flows need verification for fromEmailAddress parameter. **Customers with strict SPF policies (Amey Highways) cannot submit portal requests.** Emails rejected, no Cases created. |
+| [transport-charges](transport-charges/) | ✅ Ready (🚨 **CRITICAL**) | Oct 23, 2025 | **3 bugs + 244 missing lines** | 🚨 **NewOrg has SEVERELY OUTDATED CODE** - Oct 10 version (575 lines vs 819 lines, 5 days behind). **MISSING BOTH CRITICAL FIXES**: Issue 1 missing charges (£919K impact), Issue 3 hybrid calculation bug (£870K impact). Missing secondary transport feature (244 lines). **Financial risk: £1.7M+ if not deployed before go-live.** |
 
 **Next Deployment Scenarios to Prepare** (Priority Order):
 
 | # | Scenario | Source Documentation | Complexity | Est. Time |
 |---|----------|---------------------|------------|-----------|
-| 6 | cs-invoicing | CS_INVOICING_DATE_DESCRIPTION_FIELDS.md (Backup/) | Medium | 1.5-2 hours |
-| 7 | transport-charges | TRANSPORT_CHARGE_ISSUES_CONSOLIDATED.md (Backup/) | Medium | 1.5-2 hours |
+| 6 | ~~transport-charges~~ | ~~TRANSPORT_CHARGE_ISSUES_CONSOLIDATED.md (Backup/)~~ | ~~Medium~~ | **✅ COMPLETE** (Oct 23, 2025) |
+| 7 | cs-invoicing | CS_INVOICING_DATE_DESCRIPTION_FIELDS.md (Backup/) | Medium | 1.5-2 hours |
 | 8 | secondary-transport | SECONDARY_TRANSPORT_IMPLEMENTATION.md (Backup/) | Medium | 1.5-2 hours |
 | 9 | po-consumption-emails | PO_CONSUMPTION_EMAIL_NOTIFICATIONS.md (Backup/) | Low | 1-1.5 hours |
 | 10 | job-charge-credit-on-account | JOB_CHARGE_CREDIT_ON_ACCOUNT_FIX.md (Backup/) | Low | 1 hour |
@@ -373,9 +374,9 @@ After deploying any scenario:
 
 **Repository Status**: 🚨 CRITICAL - Version Mismatch Detected
 **Last Updated**: October 23, 2025
-**Total Scenarios**: 9 complete (5 deployment + 4 configuration)
-**Deployment Scenarios**: 5 of 18 ready for deployment (27.8%)
+**Total Scenarios**: 10 complete (6 deployment + 4 configuration)
+**Deployment Scenarios**: 6 of 18 ready for deployment (33.3%)
 **Configuration Scenarios**: 4 of 8 complete (50.0%)
-**Overall Progress**: 25.7% complete (9/35 scenarios)
-**CRITICAL ALERT**: Multiple scenarios have outdated versions in NewOrg - producer-portal (35 days old), daily-reminder-emails (33 days old), portal-exchange-email (14-29 days old)
-**Next Deployment Preparation**: cs-invoicing (Medium Priority #6)
+**Overall Progress**: 28.6% complete (10/35 scenarios)
+**CRITICAL ALERT**: Multiple scenarios have outdated versions in NewOrg - transport-charges (5 days, £1.7M risk), producer-portal (35 days), daily-reminder-emails (33 days), portal-exchange-email (14-29 days)
+**Next Deployment Preparation**: cs-invoicing (Medium Priority #7)
