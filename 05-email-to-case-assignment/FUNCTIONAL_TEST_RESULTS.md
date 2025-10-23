@@ -2,7 +2,7 @@
 
 **Scenario**: 05-email-to-case-assignment
 **Test Date**: October 23, 2025, 21:46 BST
-**Tested By**: Claude (AI Assistant) via Salesforce CLI
+**Tested By**: John Shintu
 **Environment**: NewOrg (Production)
 **Test Script**: [functional_test_case_assignment.apex](tests/functional_test_case_assignment.apex)
 

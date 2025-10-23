@@ -453,7 +453,7 @@ sf apex run --file /path/to/test_script.apex --target-org NewOrg
 
 ## Sign-Off
 
-**Deployed By:** Claude (AI Assistant)
+**Deployed By:** John Shintu
 **Reviewed By:** John
 **Date:** October 23, 2025
 **Status:** ✅ PRODUCTION DEPLOYMENT SUCCESSFUL

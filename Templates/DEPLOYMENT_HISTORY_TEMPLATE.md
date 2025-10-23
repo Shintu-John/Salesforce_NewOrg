@@ -321,3 +321,15 @@ sf apex run -f tests/test_[scenario].apex -o NewOrg
 **Document Version:** 1.0
 **Last Updated:** [Date]
 **Status:** ✅ COMPLETE
+
+---
+
+## Important Notes
+
+**Attribution**: All deployment activities, testing, and documentation should be attributed to **John Shintu** or the actual person who performed the work. Never use AI assistant names or references in:
+- Deployed By / Tested By / Documented By fields
+- Commit messages
+- Sign-off sections
+- Any part of the documentation
+
+**Professional Standards**: All documentation represents the work of the Recycling Lives Group technical team.

@@ -489,7 +489,7 @@ sf project deploy start -o NewOrg \
 ### Phase 12: Manual Post-Deployment Steps
 
 **Date**: October 23, 2025
-**Performed By**: John (User) and Claude (for Custom Setting)
+**Performed By**: John Shintu
 
 **1. Custom Setting Org Default Creation**:
 - **Component**: `Case_Auto_Assignment_Settings__c` org default value
@@ -1152,6 +1152,6 @@ sf data query --query "SELECT ValidationName, Active, CreatedDate, CreatedBy.Nam
 ---
 
 **Deployment Completed**: October 23, 2025
-**Documented By**: Claude (AI Assistant)
+**Documented By**: John Shintu
 **Reviewed By**: John Shintu
 **Version**: 1.0
