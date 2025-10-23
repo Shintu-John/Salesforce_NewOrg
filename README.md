@@ -4,7 +4,7 @@
 **Source Organization**: OldOrg (Recycling Lives Service)
 **Purpose**: Migration plans and deployment-ready packages for migrating from OldOrg to NewOrg
 **Created**: October 22, 2025
-**Status**: 🚀 Active Deployment - 1 of 12 scenarios deployed
+**Status**: 🚀 Active Deployment - 2 of 12 scenarios deployed
 
 ---
 
@@ -13,17 +13,24 @@
 **Deployment Phase**: Active
 **Start Date**: October 23, 2025
 **Target Org**: NewOrg (Production)
-**Deployed**: 1 of 12 scenarios (8.3%)
+**Deployed**: 2 of 12 scenarios (16.7%)
 **Status**: ✅ In Progress
 
 ### Deployment Statistics
-- 🚀 **Deployed**: 1 scenario
+- 🚀 **Deployed**: 2 scenarios
 - ⏳ **In Progress**: 0 scenarios
-- 📋 **Pending**: 11 scenarios
+- 📋 **Pending**: 10 scenarios
 - ✅ **Total Ready**: 12 deployment scenarios
 
 ### Recently Deployed
-1. **transport-charges** (Oct 23, 2025) - Deploy IDs: 0AfSq000003nLkjKAE (code), 0AfSq000003nLw1KAE (validation)
+1. **cs-invoicing** (Oct 23, 2025) - Deploy ID: 0AfSq000003nOU5KAM
+   - Components: RLCSChargeService, RLCSCreditInvoiceAction, RLCS_ChargeTrigger (activated), Collection_Date__c field
+   - Tests: 83/83 passed (100%)
+   - Business Impact: Auto-population of invoice charge dates and descriptions for CS team
+   - Test Data Fixes: Updated RLCSChargeServiceTest and RLCSCreditInvoiceActionTest for NewOrg environment
+   - Status: ✅ Complete
+
+2. **transport-charges** (Oct 23, 2025) - Deploy IDs: 0AfSq000003nLkjKAE (code), 0AfSq000003nLw1KAE (validation)
    - Components: rlcsJobService, rlcsJobServiceTest, rlcsJobTrigger, Transport_Flag_Validation
    - Tests: 65/65 passed (100%)
    - Business Impact: £1.79M+ financial protection
@@ -138,8 +145,8 @@ Salesforce_NewOrg/
 | Scenario | Status | Deployed Date | Deploy ID | Critical Issues |
 |----------|--------|---------------|-----------|-----------------|
 | [transport-charges](transport-charges/) | 🚀 **DEPLOYED** | Oct 23, 2025 | 0AfSq000003nLkjKAE, 0AfSq000003nLw1KAE | ✅ **COMPLETE** - Issue 1 fix deployed (£919K protection), Issue 3 fix deployed (£870K protection), Secondary transport feature deployed (244 lines), Validation rule deployed. All 65 tests passed. Functional testing complete. **Financial risk eliminated.** |
-| [cs-invoicing](cs-invoicing/) | 📋 **PENDING** | - | - | ⚠️ **NewOrg has OLD VERSION** - RLCSChargeService 97 lines (vs 142, 31.7% missing). rlcsJobService 575 lines (vs 819, 29.8% missing). **Collection_Date__c field MISSING**. Missing buildChargeDescription(), inline SOQL performance issue. **Depends on transport-charges** (now deployed ✅). CS Invoicing team missing automatic date/description visibility. |
-| [secondary-transport](secondary-transport/) | 📋 **PENDING** | - | - | 🚨 **NewOrg has SEVERELY OUTDATED CODE** - Oct 10 version (575 lines vs 819 lines). **MISSING ALL SECONDARY TRANSPORT LOGIC** (244 lines, 29.8%). Phase 2 CSV mapping fixes MISSING in 3 components (BatchProcessor, Controller, iParserio batch). **CSV columns 14-15 issue - 97 invalid Jobs (£19K-£29K).** NULL weight/units from uploads. **Depends on transport-charges** (now deployed ✅) + cs-invoicing (pending). |
+| [cs-invoicing](cs-invoicing/) | 🚀 **DEPLOYED** | Oct 23, 2025 | 0AfSq000003nOU5KAM | ✅ **COMPLETE** - RLCSChargeService deployed (142 lines), RLCSCreditInvoiceAction deployed (153 lines), RLCS_ChargeTrigger activated, Collection_Date__c field created. All 83 tests passed (100%). Test data fixes applied for NewOrg environment (Order_Product__c setup). CS Invoicing team now has automatic date/description population on invoice charges. **Dependency on transport-charges satisfied ✅**. |
+| [secondary-transport](secondary-transport/) | 📋 **PENDING** | - | - | 🚨 **NewOrg has SEVERELY OUTDATED CODE** - Oct 10 version (575 lines vs 819 lines). **MISSING ALL SECONDARY TRANSPORT LOGIC** (244 lines, 29.8%). Phase 2 CSV mapping fixes MISSING in 3 components (BatchProcessor, Controller, iParserio batch). **CSV columns 14-15 issue - 97 invalid Jobs (£19K-£29K).** NULL weight/units from uploads. **Depends on transport-charges** (now deployed ✅) + **cs-invoicing** (now deployed ✅). **READY TO DEPLOY**. |
 | [producer-portal](producer-portal/) | 📋 **PENDING** | - | - | 🚨 **NewOrg has OLD BUGGY VERSION** - ProducerPlacedOnMarketTriggerHelper is 35 days out of date (Sept 19 vs Oct 21). **Missing ALL 5 fixes**. 8 components MISSING (sharing solution). **MUST deploy before go-live.** |
 | [email-to-case-assignment](email-to-case-assignment/) | 📋 **PENDING** | - | - | ⚠️ **NewOrg has OLD VERSION** - Apex classes are pre-V3 (434 vs 631 lines). Missing SOQL caching, recursion prevention, Kaylie Morris exemption. **3 components MISSING** (Custom Setting, Case field, Flow). **Customer Service workload management - deploy soon.** |
 | [invoice-email-portal-access](invoice-email-portal-access/) | 📋 **PENDING** | - | - | ⚠️ **NewOrg has OLD VERSION** - 4 of 5 components outdated (Sept 2025 vs Oct 9). InvoiceFileListController missing invoice PDF logic (71 lines). **ContentDistributionHelper already current** (Oct 10). Customers cannot access invoice PDFs on portal. |

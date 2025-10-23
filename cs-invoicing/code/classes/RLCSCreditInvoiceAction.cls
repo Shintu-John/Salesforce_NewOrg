@@ -40,7 +40,8 @@ public with sharing class RLCSCreditInvoiceAction {
         // Get all the RLCS charge records for these charges and add them to a map by Invoice Id
         Map<Id, List<RLCS_Charge__c>> rlcsChargesToCreditByInvoice = new Map<Id, List<RLCS_Charge__c>>();
         for (RLCS_Charge__c rc : [SELECT Id, Sales_Invoice__c, Sales_Price__c, Sales_Account__c, Charge_Type__c, RecordTypeId,
-                                        Date__c, Name, RLCS_Job__c, Credited_RLCS_Charge__c
+                                        Date__c, Name, RLCS_Job__c, Credited_RLCS_Charge__c,
+                                        RLCS_Job__r.Product_Name__c, RLCS_Job__r.Waste_Type__c, RLCS_Job__r.EWC__c, RLCS_Job__r.Collected_Date__c
                                     FROM RLCS_Charge__c
                                     WHERE Charge_Type__c!=:RLCSChargeService.JOB_CHARGE_TYPE_CREDIT AND Id IN:selectedRLCSChargeIds]) {
             if (rlcsChargesToCreditByInvoice.containsKey(rc.Sales_Invoice__c) == false) {rlcsChargesToCreditByInvoice.put(rc.Sales_Invoice__c, new List<RLCS_Charge__c>());}
@@ -64,7 +65,7 @@ public with sharing class RLCSCreditInvoiceAction {
             // Step through the RLCS charges and create credit RLCS charges
             for (RLCS_Charge__c rc : rlcsCharges) {
                 // Create the RLCS charge for the credit
-                RLCS_Charge__c creditRLCSCharge = RLCSChargeService.createAutoJobCharge(rc.RLCS_Job__c, RLCSChargeService.JOB_CHARGE_TYPE_CREDIT);
+                RLCS_Charge__c creditRLCSCharge = RLCSChargeService.createAutoJobCharge(rc.RLCS_Job__r, RLCSChargeService.JOB_CHARGE_TYPE_CREDIT);
 
                 // Update the RLCS charge with credit details
                 creditRLCSCharge.Sales_Price__c = -1 * rc.Sales_Price__c;
