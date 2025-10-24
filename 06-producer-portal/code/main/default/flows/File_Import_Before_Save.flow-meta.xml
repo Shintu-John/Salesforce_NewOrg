@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Initial_Assignment</name>
+        <label>Initial Assignment</label>
+        <locationX>176</locationX>
+        <locationY>287</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.File_Import_Status__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>fileImportStatus</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <environments>Default</environments>
+    <formulas>
+        <name>fileImportStatus</name>
+        <dataType>String</dataType>
+        <expression>IF(LOWER({!$Record.Tag__c}) == &apos;ovi&apos;, IF( {!$Record.Invoice_Total__c}
+            == {!$Record.Total_OVI__c}, &apos;Completed&apos;, &apos;Failed&apos;),
+            TEXT({!$Record.File_Import_Status__c}))</expression>
+    </formulas>
+    <interviewLabel>File Import - Before Save {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>File Import - Before Save</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Initial_Assignment</targetReference>
+        </connector>
+        <object>File_Import__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>

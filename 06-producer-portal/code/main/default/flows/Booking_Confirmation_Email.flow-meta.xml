@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>50.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>19-03-2024: removed the old template for Domestic job
+20-02-2024: new email template added
+after sending email change status to &quot;Awaiting Supplier Confirmation&quot;</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>emails</name>
+        <dataType>String</dataType>
+        <expression>{!Get_Job_Record.Supplier__r.Sales_Email__c}+IF(NOT(ISBLANK({!Get_Job_Record.Supplier__r.Other_Emails__c})), &apos;;&apos;+{!Get_Job_Record.Supplier__r.Other_Emails__c},&apos;&apos;)</expression>
+    </formulas>
+    <formulas>
+        <name>FromEmailSupplier</name>
+        <dataType>String</dataType>
+        <expression>{!$Label.From_Address_Supplier}</expression>
+    </formulas>
+    <formulas>
+        <name>templateName</name>
+        <dataType>String</dataType>
+        <expression>IF({!Get_Job_Record.Schedule__c}&lt;&gt;NULL,&quot;X2_0_Schedule_Job_Template&quot;,
+IF({!Get_Job_Record.RecordType.DeveloperName}=&quot;Fixed&quot;,
+
+CASE(TEXT({!Get_Job_Record.Type__c}), &quot;Exchange&quot;, &quot;X2_0_Fixed_Job_Template_Exchange&quot;, &quot;Wait &amp; Load&quot;, &quot;X2_0_Fixed_Job_Template_Wait_Load&quot;, &quot;X2_0_Fixed_Job_Template_Delivery&quot;)
+,
+IF({!Get_Job_Record.RecordType.DeveloperName}=&quot;Variable&quot;,
+
+CASE(TEXT({!Get_Job_Record.Type__c}), &quot;Exchange&quot;, &quot;X2_0_Variable_Job_Template_Exchange&quot;, &quot;Wait &amp; Load&quot;, &quot;X2_0_Variable_Job_Template_Wait_Load&quot;, &quot;X2_0_Variable_Job_Template_Delivery&quot;)
+
+,
+IF({!Get_Job_Record.RecordType.DeveloperName}=&quot;Rebate&quot;,
+
+CASE(TEXT({!Get_Job_Record.Type__c}), &quot;Exchange&quot;, &quot;X2_0_Rebate_Job_Template_Exchange&quot;, &quot;Wait &amp; Load&quot;, &quot;X2_0_Rebate_Job_Template_Wait_Load&quot;, &quot;X2_0_Rebate_Job_Template_Delivery&quot;)
+
+,
+&quot;No Template Found&quot;))))</expression>
+    </formulas>
+    <interviewLabel>Booking Confirmation Email {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Booking Confirmation Email</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordLookups>
+        <name>Get_Job_Record</name>
+        <label>Get Job Record</label>
+        <locationX>176</locationX>
+        <locationY>204</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Note_Screen</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Job__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Job</name>
+        <label>Update Job</label>
+        <locationX>441</locationX>
+        <locationY>206</locationY>
+        <connector>
+            <targetReference>Email_Preview</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Notes_on_Supplier_PO__c</field>
+            <value>
+                <elementReference>Supplier_Note</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Notes_to_Supplier_for_Collection__c</field>
+            <value>
+                <elementReference>Supplier_Collection_Notes</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Job__c</object>
+    </recordUpdates>
+    <screens>
+        <name>Email_Preview</name>
+        <label>Email Preview</label>
+        <locationX>585</locationX>
+        <locationY>208</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>sendEmailPreview</name>
+            <extensionName>c:sendEmailToSupplier</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>emailStatus</name>
+                <value>
+                    <booleanValue>true</booleanValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>jobID</name>
+                <value>
+                    <elementReference>recordId</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>templatename</name>
+                <value>
+                    <elementReference>templateName</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>suppplierToEmailIDs</name>
+                <value>
+                    <elementReference>emails</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>fromEmailAddress</name>
+                <value>
+                    <elementReference>FromEmailSupplier</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>successStatus</name>
+                <value>
+                    <stringValue>Awaiting Supplier Confirmation</stringValue>
+                </value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Note_Screen</name>
+        <label>Note Screen</label>
+        <locationX>305</locationX>
+        <locationY>204</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Update_Job</targetReference>
+        </connector>
+        <fields>
+            <name>Supplier_Note</name>
+            <defaultValue>
+                <stringValue>{!Get_Job_Record.Notes_on_Supplier_PO__c}</stringValue>
+            </defaultValue>
+            <fieldText>Supplier Note</fieldText>
+            <fieldType>LargeTextArea</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>templateName</leftValueReference>
+                    <operator>NotEqualTo</operator>
+                    <rightValue>
+                        <stringValue>Organise_Collection_Job_Template</stringValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
+            <name>Supplier_Collection_Notes</name>
+            <defaultValue>
+                <stringValue>{!Get_Job_Record.Notes_to_Supplier_for_Collection__c}</stringValue>
+            </defaultValue>
+            <fieldText>Supplier Collection Notes</fieldText>
+            <fieldType>LargeTextArea</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>templateName</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>Organise_Collection_Job_Template</stringValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
+            <name>DisplayTemplateName</name>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;font-size: 10px;&quot;&gt;{!templateName}&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>50</locationX>
+        <locationY>50</locationY>
+        <connector>
+            <targetReference>Get_Job_Record</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

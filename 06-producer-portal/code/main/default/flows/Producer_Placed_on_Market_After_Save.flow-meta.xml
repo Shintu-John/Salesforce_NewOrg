@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Manage_Producer_User_Access_On_Producer_Placed_On_Market_Data</name>
+        <label>Manage Producer User Access On Producer Placed On Market Data</label>
+        <locationX>176</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Visible_to_Producer</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Visible_To_Producer_User__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Account__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>$Record.Account_For_Community__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Producer_User_Access_On_Producer_Placed_On_Market_Data</targetReference>
+            </connector>
+            <label>Visible to Producer</label>
+        </rules>
+        <rules>
+            <name>Hidden_from_Producer</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Visible_To_Producer_User__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Account_For_Community__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Producer_User_Access_On_Producer_Placed_On_Market_Data</targetReference>
+            </connector>
+            <label>Hidden from Producer</label>
+        </rules>
+    </decisions>
+    <description>11-01-2025 : added Producer User Access On Producer Placed On Market Data</description>
+    <environments>Default</environments>
+    <interviewLabel>Producer Placed on Market - After Save {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Producer Placed on Market - After Save</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Manage_Producer_User_Access_On_Producer_Placed_On_Market_Data</targetReference>
+        </connector>
+        <object>Producer_Placed_on_Market__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>Producer_User_Access_On_Producer_Placed_On_Market_Data</name>
+        <label>Producer User Access On Producer Placed On Market Data</label>
+        <locationX>176</locationX>
+        <locationY>623</locationY>
+        <flowName>Producer_User_Access_On_Producer_Placed_On_Market_Data</flowName>
+    </subflows>
+</Flow>

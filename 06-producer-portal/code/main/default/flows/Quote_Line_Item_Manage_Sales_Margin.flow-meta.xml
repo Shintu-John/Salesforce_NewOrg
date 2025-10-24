@@ -1,0 +1,635 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Process_Required</name>
+        <label>Process Required</label>
+        <locationX>446</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Customer_Service_New_Site_21</name>
+            <conditionLogic>1 AND 2 AND 3 AND 8 AND 9 AND 10 AND (4 OR 5 OR 6 OR 7)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Quote.Account_Owner_ID__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>$Setup.Static_Id__c.User_CustomerServiceAccounts__c</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Quote.Opportunity.Account.Account_Uses_Ratecard__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Quote.Quote_For_New_Site__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Margin__c</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <numberValue>21.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>OrderItemMarginLIFT</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <numberValue>21.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>OrderItemMarginTONNAGE</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <numberValue>21.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>OrderItemMarginTRANSPORT</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <numberValue>21.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Is_Pricing_Entered</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>isHazWasteJob</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Do_Not_Apply_Auto_Margin__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_to_21</targetReference>
+            </connector>
+            <label>Customer Service New Site &gt;21%</label>
+        </rules>
+        <rules>
+            <name>Customer_Service_Existing_Site_23</name>
+            <conditionLogic>1 AND 2 AND 3 AND 4 AND 9 AND (5 OR 6 OR 7 OR 8)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Quote.Quote_For_New_Site__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Quote.Opportunity.Account.Account_Uses_Ratecard__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Quote.Account_Owner_ID__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>005240000070lq4</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Is_Pricing_Entered</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Margin__c</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <numberValue>23.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>OrderItemMarginLIFT</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <numberValue>23.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>OrderItemMarginTONNAGE</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <numberValue>23.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>OrderItemMarginTRANSPORT</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <numberValue>23.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>isHazWasteJob</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_to_23</targetReference>
+            </connector>
+            <label>Customer Service Existing Site &gt;23%</label>
+        </rules>
+        <rules>
+            <name>Haz_Waste_Line_25</name>
+            <conditionLogic>1 AND 2 AND 3 AND 8 AND (4 OR 5 OR 6 OR 7)</conditionLogic>
+            <conditions>
+                <leftValueReference>Is_Pricing_Entered</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Quote.Opportunity.Account.Account_Uses_Ratecard__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>isHazWasteJob</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Margin__c</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <numberValue>25.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>OrderItemMarginLIFT</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <numberValue>25.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>OrderItemMarginTONNAGE</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <numberValue>25.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>OrderItemMarginTRANSPORT</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <numberValue>25.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Do_Not_Apply_Auto_Margin__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_to_25</targetReference>
+            </connector>
+            <label>Haz Waste Line &gt;25%</label>
+        </rules>
+    </decisions>
+    <description>20/09/2025 : removed the static Id dependency
+10/03/2025: Fixed bug with Rebate Lines calculating NULL margin.
+15/01/2024: &quot;Do Not Apply Increase&quot; allows users to save &lt;18%.
+
+Process to automatically manage sales margin on OrderItem records.</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>Is_Pricing_Entered</name>
+        <dataType>Boolean</dataType>
+        <expression>IF(
+   AND(
+      TEXT({!$Record.Pricing_method__c}) != &quot;Rebate&quot;,
+      {!$Record.UnitPrice}&gt; 0
+   ), 
+   TRUE, 
+   IF(
+      AND(
+         TEXT({!$Record.Pricing_method__c}) = &quot;Rebate&quot;,
+         {!$Record.Sales_Transport__c} &gt; 0
+      ), 
+      TRUE, 
+      FALSE
+   )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>isHazWasteJob</name>
+        <dataType>Boolean</dataType>
+        <expression>CONTAINS({!$Record.EWC_Code_New__c}, &quot;*&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>LIFT_18p_Margin</name>
+        <dataType>Currency</dataType>
+        <expression>IF(
+  AND(
+    {!$Record.Partner_price__c} &lt;= 0,
+    ISPICKVAL({!$Record.Pricing_method__c}, &quot;Rebate&quot;)
+  ),
+  0,
+
+  IF(
+    AND(
+      {!$Record.Partner_price__c} &gt; 0,
+      NOT(ISPICKVAL({!$Record.Pricing_method__c}, &quot;Rebate&quot;))
+    ),
+    ROUND({!$Record.Partner_price__c} / (1 - 0.18), 0),
+
+    IF(
+      AND(
+        {!$Record.Partner_price__c} &gt; 0,
+        ISPICKVAL({!$Record.Pricing_method__c}, &quot;Rebate&quot;)
+      ),
+      ROUND({!$Record.Partner_price__c} * (1 - 0.18), 0),
+      NULL
+    )
+  )
+)</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>LIFT_21p_Margin</name>
+        <dataType>Currency</dataType>
+        <expression>IF(
+  AND(
+    {!$Record.Partner_price__c} &lt;= 0,
+    ISPICKVAL({!$Record.Pricing_method__c}, &quot;Rebate&quot;)
+  ),
+  0,
+
+  IF(
+    AND(
+      {!$Record.Partner_price__c} &gt; 0,
+      NOT(ISPICKVAL({!$Record.Pricing_method__c}, &quot;Rebate&quot;))
+    ),
+    ROUND({!$Record.Partner_price__c} / (1 - 0.21), 0),
+
+    IF(
+      AND(
+        {!$Record.Partner_price__c} &gt; 0,
+        ISPICKVAL({!$Record.Pricing_method__c}, &quot;Rebate&quot;)
+      ),
+      ROUND({!$Record.Partner_price__c} * (1 - 0.21), 0),
+      NULL
+    )
+  )
+)</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>LIFT_23p_Margin</name>
+        <dataType>Currency</dataType>
+        <expression>IF(
+  AND(
+    {!$Record.Partner_price__c} &lt;= 0,
+    ISPICKVAL({!$Record.Pricing_method__c}, &quot;Rebate&quot;)
+  ),
+  0,
+
+  IF(
+    AND(
+      {!$Record.Partner_price__c} &gt; 0,
+      NOT(ISPICKVAL({!$Record.Pricing_method__c}, &quot;Rebate&quot;))
+    ),
+    ROUND({!$Record.Partner_price__c} / (1 - 0.23), 0),
+
+    IF(
+      AND(
+        {!$Record.Partner_price__c} &gt; 0,
+        ISPICKVAL({!$Record.Pricing_method__c}, &quot;Rebate&quot;)
+      ),
+      ROUND({!$Record.Partner_price__c} * (1 - 0.23), 0),
+      NULL
+    )
+  )
+)</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>LIFT_25p_Margin</name>
+        <dataType>Currency</dataType>
+        <expression>IF(
+  AND(
+    {!$Record.Partner_price__c} &lt;= 0,
+    ISPICKVAL({!$Record.Pricing_method__c}, &quot;Rebate&quot;)
+  ),
+  0,
+
+  IF(
+    AND(
+      {!$Record.Partner_price__c} &gt; 0,
+      NOT(ISPICKVAL({!$Record.Pricing_method__c}, &quot;Rebate&quot;))
+    ),
+    ROUND({!$Record.Partner_price__c} / (1 - 0.25), 0),
+
+    IF(
+      AND(
+        {!$Record.Partner_price__c} &gt; 0,
+        ISPICKVAL({!$Record.Pricing_method__c}, &quot;Rebate&quot;)
+      ),
+      ROUND({!$Record.Partner_price__c} * (1 - 0.25), 0),
+      NULL
+    )
+  )
+)</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>NotesDELETE</name>
+        <dataType>String</dataType>
+        <expression>&quot;OI LIFT: &quot; &amp; TEXT({!OrderItemMarginLIFT}) &amp; &quot; LIFT MARGIN: &quot; &amp; TEXT({!LIFT_18p_Margin}) &amp; &quot; | OI TONNGAGE: &quot; &amp; TEXT({!OrderItemMarginTONNAGE}) &amp; &quot; TONNAGE MARGIN: &quot; &amp; TEXT({!TONNAGE_18p_Margin}) &amp; &quot; | OI TRANSPORT: &quot; &amp; TEXT({!OrderItemMarginTRANSPORT}) &amp; &quot; TRANSPORT MARGIN: &quot; &amp; TEXT({!TRANSPORT_18p_Margin}) &amp; &quot; | OI MARGIN: &quot; &amp; TEXT({!$Record.Margin__c})</expression>
+    </formulas>
+    <formulas>
+        <name>OrderItemMarginLIFT</name>
+        <dataType>Number</dataType>
+        <expression>IF(
+   AND(
+      TEXT({!$Record.Pricing_method__c}) != &quot;Rebate&quot;,
+      {!$Record.UnitPrice} &gt; 0
+   ),
+   (({!$Record.UnitPrice} - {!$Record.Partner_price__c}) / {!$Record.UnitPrice}) * 100,
+   99
+)</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>OrderItemMarginTONNAGE</name>
+        <dataType>Number</dataType>
+        <expression>IF(
+   AND(
+      TEXT({!$Record.Pricing_method__c}) = &quot;Variable&quot;,
+      {!$Record.Sales_Tonnage_charge_thereafter__c} &gt; 0
+   ),
+   (({!$Record.Sales_Tonnage_charge_thereafter__c} - {!$Record.Partner_Tonnage_charge_thereafter__c}) / {!$Record.Sales_Tonnage_charge_thereafter__c}) * 100,
+   99
+)</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>OrderItemMarginTRANSPORT</name>
+        <dataType>Number</dataType>
+        <expression>IF(
+   AND(
+      TEXT({!$Record.Pricing_method__c}) = &quot;Rebate&quot;,
+      {!$Record.Sales_Transport__c} &gt; 0
+   ),
+   (({!$Record.Sales_Transport__c} - {!$Record.Transport__c}) / {!$Record.Sales_Transport__c}) * 100,
+   99
+)</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>TONNAGE_18p_Margin</name>
+        <dataType>Currency</dataType>
+        <expression>IF(
+   {!$Record.Partner_Tonnage_charge_thereafter__c} &gt; 0,
+   ROUND({!$Record.Partner_Tonnage_charge_thereafter__c} / (1 - 0.18), 0),
+   NULL
+)</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>TONNAGE_21p_Margin</name>
+        <dataType>Currency</dataType>
+        <expression>IF(
+  {!$Record.Partner_Tonnage_charge_thereafter__c} &gt; 0,
+  ROUND({!$Record.Partner_Tonnage_charge_thereafter__c} / (1 - 0.21), 0),
+  NULL
+)</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>TONNAGE_23p_Margin</name>
+        <dataType>Currency</dataType>
+        <expression>IF(
+   {!$Record.Partner_Tonnage_charge_thereafter__c} &gt; 0,
+   ROUND({!$Record.Partner_Tonnage_charge_thereafter__c} / (1 - 0.23), 0),
+   NULL
+)</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>TONNAGE_25p_Margin</name>
+        <dataType>Currency</dataType>
+        <expression>IF(
+   {!$Record.Partner_Tonnage_charge_thereafter__c} &gt; 0,
+   ROUND({!$Record.Partner_Tonnage_charge_thereafter__c} / (1 - 0.18), 0),
+   NULL
+)</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>TRANSPORT_18p_Margin</name>
+        <dataType>Currency</dataType>
+        <expression>IF(
+  {!$Record.Transport__c} &gt; 0,
+  ROUND({!$Record.Transport__c} / (1 - 0.18), 0),
+  NULL
+)</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>TRANSPORT_21p_Margin</name>
+        <dataType>Currency</dataType>
+        <expression>IF(
+  {!$Record.Transport__c} &gt; 0,
+  ROUND({!$Record.Transport__c} / (1 - 0.21), 0),
+  NULL
+)</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>TRANSPORT_23p_Margin</name>
+        <dataType>Currency</dataType>
+        <expression>IF(
+  {!$Record.Transport__c} &gt; 0,
+  ROUND({!$Record.Transport__c} / (1 - 0.23), 0),
+  NULL
+)</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>TRANSPORT_25p_Margin</name>
+        <dataType>Currency</dataType>
+        <expression>IF(
+  {!$Record.Transport__c} &gt; 0,
+  ROUND({!$Record.Transport__c} / (1 - 0.18), 0),
+  NULL
+)</expression>
+        <scale>2</scale>
+    </formulas>
+    <interviewLabel>Quote Line Item: Manage Sales Margin {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Quote Line Item: Manage Sales Margin For RLES</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_to_21</name>
+        <label>Update to 21%</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <inputAssignments>
+            <field>Margin__c</field>
+            <value>
+                <numberValue>21.0</numberValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Sales_Tonnage_charge_thereafter__c</field>
+            <value>
+                <elementReference>TONNAGE_21p_Margin</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Sales_Transport__c</field>
+            <value>
+                <elementReference>TRANSPORT_21p_Margin</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>UnitPrice</field>
+            <value>
+                <elementReference>LIFT_21p_Margin</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_to_23</name>
+        <label>Update to 23%</label>
+        <locationX>314</locationX>
+        <locationY>431</locationY>
+        <inputAssignments>
+            <field>Margin__c</field>
+            <value>
+                <numberValue>23.0</numberValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Sales_Tonnage_charge_thereafter__c</field>
+            <value>
+                <elementReference>TONNAGE_23p_Margin</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Sales_Transport__c</field>
+            <value>
+                <elementReference>TRANSPORT_23p_Margin</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>UnitPrice</field>
+            <value>
+                <elementReference>LIFT_23p_Margin</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_to_25</name>
+        <label>Update to 25%</label>
+        <locationX>578</locationX>
+        <locationY>431</locationY>
+        <inputAssignments>
+            <field>Margin__c</field>
+            <value>
+                <numberValue>25.0</numberValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Sales_Tonnage_charge_thereafter__c</field>
+            <value>
+                <elementReference>TONNAGE_25p_Margin</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Sales_Transport__c</field>
+            <value>
+                <elementReference>TRANSPORT_25p_Margin</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>UnitPrice</field>
+            <value>
+                <elementReference>LIFT_25p_Margin</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>320</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Process_Required</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Quote_created_date__c</field>
+            <operator>GreaterThan</operator>
+            <value>
+                <dateTimeValue>2025-01-15T00:01:00.000Z</dateTimeValue>
+            </value>
+        </filters>
+        <filters>
+            <field>null__NotFound</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>RLCS_Quote</stringValue>
+            </value>
+        </filters>
+        <object>QuoteLineItem</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>InvalidDraft</status>
+</Flow>

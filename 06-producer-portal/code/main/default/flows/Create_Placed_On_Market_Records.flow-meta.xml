@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>ManagePlacedOnMarketDataAction</name>
+        <label>ManagePlacedOnMarketDataAction</label>
+        <locationX>176</locationX>
+        <locationY>323</locationY>
+        <actionName>ManagePlacedOnMarketDataAction</actionName>
+        <actionType>apex</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>contractIds</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>ManagePlacedOnMarketDataAction</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>06-01-2024: when account gets changed, contract start date, contract end date,
+        contract type changed
+        09-12-2024: when contract gets created and obligation type gets changed
+        04-12-2024: added ManagePlacedOnMarketDataAction
+        04-12-2024: added recordtype logic
+        21-11-2024: changed the logic to check from contract to account</description>
+    <environments>Default</environments>
+    <interviewLabel>CREATE PLACED ON MARKET RECORDS {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Create Placed On Market Records</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>ManagePlacedOnMarketDataAction</targetReference>
+        </connector>
+        <filterFormula>ISNEW() || ISCHANGED({!$Record.Obligation_Type__c}) ||
+            ISCHANGED({!$Record.Account__c}) || ISCHANGED({!$Record.Contract_Type__c}) ||
+            ISCHANGED({!$Record.Contract_Start_Date__c}) ||
+            ISCHANGED({!$Record.Contract_End_Date__c})</filterFormula>
+        <object>Producer_Contract__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

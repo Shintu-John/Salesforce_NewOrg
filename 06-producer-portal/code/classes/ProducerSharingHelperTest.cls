@@ -24,6 +24,7 @@ public class ProducerSharingHelperTest {
         Producer_Contract__c pc = new Producer_Contract__c(
             Account__c = accountId,
             Contract_Type__c = typeVal,
+            Obligation_Type__c = 'Non-Household',  // Required for Flow validation on Obligation insert
             Contract_Start_Date__c = Date.today(),
             Contract_End_Date__c = Date.today().addYears(1),
             VAT_Registered__c = true
@@ -66,10 +67,19 @@ public class ProducerSharingHelperTest {
     // Helper to create 4 quarterly POM records for a given account and year
     // Satisfies Obligation validation and avoids NPEs in ProducerPlacedOnMarket trigger
     private static void createQuarterlyPOMRecords(Id accountId, String complianceYear) {
-        // Get the Household RecordType dynamically (will make Type__c = 'WEEE' via formula)
+        // Get the Non_Household RecordType to match Contract's Obligation_Type__c
         Id householdRTId = Schema.SObjectType.Producer_Placed_on_Market__c
             .getRecordTypeInfosByDeveloperName()
-            .get('Household').getRecordTypeId();
+            .get('Non_Household').getRecordTypeId();
+
+        // Delete any existing POMs for this account/year/recordtype to avoid duplication
+        delete [
+            SELECT Id
+            FROM Producer_Placed_on_Market__c
+            WHERE Account__c = :accountId
+            AND Compliance_Year__c = :complianceYear
+            AND RecordTypeId = :householdRTId
+        ];
 
         List<Producer_Placed_on_Market__c> pomRecords = new List<Producer_Placed_on_Market__c>();
         String[] quarters = new String[]{'Q1', 'Q2', 'Q3', 'Q4'};
@@ -78,26 +88,31 @@ public class ProducerSharingHelperTest {
                 Account__c = accountId,
                 Quarter__c = quarter,
                 Compliance_Year__c = complianceYear,
-                RecordTypeId = householdRTId,  // Type__c will auto-calculate to 'WEEE'
-                // Fill all 14 household categories to satisfy NewOrg validation (0 = filled but no tonnage)
-                Category_1_Household__c = 0,
-                Category_2_Household__c = 0,
-                Category_3_Household__c = 0,
-                Category_4_Household__c = 0,
-                Category_5_Household__c = 0,
-                Category_6_Household__c = 0,
-                Category_7_Household__c = 0,
-                Category_8_Household__c = 0,
-                Category_9_Household__c = 0,
-                Category_10_Household__c = 0,
-                Category_11_Household__c = 0,
-                Category_12_Household__c = 0,
-                Category_13_Household__c = 0,
-                Category_14_Household__c = 0
-                // Note: Not setting Acknowledgement - cannot satisfy NewOrg validation in tests
+                RecordTypeId = householdRTId,  // Non_Household RecordType
+                // Fill all 30 categories (both Household and NonHousehold) for Non_Household RecordType
+                Category_1_Household__c = 0, Category_1_Non_Household__c = 0,
+                Category_2_Household__c = 0, Category_2_Non_Household__c = 0,
+                Category_3_Household__c = 0, Category_3_Non_Household__c = 0,
+                Category_4_Household__c = 0, Category_4_Non_Household__c = 0,
+                Category_5_Household__c = 0, Category_5_Non_Household__c = 0,
+                Category_6_Household__c = 0, Category_6_Non_Household__c = 0,
+                Category_7_Household__c = 0, Category_7_Non_Household__c = 0,
+                Category_8_Household__c = 0, Category_8_Non_Household__c = 0,
+                Category_9_Household__c = 0, Category_9_Non_Household__c = 0,
+                Category_10_Household__c = 0, Category_10_Non_Household__c = 0,
+                Category_11_Household__c = 0, Category_11_Non_Household__c = 0,
+                Category_12_Household__c = 0, Category_12_Non_Household__c = 0,
+                Category_13_Household__c = 0, Category_13_Non_Household__c = 0,
+                Category_14_Household__c = 0, Category_14_Non_Household__c = 0,
+                Category_15_Household__c = 0, Category_15_Non_Household__c = 0,
+                Acknowledgement_of_Statements__c = true  // CRITICAL: Flow requires acknowledged POMs
             ));
         }
-        insert pomRecords;
+
+        // Insert POMs one at a time to avoid Flow duplication detection issues in test context
+        for (Producer_Placed_on_Market__c pom : pomRecords) {
+            insert pom;
+        }
     }
 
     // Helper to create a portal user for an account
@@ -255,8 +270,6 @@ public class ProducerSharingHelperTest {
     @isTest
     static void testObligationTrigger_AfterInsert() {
         Producer_Contract__c c = [SELECT Id, Account__c FROM Producer_Contract__c LIMIT 1];
-        String previousYear = String.valueOf(Date.today().year() - 1);
-        createQuarterlyPOMRecords(c.Account__c, previousYear);
 
         Test.startTest();
         Producer_Obligation__c ob = makeObligation(c.Id);
@@ -274,14 +287,11 @@ public class ProducerSharingHelperTest {
         // Create portal user for the alternate account to enable sharing
         createPortalUser(a.Id, 'Alt', 'User');
 
-        // Seed quarterly POM records for both accounts for the previous year
-        String previousYear = String.valueOf(Date.today().year() - 1);
-        createQuarterlyPOMRecords(c1.Account__c, previousYear);
-        createQuarterlyPOMRecords(a.Id, previousYear);
-
+        // Create obligation for c1 (makeObligation creates required POMs for c1's account)
         Producer_Obligation__c ob = makeObligation(c1.Id);
 
         Test.startTest();
+        // Move obligation to c2 - this tests sharing recalculation
         ob.Producer_Contract__c = c2.Id;
         update ob;
         Test.stopTest();
@@ -292,9 +302,6 @@ public class ProducerSharingHelperTest {
     @isTest
     static void testObligationTrigger_AfterUpdate_ContractUnchanged_NoShare() {
         Producer_Contract__c c = [SELECT Id, Account__c FROM Producer_Contract__c LIMIT 1];
-
-        String previousYear = String.valueOf(Date.today().year() - 1);
-        createQuarterlyPOMRecords(c.Account__c, previousYear);
 
         Producer_Obligation__c ob = makeObligation(c.Id);
 

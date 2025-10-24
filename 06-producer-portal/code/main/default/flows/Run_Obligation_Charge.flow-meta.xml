@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Redirect_To_Record_Id</name>
+        <label>Redirect To Record Id</label>
+        <locationX>176</locationX>
+        <locationY>350</locationY>
+        <actionName>c:redirectToRecordId</actionName>
+        <actionType>component</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>recordId</name>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>c:redirectToRecordId</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <actionCalls>
+        <name>Run_Producer_Obligation_Batch</name>
+        <label>Run Producer Obligation Batch</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <actionName>RunProducerObligationBatchFlowAction</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Redirect_To_Record_Id</targetReference>
+        </connector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>obligationId</name>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>runForDate</name>
+            <value>
+                <elementReference>Charge_Date</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>RunProducerObligationBatchFlowAction</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>change date to 20th</description>
+    <environments>Default</environments>
+    <interviewLabel>Run Obligation Charge {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Run Obligation Charge</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <screens>
+        <name>Run_Charge_For_Screen</name>
+        <label>Run Charge For Screen</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Run_Producer_Obligation_Batch</targetReference>
+        </connector>
+        <fields>
+            <name>noteText</name>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;color: rgb(13, 176, 43);&quot;&gt;Note: &lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;strong style=&quot;color: rgb(13, 176, 43);&quot;&gt;Contract Status = Signed&lt;/strong&gt;&lt;/li&gt;&lt;li&gt;&lt;strong style=&quot;background-color: rgb(255, 255, 255); font-size: 12px; color: rgb(13, 176, 43);&quot;&gt;Total Obligation Cost &amp;gt; 0&lt;/strong&gt;&lt;/li&gt;&lt;li&gt;&lt;strong style=&quot;background-color: rgb(255, 255, 255); font-size: 12px; color: rgb(13, 176, 43);&quot;&gt;Selected Charge Date&apos;s Next Month Year should match with Compliance Year&lt;/strong&gt;&lt;/li&gt;&lt;li&gt;&lt;strong style=&quot;background-color: rgb(255, 255, 255); font-size: 12px; color: rgb(13, 176, 43);&quot;&gt;Selected Charge Date&apos;s Next Month should be in between Contract Start and Contract End Date&lt;/strong&gt;&lt;/li&gt;&lt;li&gt;&lt;strong style=&quot;background-color: rgb(255, 255, 255); font-size: 12px; color: rgb(13, 176, 43);&quot;&gt;Selected Charge Date should be 20th&lt;/strong&gt;&lt;/li&gt;&lt;/ul&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Charge_Date</name>
+            <dataType>Date</dataType>
+            <fieldText>Charge Date</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <validationRule>
+                <errorMessage>&lt;p&gt;you can only choose 25th here.&lt;/p&gt;</errorMessage>
+                <formulaExpression>DAY({!Charge_Date}) == 20</formulaExpression>
+            </validationRule>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Run_Charge_For_Screen</targetReference>
+        </connector>
+    </start>
+    <status>Draft</status>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

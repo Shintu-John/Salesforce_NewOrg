@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>57.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Holiday_Assignment</name>
+        <label>Holiday Assignment</label>
+        <locationX>402</locationX>
+        <locationY>995</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Days_to_Deliver_Holiday__c</assignToReference>
+            <operator>AssignCount</operator>
+            <value>
+                <elementReference>Get_All_Holidays</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Populate_Collection_Date_From_Delivery_Date</name>
+        <label>Populate Collection Date From Delivery Date</label>
+        <locationX>314</locationX>
+        <locationY>503</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Collection_Date__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Delivery_Date__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Delivery_Date_Changed_Decision</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Populate_Delivery_Date_is_Collection_Date</name>
+        <label>Populate Delivery Date is Collection Date</label>
+        <locationX>50</locationX>
+        <locationY>503</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Delivery_Date__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Collection_Date__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Delivery_Date_Changed_Decision</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Date_Change_Decision</name>
+        <label>Date Change Decision</label>
+        <locationX>314</locationX>
+        <locationY>395</locationY>
+        <defaultConnector>
+            <targetReference>Delivery_Date_Changed_Decision</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Delivery_Date_is_NULL</name>
+            <conditionLogic>(1 OR (2 AND 3)) AND 4</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Delivery_Date__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Collection_Date__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>$Record.Delivery_Date__c</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Collection_Date__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Collection_Date__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Populate_Delivery_Date_is_Collection_Date</targetReference>
+            </connector>
+            <label>Delivery Date is NULL OR Collection Date Changed</label>
+        </rules>
+        <rules>
+            <name>Collection_Date_is_NULL</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Collection_Date__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Delivery_Date__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Populate_Collection_Date_From_Delivery_Date</targetReference>
+            </connector>
+            <label>Collection Date is NULL</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Delivery_Date_Changed_Decision</name>
+        <label>Delivery Date Changed Decision</label>
+        <locationX>534</locationX>
+        <locationY>779</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Delivery_Date_Changed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Delivery_Date__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>$Record__Prior.Delivery_Date__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_All_Holidays</targetReference>
+            </connector>
+            <label>Delivery Date Changed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Job_Type_Decision</name>
+        <label>Job Type Decision</label>
+        <locationX>534</locationX>
+        <locationY>287</locationY>
+        <defaultConnector>
+            <targetReference>Delivery_Date_Changed_Decision</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Other Jobs</defaultConnectorLabel>
+        <rules>
+            <name>Job_Type_Wait_Load</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Wait &amp; Load</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Date_Change_Decision</targetReference>
+            </connector>
+            <label>Job Type = Wait &amp; Load</label>
+        </rules>
+    </decisions>
+    <description>04-12-2023: added holiday in between createddate and delivery date.
+17/05/2023: added on change delivery date and collection date</description>
+    <environments>Default</environments>
+    <interviewLabel>Manage Collection and Delivery Date Job Flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Manage Collection and Delivery Date Job Flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_All_Holidays</name>
+        <label>Get All Holidays</label>
+        <locationX>402</locationX>
+        <locationY>887</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Holiday_Assignment</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>ActivityDate</field>
+            <operator>GreaterThanOrEqualTo</operator>
+            <value>
+                <elementReference>$Record.CreatedDate</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>ActivityDate</field>
+            <operator>LessThanOrEqualTo</operator>
+            <value>
+                <elementReference>$Record.Delivery_Date__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Holiday</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>408</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Job_Type_Decision</targetReference>
+        </connector>
+        <object>Job__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Obsolete</status>
+    <variables>
+        <name>holidaysCount</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+</Flow>

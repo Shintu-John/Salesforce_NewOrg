@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>57.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Lock_Job_Assignment</name>
+        <label>Lock Job Assignment</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Locked__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Update_Status_to_Collected</name>
+        <label>Update Status to Collected</label>
+        <locationX>578</locationX>
+        <locationY>551</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Status__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Collected</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Update_Status_to_Paperwork_Provided</name>
+        <label>Update Status to Paperwork Provided</label>
+        <locationX>314</locationX>
+        <locationY>551</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Status__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Paperwork Provided</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <name>myRule_1</name>
+        <label>Job Status change to Cancelled?</label>
+        <locationX>314</locationX>
+        <locationY>311</locationY>
+        <defaultConnector>
+            <targetReference>myRule_4</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>FALSE_Job Status change to Cancelled?</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_myRule_1</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Cancelled</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Locked__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Lock_Job_Assignment</targetReference>
+            </connector>
+            <label>TRUE_Job Status change to Cancelled?</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>myRule_4</name>
+        <label>Paperwork Uploaded</label>
+        <locationX>578</locationX>
+        <locationY>431</locationY>
+        <defaultConnectorLabel>FALSE_Paperwork Uploaded</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_myRule_4</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Completed</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Required_Paperwork__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Cancelled</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Failed</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>isPaperworkDone</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Status_to_Paperwork_Provided</targetReference>
+            </connector>
+            <label>TRUE_Paperwork Uploaded</label>
+        </rules>
+        <rules>
+            <name>Downgrade_Status_from_Paperwork_Provided</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Paperwork Provided</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>isPaperworkDonePrior</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Status_to_Collected</targetReference>
+            </connector>
+            <label>Downgrade Status from Paperwork Provided</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>isPaperworkDone</name>
+        <dataType>Boolean</dataType>
+        <expression>(
+( (INCLUDES({!$Record.Required_Paperwork__c}, &apos;ADOC&apos;) &amp;&amp; {!$Record.DOC_uploaded__c}) || (NOT(INCLUDES({!$Record.Required_Paperwork__c}, &apos;ADOC&apos;))) ) &amp;&amp;
+( (INCLUDES({!$Record.Required_Paperwork__c}, &apos;Weighbridge Ticket&apos;) &amp;&amp; {!$Record.Weighbridge_Ticket_Uploaded__c}) || (NOT(INCLUDES({!$Record.Required_Paperwork__c}, &apos;Weighbridge Ticket&apos;))) ) &amp;&amp;
+( (INCLUDES({!$Record.Required_Paperwork__c}, &apos;WTN&apos;) &amp;&amp; {!$Record.Waste_Transfer_Note_Uploaded__c}) || (NOT(INCLUDES({!$Record.Required_Paperwork__c}, &apos;WTN&apos;))) ) &amp;&amp;
+( (INCLUDES({!$Record.Required_Paperwork__c}, &apos;Consignment Note&apos;) &amp;&amp; {!$Record.Consignment_note_uploaded__c}) || (NOT(INCLUDES({!$Record.Required_Paperwork__c}, &apos;Consignment Note&apos;))) ) &amp;&amp;
+( (INCLUDES({!$Record.Required_Paperwork__c}, &apos;Customer Advice Note&apos;) &amp;&amp; {!$Record.Customer_Advice_note_uploaded__c}) || (NOT(INCLUDES({!$Record.Required_Paperwork__c}, &apos;Customer Advice Note&apos;))) ) &amp;&amp;
+( (INCLUDES({!$Record.Required_Paperwork__c}, &apos;Supplier Advice Note&apos;) &amp;&amp; {!$Record.Supplier_Advice_note_uploaded__c}) || (NOT(INCLUDES({!$Record.Required_Paperwork__c}, &apos;Supplier Advice Note&apos;))) ) &amp;&amp;
+( NOT(ISBLANK({!$Record.Required_Paperwork__c})) )
+)
+
+||
+
+ISBLANK({!$Record.Required_Paperwork__c})</expression>
+    </formulas>
+    <formulas>
+        <name>isPaperworkDonePrior</name>
+        <dataType>Boolean</dataType>
+        <expression>(
+( (INCLUDES({!$Record__Prior.Required_Paperwork__c}, &apos;ADOC&apos;) &amp;&amp; {!$Record__Prior.DOC_uploaded__c}) || (NOT(INCLUDES({!$Record__Prior.Required_Paperwork__c}, &apos;ADOC&apos;))) ) &amp;&amp;
+( (INCLUDES({!$Record__Prior.Required_Paperwork__c}, &apos;Weighbridge Ticket&apos;) &amp;&amp; {!$Record__Prior.Weighbridge_Ticket_Uploaded__c}) || (NOT(INCLUDES({!$Record__Prior.Required_Paperwork__c}, &apos;Weighbridge Ticket&apos;))) ) &amp;&amp;
+( (INCLUDES({!$Record__Prior.Required_Paperwork__c}, &apos;WTN&apos;) &amp;&amp; {!$Record__Prior.Waste_Transfer_Note_Uploaded__c}) || (NOT(INCLUDES({!$Record__Prior.Required_Paperwork__c}, &apos;WTN&apos;))) ) &amp;&amp;
+( (INCLUDES({!$Record__Prior.Required_Paperwork__c}, &apos;Consignment Note&apos;) &amp;&amp; {!$Record__Prior.Consignment_note_uploaded__c}) || (NOT(INCLUDES({!$Record__Prior.Required_Paperwork__c}, &apos;Consignment Note&apos;))) ) &amp;&amp;
+( (INCLUDES({!$Record__Prior.Required_Paperwork__c}, &apos;Customer Advice Note&apos;) &amp;&amp; {!$Record__Prior.Customer_Advice_note_uploaded__c}) || (NOT(INCLUDES({!$Record__Prior.Required_Paperwork__c}, &apos;Customer Advice Note&apos;))) ) &amp;&amp;
+( (INCLUDES({!$Record__Prior.Required_Paperwork__c}, &apos;Supplier Advice Note&apos;) &amp;&amp; {!$Record__Prior.Supplier_Advice_note_uploaded__c}) || (NOT(INCLUDES({!$Record__Prior.Required_Paperwork__c}, &apos;Supplier Advice Note&apos;))) ) &amp;&amp;
+( NOT(ISBLANK({!$Record__Prior.Required_Paperwork__c})) )
+)
+
+||
+
+ISBLANK({!$Record__Prior.Required_Paperwork__c})</expression>
+    </formulas>
+    <interviewLabel>Job Process Flow Before Save {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Job Process Flow Before Save</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>188</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>myRule_1</targetReference>
+        </connector>
+        <object>Job__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Obsolete</status>
+</Flow>

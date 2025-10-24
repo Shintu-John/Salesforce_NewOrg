@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Evidence_Status_Assignment</name>
+        <label>Evidence Status Assignment</label>
+        <locationX>50</locationX>
+        <locationY>503</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Status__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>tradeStatus</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Initial_Assignment</name>
+        <label>Initial Assignment</label>
+        <locationX>182</locationX>
+        <locationY>287</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Total_Tonnes_Traded__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>totalTonnageTraded</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Total_Evidence_Weight__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>totalEvidenceWeight</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Evidence_Status_Low_Level_Change_Decision</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Evidence_Status_Low_Level_Change_Decision</name>
+        <label>Evidence Status Low Level Change Decision</label>
+        <locationX>182</locationX>
+        <locationY>395</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Evidence_Status_Low_Level_Change_Outcome</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Evidence_Status_Low_Level__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Total_Evidence_Weight__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Total_Tonnes_Traded__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>isCatChanged</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Evidence_Status_Assignment</targetReference>
+            </connector>
+            <label>Evidence Status Low Level Change Outcome</label>
+        </rules>
+    </decisions>
+    <description>20-03-2025 : Is Cat changed
+20-03-2025 : added Small_Mixed_WEEE__c
+14-3-205 : added Total Material Category = Cat 1 to Cat 14
+13-3-2025 : added Total Tonnage = x1 to x14</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>isCatChanged</name>
+        <dataType>Boolean</dataType>
+        <expression>OR(
+    ISCHANGED({!$Record.X1__c}),
+    ISCHANGED({!$Record.X2__c}),
+    ISCHANGED({!$Record.X3__c}),
+    ISCHANGED({!$Record.X4__c}),
+    ISCHANGED({!$Record.X5__c}),
+    ISCHANGED({!$Record.X6__c}),
+    ISCHANGED({!$Record.X7__c}),
+    ISCHANGED({!$Record.X8__c}),
+    ISCHANGED({!$Record.X9__c}),
+    ISCHANGED({!$Record.X10__c}),
+    ISCHANGED({!$Record.X11__c}),
+    ISCHANGED({!$Record.X12__c}),
+    ISCHANGED({!$Record.X13__c}),
+    ISCHANGED({!$Record.X14__c}),
+    ISCHANGED({!$Record.Evidence_Cat_1__c}),
+    ISCHANGED({!$Record.Evidence_Cat_2__c}),
+    ISCHANGED({!$Record.Evidence_Cat_3__c}),
+    ISCHANGED({!$Record.Evidence_Cat_4__c}),
+    ISCHANGED({!$Record.Evidence_Cat_5__c}),
+    ISCHANGED({!$Record.Evidence_Cat_6__c}),
+    ISCHANGED({!$Record.Evidence_Cat_7__c}),
+    ISCHANGED({!$Record.Evidence_Cat_8__c}),
+    ISCHANGED({!$Record.Evidence_Cat_9__c}),
+    ISCHANGED({!$Record.Evidence_Cat_10__c}),
+    ISCHANGED({!$Record.Evidence_Cat_11__c}),
+    ISCHANGED({!$Record.Evidence_Cat_12__c}),
+    ISCHANGED({!$Record.Evidence_Cat_13__c}),
+    ISCHANGED({!$Record.Evidence_Cat_14__c})
+)</expression>
+    </formulas>
+    <formulas>
+        <name>totalEvidenceWeight</name>
+        <dataType>Number</dataType>
+        <expression>IF(ISNULL({!$Record.Evidence_Cat_1__c}), 0, {!$Record.Evidence_Cat_1__c}) + 
+IF(ISNULL({!$Record.Evidence_Cat_2__c}), 0, {!$Record.Evidence_Cat_2__c}) + 
+IF(ISNULL({!$Record.Evidence_Cat_3__c}), 0, {!$Record.Evidence_Cat_3__c}) + 
+IF(ISNULL({!$Record.Evidence_Cat_4__c}), 0, {!$Record.Evidence_Cat_4__c}) + 
+IF(ISNULL({!$Record.Evidence_Cat_5__c}), 0, {!$Record.Evidence_Cat_5__c}) + 
+IF(ISNULL({!$Record.Evidence_Cat_6__c}), 0, {!$Record.Evidence_Cat_6__c}) + 
+IF(ISNULL({!$Record.Evidence_Cat_7__c}), 0, {!$Record.Evidence_Cat_7__c}) + 
+IF(ISNULL({!$Record.Evidence_Cat_8__c}), 0, {!$Record.Evidence_Cat_8__c}) + 
+IF(ISNULL({!$Record.Evidence_Cat_9__c}), 0, {!$Record.Evidence_Cat_9__c}) + 
+IF(ISNULL({!$Record.Evidence_Cat_10__c}), 0, {!$Record.Evidence_Cat_10__c}) + 
+IF(ISNULL({!$Record.Evidence_Cat_11__c}), 0, {!$Record.Evidence_Cat_11__c}) + 
+IF(ISNULL({!$Record.Evidence_Cat_12__c}), 0, {!$Record.Evidence_Cat_12__c}) + 
+IF(ISNULL({!$Record.Evidence_Cat_13__c}), 0, {!$Record.Evidence_Cat_13__c}) + 
+IF(ISNULL({!$Record.Evidence_Cat_14__c}), 0, {!$Record.Evidence_Cat_14__c})</expression>
+        <scale>3</scale>
+    </formulas>
+    <formulas>
+        <name>totalTonnageTraded</name>
+        <dataType>Number</dataType>
+        <expression>IF(ISNULL({!$Record.X1__c}), 0, {!$Record.X1__c}) + 
+IF(ISNULL({!$Record.X2__c}), 0, {!$Record.X2__c}) + 
+IF(ISNULL({!$Record.X3__c}), 0, {!$Record.X3__c}) + 
+IF(ISNULL({!$Record.X4__c}), 0, {!$Record.X4__c}) + 
+IF(ISNULL({!$Record.X5__c}), 0, {!$Record.X5__c}) + 
+IF(ISNULL({!$Record.X6__c}), 0, {!$Record.X6__c}) + 
+IF(ISNULL({!$Record.X7__c}), 0, {!$Record.X7__c}) + 
+IF(ISNULL({!$Record.X8__c}), 0, {!$Record.X8__c}) + 
+IF(ISNULL({!$Record.X9__c}), 0, {!$Record.X9__c}) + 
+IF(ISNULL({!$Record.X10__c}), 0, {!$Record.X10__c}) + 
+IF(ISNULL({!$Record.X11__c}), 0, {!$Record.X11__c}) + 
+IF(ISNULL({!$Record.X12__c}), 0, {!$Record.X12__c}) + 
+IF(ISNULL({!$Record.X13__c}), 0, {!$Record.X13__c}) + 
+IF(ISNULL({!$Record.X14__c}), 0, {!$Record.X14__c})+ 
+IF(ISNULL({!$Record.Small_Mixed_WEEE__c}), 0, {!$Record.Small_Mixed_WEEE__c})</expression>
+        <scale>3</scale>
+    </formulas>
+    <formulas>
+        <name>tradeStatus</name>
+        <dataType>String</dataType>
+        <expression>CASE(
+    {!$Record.Evidence_Status_Low_Level__c}, 
+    1, &quot;Draft Note&quot;, 
+    2, &quot;Submitted Note&quot;,
+    IF(
+        {!$Record.Total_Evidence_Weight__c} &gt; 0 &amp;&amp;
+        {!$Record.Total_Evidence_Weight__c} == {!$Record.Total_Tonnes_Traded__c} &amp;&amp;
+        
+        OR(
+            NOT({!$Record.X1__c} &gt; 0), 
+            {!$Record.X1__c} == {!$Record.Evidence_Cat_1__c}
+        ) &amp;&amp;
+        OR(
+            NOT({!$Record.X11__c} &gt; 0), 
+            {!$Record.X11__c} == {!$Record.Evidence_Cat_11__c}
+        ) &amp;&amp;
+        OR(
+            NOT({!$Record.X12__c} &gt; 0), 
+            {!$Record.X12__c} == {!$Record.Evidence_Cat_12__c}
+        ) &amp;&amp;
+        OR(
+            NOT({!$Record.X13__c} &gt; 0), 
+            {!$Record.X13__c} == {!$Record.Evidence_Cat_13__c}
+        ) &amp;&amp;
+        OR(
+            NOT({!$Record.X14__c} &gt; 0), 
+            {!$Record.X14__c} == {!$Record.Evidence_Cat_14__c}
+        ) &amp;&amp;
+        
+        AND(
+            OR(
+                NOT({!$Record.X2__c} &gt; 0),  
+                {!$Record.X2__c} == {!$Record.Evidence_Cat_2__c},  
+                AND(
+                    {!$Record.Small_Mixed_WEEE__c} &gt; 0,  
+                    {!$Record.X2__c} &lt;= {!$Record.Evidence_Cat_2__c}
+                )
+            ),
+            OR(
+                NOT({!$Record.X3__c} &gt; 0),  
+                {!$Record.X3__c} == {!$Record.Evidence_Cat_3__c},  
+                AND(
+                    {!$Record.Small_Mixed_WEEE__c} &gt; 0,  
+                    {!$Record.X3__c} &lt;= {!$Record.Evidence_Cat_3__c}
+                )
+            ),
+            OR(
+                NOT({!$Record.X4__c} &gt; 0),  
+                {!$Record.X4__c} == {!$Record.Evidence_Cat_4__c},  
+                AND(
+                    {!$Record.Small_Mixed_WEEE__c} &gt; 0,  
+                    {!$Record.X4__c} &lt;= {!$Record.Evidence_Cat_4__c}
+                )
+            ),
+            OR(
+                NOT({!$Record.X5__c} &gt; 0),  
+                {!$Record.X5__c} == {!$Record.Evidence_Cat_5__c},  
+                AND(
+                    {!$Record.Small_Mixed_WEEE__c} &gt; 0,  
+                    {!$Record.X5__c} &lt;= {!$Record.Evidence_Cat_5__c}
+                )
+            ),
+            OR(
+                NOT({!$Record.X6__c} &gt; 0),  
+                {!$Record.X6__c} == {!$Record.Evidence_Cat_6__c},  
+                AND(
+                    {!$Record.Small_Mixed_WEEE__c} &gt; 0,  
+                    {!$Record.X6__c} &lt;= {!$Record.Evidence_Cat_6__c}
+                )
+            ),
+            OR(
+                NOT({!$Record.X7__c} &gt; 0),  
+                {!$Record.X7__c} == {!$Record.Evidence_Cat_7__c},  
+                AND(
+                    {!$Record.Small_Mixed_WEEE__c} &gt; 0,  
+                    {!$Record.X7__c} &lt;= {!$Record.Evidence_Cat_7__c}
+                )
+            ),
+            OR(
+                NOT({!$Record.X8__c} &gt; 0),  
+                {!$Record.X8__c} == {!$Record.Evidence_Cat_8__c},  
+                AND(
+                    {!$Record.Small_Mixed_WEEE__c} &gt; 0,  
+                    {!$Record.X8__c} &lt;= {!$Record.Evidence_Cat_8__c}
+                )
+            ),
+            OR(
+                NOT({!$Record.X9__c} &gt; 0),  
+                {!$Record.X9__c} == {!$Record.Evidence_Cat_9__c},  
+                AND(
+                    {!$Record.Small_Mixed_WEEE__c} &gt; 0,  
+                    {!$Record.X9__c} &lt;= {!$Record.Evidence_Cat_9__c}
+                )
+            ),
+            OR(
+                NOT({!$Record.X10__c} &gt; 0),  
+                {!$Record.X10__c} == {!$Record.Evidence_Cat_10__c},  
+                AND( {!$Record.Small_Mixed_WEEE__c} &gt; 0, {!$Record.X10__c} &lt;= {!$Record.Evidence_Cat_10__c})
+            )
+        ),
+        &quot;Approved Note&quot;,
+        IF( ISPICKVAL({!$Record.Status__c}, &quot;Approved Note&quot;),  &quot;Submitted Note&quot;, TEXT({!$Record.Status__c})
+        )
+    )
+)</expression>
+    </formulas>
+    <interviewLabel>Trade - Before Save {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Trade - Before Save</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Initial_Assignment</targetReference>
+        </connector>
+        <object>Trade__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>

@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <customErrors>
+        <name>Prevent_Balance_Over_on_Category_Error_Message</name>
+        <label>Prevent Balance Over on Category Error Message</label>
+        <locationX>842</locationX>
+        <locationY>935</locationY>
+        <customErrorMessages>
+            <errorMessage>You can add max {!balanceRemainOnCategory} tonnes on this category ({!categoryRec.Name}).</errorMessage>
+            <fieldSelection>Total_Tonnes_Traded__c</fieldSelection>
+            <isFieldError>true</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <customErrors>
+        <name>Prevent_Balance_Over_on_Trade_Agreement_Error_Message</name>
+        <label>Prevent Balance Over on Trade Agreement Error Message</label>
+        <locationX>50</locationX>
+        <locationY>611</locationY>
+        <customErrorMessages>
+            <errorMessage>You can add max {!tradeAgreementBalanceRemain} tonnes on this trade agreement.</errorMessage>
+            <fieldSelection>Total_Tonnes_Traded__c</fieldSelection>
+            <isFieldError>true</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <decisions>
+        <name>Balance_Over_Decision</name>
+        <label>Balance Over Decision</label>
+        <locationX>479</locationX>
+        <locationY>503</locationY>
+        <defaultConnector>
+            <targetReference>Get_Category</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Balance_Over</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>tradeAgreementBalanceRemain</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <elementReference>$Record.Total_Tonnes_Traded__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Prevent_Balance_Over_on_Trade_Agreement_Error_Message</targetReference>
+            </connector>
+            <label>Balance Over</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Prevent_Balance_Over_on_Category_Decision</name>
+        <label>Prevent Balance Over on Category Decision</label>
+        <locationX>974</locationX>
+        <locationY>827</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Balance_Over_on_Category</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>balanceRemainOnCategory</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <elementReference>$Record.Total_Tonnes_Traded__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Prevent_Balance_Over_on_Category_Error_Message</targetReference>
+            </connector>
+            <label>Balance Over on Category</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Prevent_Obligation_Over_on_Category_Decision</name>
+        <label>Prevent Obligation Over on Category Decision</label>
+        <locationX>446</locationX>
+        <locationY>827</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Prevent_Obligation_Over_on_Category</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>obligationRemain</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <elementReference>$Record.Total_Tonnes_Traded__c</elementReference>
+                </rightValue>
+            </conditions>
+            <label>Prevent Obligation Over on Category</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Re_calculate_Prevent_Balance_Over_on_Trade_Agreement_Decision</name>
+        <label>Re-calculate Prevent Balance Over on Trade Agreement Decision</label>
+        <locationX>1056</locationX>
+        <locationY>287</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Re_calculate_Prevent_Balance_Over_on_Trade_Agreement</name>
+            <conditionLogic>1  AND (2 OR 3 OR 4)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Total_Tonnes_Traded__c</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>ISNEW</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Total_Tonnes_Traded__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.WEEE_Category__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Trade_Agreement</targetReference>
+            </connector>
+            <label>Re-calculate Prevent Balance Over on Trade Agreement</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Trade_Record_Type_Decision</name>
+        <label>Trade Record Type Decision</label>
+        <locationX>908</locationX>
+        <locationY>719</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Trade_Record_Type_Buy</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Trade_Agreement.RecordType.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Buy</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Prevent_Obligation_Over_on_Category_Decision</targetReference>
+            </connector>
+            <label>Trade Record Type = Buy</label>
+        </rules>
+        <rules>
+            <name>Trade_Record_Type_Sell</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Trade_Agreement.RecordType.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Sell</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Prevent_Balance_Over_on_Category_Decision</targetReference>
+            </connector>
+            <label>Trade Record Type = Sell</label>
+        </rules>
+    </decisions>
+    <description>Actual__c added to formula</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>balanceRemainOnCategory</name>
+        <dataType>Number</dataType>
+        <expression>IF(ISNULL({!categoryRec.Actual__c}), 0, {!categoryRec.Actual__c}) + IF({!ISNEW} || ISNULL({!$Record__Prior.Total_Tonnes_Traded__c}) || ISCHANGED({!$Record.WEEE_Category__c}), 0, {!$Record__Prior.Total_Tonnes_Traded__c})</expression>
+        <scale>3</scale>
+    </formulas>
+    <formulas>
+        <name>ISNEW</name>
+        <dataType>Boolean</dataType>
+        <expression>ISNEW()</expression>
+    </formulas>
+    <formulas>
+        <name>obligationRemain</name>
+        <dataType>Number</dataType>
+        <expression>IF(ISNULL({!categoryRec.Obligation_Remain__c}), 0, {!categoryRec.Obligation_Remain__c}) + IF({!ISNEW} || ISNULL({!$Record__Prior.Total_Tonnes_Traded__c}) || ISCHANGED({!$Record.WEEE_Category__c}), 0, {!$Record__Prior.Total_Tonnes_Traded__c})</expression>
+        <scale>3</scale>
+    </formulas>
+    <formulas>
+        <name>totalTonnageTraded</name>
+        <dataType>Number</dataType>
+        <expression>IF({!ISNEW}, {!$Record.Total_Tonnes_Traded__c}, {!$Record__Prior.Total_Tonnes_Traded__c} - {!$Record.Total_Tonnes_Traded__c})</expression>
+        <scale>3</scale>
+    </formulas>
+    <formulas>
+        <name>tradeAgreementBalanceRemain</name>
+        <dataType>Number</dataType>
+        <expression>IF(ISNULL({!Get_Trade_Agreement.Balance_Outstanding__c}), 0, {!Get_Trade_Agreement.Balance_Outstanding__c})  + IF({!ISNEW} || ISNULL({!$Record__Prior.Total_Tonnes_Traded__c}) , 0, {!$Record__Prior.Total_Tonnes_Traded__c})</expression>
+        <scale>3</scale>
+    </formulas>
+    <interviewLabel>Prevent Balance Over on Trade Agreement {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Prevent Balance Over on Trade Agreement</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Category</name>
+        <label>Get Category</label>
+        <locationX>908</locationX>
+        <locationY>611</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Trade_Record_Type_Decision</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.WEEE_Category__c</elementReference>
+            </value>
+        </filters>
+        <object>WEEE_Category__c</object>
+        <outputReference>categoryRec</outputReference>
+        <queriedFields>Balance__c</queriedFields>
+        <queriedFields>Obligation_Remain__c</queriedFields>
+        <queriedFields>Name</queriedFields>
+        <queriedFields>Actual__c</queriedFields>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Trade_Agreement</name>
+        <label>Get Trade Agreement</label>
+        <locationX>479</locationX>
+        <locationY>395</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Balance_Over_Decision</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Trade_Agreement__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Trade_Agreement__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>930</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Re_calculate_Prevent_Balance_Over_on_Trade_Agreement_Decision</targetReference>
+        </connector>
+        <object>Trade__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Draft</status>
+    <variables>
+        <name>categoryRec</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>WEEE_Category__c</objectType>
+    </variables>
+</Flow>

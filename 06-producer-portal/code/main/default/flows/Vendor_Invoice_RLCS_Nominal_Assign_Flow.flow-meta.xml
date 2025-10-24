@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <choices>
+        <name>BAT</name>
+        <choiceText>BAT</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>BAT</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>COX</name>
+        <choiceText>COX</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>COX</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>EFW</name>
+        <choiceText>EFW</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>EFW</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>GAS</name>
+        <choiceText>GAS</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>GAS</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>HOF</name>
+        <choiceText>HOF</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>HOF</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>PAC</name>
+        <choiceText>PAC</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>PAC</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>RAL</name>
+        <choiceText>RAL</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>RAL</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>WEE</name>
+        <choiceText>WEE</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>WEE</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>WRK</name>
+        <choiceText>WRK</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>WRK</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>X10020_Producer_obligation_fees</name>
+        <choiceText>10020 - Producer obligation fees</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>10020 - Producer obligation fees</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>X10060_Material_rebate</name>
+        <choiceText>10060 - Material rebate</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>10060 - Material rebate</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>X10070_Third_party_collections</name>
+        <choiceText>10070 - Third party collections</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>10070 - Third party collections</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>X10160_Treatment_on_AATF_3rd_party_material</name>
+        <choiceText>10160 - Treatment on AATF/3rd party material</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>10160 - Treatment on AATF/3rd party material</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>X20020_Third_party_Storage</name>
+        <choiceText>20020 - Third party Storage</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>20020 - Third party Storage</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>x30010_GAS_General_Transport</name>
+        <choiceText>&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 16px; font-family: Aptos, sans-serif; color: rgb(0, 0, 0);&quot;&gt;30010 GAS General Transport&lt;/span&gt;</choiceText>
+        <dataType>String</dataType>
+    </choices>
+    <choices>
+        <name>X30010_General_Transport</name>
+        <choiceText>30010 - General Transport</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>30010 - General Transport</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>X30020_Third_Party_Transport</name>
+        <choiceText>30020 - Third Party Transport</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>30020 - Third Party Transport</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>X30030_Producer_Material_Transport</name>
+        <choiceText>30030 - Producer Material Transport</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>30030 - Producer Material Transport</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>X30040_PBS_Transport_Costs</name>
+        <choiceText>30040 - PBS Transport Costs</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>30040 - PBS Transport Costs</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>X30050_Container_Trailer_Rental</name>
+        <choiceText>30050 - Container/Trailer Rental</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>30050 - Container/Trailer Rental</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>X30110_Local_Authority_Treatment</name>
+        <choiceText>30110 - Local Authority Treatment</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>30110 - Local Authority Treatment</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>X30120_Third_Party_Treatment</name>
+        <choiceText>30120 - Third Party Treatment</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>30120 - Third Party Treatment</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>X30130_Producer_Material_Treatment</name>
+        <choiceText>30130 - Producer Material Treatment</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>30130 - Producer Material Treatment</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>X30140_Treatment_On_AATF_3rd_Party_Cost</name>
+        <choiceText>30140 - Treatment On AATF &amp; 3rd Party Cost</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>30140 - Treatment On AATF &amp; 3rd Party Cost</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>X30150_Treatment_On_HWH_Cost</name>
+        <choiceText>30150 - Treatment On HWH Cost</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>30150 - Treatment On HWH Cost</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>X30210_Local_Authority_Material_Rebates</name>
+        <choiceText>30210 - Local Authority Material Rebates</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>30210 - Local Authority Material Rebates</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>X30220_Producer_Material_Rebate</name>
+        <choiceText>30220 - Producer Material Rebate</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>30220 - Producer Material Rebate</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>X30230_Producer_Obligation_Rebate</name>
+        <choiceText>30230 - Producer Obligation Rebate</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>30230 - Producer Obligation Rebate</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>X30310_AATF_Evidence_Purchases</name>
+        <choiceText>30310 - AATF Evidence Purchases</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>30310 - AATF Evidence Purchases</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>X30320_Scheme_Evidence_Purchases</name>
+        <choiceText>30320 - Scheme Evidence Purchases</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>30320 - Scheme Evidence Purchases</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>X30330_PBS</name>
+        <choiceText>30330 - PBS</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>30330 - PBS</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>X30340_PRN_Purchases</name>
+        <choiceText>30340 - PRN Purchases</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>30340 - PRN Purchases</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>X30520_TV_Material_Disposal</name>
+        <choiceText>30520 - TV Material Disposal</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>30520 - TV Material Disposal</stringValue>
+        </value>
+    </choices>
+    <description>07/04/2025</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>Nominal_Code_Left5</name>
+        <dataType>String</dataType>
+        <expression>LEFT({!Nominal_Code}, 5)</expression>
+    </formulas>
+    <interviewLabel>Vendor Invoice: RLCS Nominal Assign Flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Vendor Invoice: RLCS Nominal Assign Flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordUpdates>
+        <name>Update_Invoice</name>
+        <label>Update Invoice</label>
+        <locationX>176</locationX>
+        <locationY>350</locationY>
+        <connector>
+            <targetReference>Confirmation</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>RLCS_Cost_Centre__c</field>
+            <value>
+                <elementReference>Cost_Centre</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RLCS_Nominal_Code__c</field>
+            <value>
+                <elementReference>Nominal_Code_Left5</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Vendor_Invoice__c</object>
+    </recordUpdates>
+    <runInMode>SystemModeWithoutSharing</runInMode>
+    <screens>
+        <name>Assign_Nominal_and_Const_Centre</name>
+        <label>Assign Nominal and Const Centre</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Update_Invoice</targetReference>
+        </connector>
+        <fields>
+            <name>Assign_Nominal_and_Const_Centre_Section1</name>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Assign_Nominal_and_Const_Centre_Section1_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Nominal_Code</name>
+                    <choiceReferences>X30010_General_Transport</choiceReferences>
+                    <choiceReferences>X30020_Third_Party_Transport</choiceReferences>
+                    <choiceReferences>X30030_Producer_Material_Transport</choiceReferences>
+                    <choiceReferences>X30040_PBS_Transport_Costs</choiceReferences>
+                    <choiceReferences>X30050_Container_Trailer_Rental</choiceReferences>
+                    <choiceReferences>X30110_Local_Authority_Treatment</choiceReferences>
+                    <choiceReferences>X30120_Third_Party_Treatment</choiceReferences>
+                    <choiceReferences>X30130_Producer_Material_Treatment</choiceReferences>
+                    <choiceReferences>X30140_Treatment_On_AATF_3rd_Party_Cost</choiceReferences>
+                    <choiceReferences>X30150_Treatment_On_HWH_Cost</choiceReferences>
+                    <choiceReferences>X30210_Local_Authority_Material_Rebates</choiceReferences>
+                    <choiceReferences>X30220_Producer_Material_Rebate</choiceReferences>
+                    <choiceReferences>X30230_Producer_Obligation_Rebate</choiceReferences>
+                    <choiceReferences>X30310_AATF_Evidence_Purchases</choiceReferences>
+                    <choiceReferences>X30320_Scheme_Evidence_Purchases</choiceReferences>
+                    <choiceReferences>X30330_PBS</choiceReferences>
+                    <choiceReferences>X30340_PRN_Purchases</choiceReferences>
+                    <choiceReferences>X30520_TV_Material_Disposal</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Nominal Code</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>Assign_Nominal_and_Const_Centre_Section1_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Cost_Centre</name>
+                    <choiceReferences>WEE</choiceReferences>
+                    <choiceReferences>BAT</choiceReferences>
+                    <choiceReferences>PAC</choiceReferences>
+                    <choiceReferences>RAL</choiceReferences>
+                    <choiceReferences>COX</choiceReferences>
+                    <choiceReferences>GAS</choiceReferences>
+                    <choiceReferences>WRK</choiceReferences>
+                    <choiceReferences>HOF</choiceReferences>
+                    <choiceReferences>EFW</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Cost Centre</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithoutHeader</regionContainerType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>Confirmation</name>
+        <label>Confirmation</label>
+        <locationX>176</locationX>
+        <locationY>458</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>Confirmation_Text</name>
+            <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;color: rgb(0, 15, 80);&quot;&gt;This invoice has now been updated.&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Complete</nextOrFinishButtonLabel>
+        <showFooter>false</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>Warning</name>
+        <label>Warning</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Assign_Nominal_and_Const_Centre</targetReference>
+        </connector>
+        <fields>
+            <name>Warning_Text</name>
+            <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;color: rgb(0, 15, 80);&quot;&gt;This invoice requires a &lt;span class=&quot;ql-cursor&quot;&gt;﻿&lt;/span&gt;nominal code and the cost centre assigning.&lt;/strong&gt;&lt;/p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;&lt;br&gt;&lt;/p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;color: rgb(0, 15, 80);&quot;&gt;Click next if you are ready to assign. If not please close and refresh this page when ready to assign.&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Warning</targetReference>
+        </connector>
+    </start>
+    <status>Draft</status>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

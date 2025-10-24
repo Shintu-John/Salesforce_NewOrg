@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>12-11-2024: added async process</description>
+    <environments>Default</environments>
+    <interviewLabel>Populate Material Category On Creation {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Populate Material Category On Creation</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <object>Material_Category_Breakdown__c</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <scheduledPaths>
+            <connector>
+                <targetReference>Populate_Material_Category_Auto_launch</targetReference>
+            </connector>
+            <pathType>AsyncAfterCommit</pathType>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>Populate_Material_Category_Auto_launch</name>
+        <label>Populate Material Category Auto launch</label>
+        <locationX>308</locationX>
+        <locationY>276</locationY>
+        <flowName>Populate_Material_Category_Auto_launch</flowName>
+        <inputAssignments>
+            <name>breakDownRecordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>jobId</name>
+            <value>
+                <elementReference>$Record.RLCS_Job__c</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+</Flow>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Send_ACE_Web_Form_Confirmation</name>
+        <label>Send ACE Web Form Confirmation</label>
+        <locationX>176</locationX>
+        <locationY>431</locationY>
+        <actionName>ACE_Web_Form__c.ACE_Web_Form_Confirmation</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>ACE_Web_Form__c.ACE_Web_Form_Confirmation</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <apiVersion>58.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>Object: ACE Webform
+Trigger: Record Created
+Description: Changes the record owner of the Webform to Gary Welsh when it is created.</description>
+    <environments>Default</environments>
+    <interviewLabel>ACE WebForm Assignment {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>ACE WebForm Assignment</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <description>This updates the owner of the record to Gary once it has been created.</description>
+        <name>UpdateOwner</name>
+        <label>UpdateOwner</label>
+        <locationX>176</locationX>
+        <locationY>323</locationY>
+        <connector>
+            <targetReference>Send_ACE_Web_Form_Confirmation</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <stringValue>0058e000000giaXAAQ</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>UpdateOwner</targetReference>
+        </connector>
+        <object>ACE_Web_Form__c</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+    <textTemplates>
+        <name>ttEmailBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Thank you for submitting a referral to the ACE Project. Your referral has been received, and a member of the team will be in touch in due course.
+If you have any questions in the meantime, please feel free to contact us on AceOnCall@recyclinglives.org or AceOnCall@recyclinglives.cjsm.net
+You can also view our website for further information regarding the ACE Project: recyclinglives.org/our-programmes/the-ace-project</text>
+    </textTemplates>
+</Flow>

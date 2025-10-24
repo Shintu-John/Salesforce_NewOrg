@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>58.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Job_Charge_Date_Assignment</name>
+        <label>Job Charge Date Assignment</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <assignmentItems>
+            <assignToReference>jobCharge_Date</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>jobChargeDate_Formula</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <environments>Default</environments>
+    <formulas>
+        <name>jobChargeDate_Formula</name>
+        <dataType>Date</dataType>
+        <expression>IF(NOT(ISNULL({!job_deliveryDate})) &amp;&amp; OR({!jobCharge_chargeType} ==
+            &quot;Job&quot;, {!jobCharge_chargeType} == &quot;Rebate Transport&quot;) ,
+            {!job_deliveryDate},
+            IF(NOT(ISNULL({!job_collectionDate})) &amp;&amp; OR({!jobCharge_chargeType} ==
+            &quot;Tonnage&quot;, {!jobCharge_chargeType} == &quot;Rebate&quot;) ,
+            {!job_collectionDate},
+            IF(NOT(ISNULL({!jobCharge_createdDate})), {!jobCharge_createdDate} ,
+            {!$Flow.CurrentDate})
+            )
+            )</expression>
+    </formulas>
+    <interviewLabel>Job Charge Date Cal {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Job Charge Date Cal</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <runInMode>SystemModeWithoutSharing</runInMode>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Job_Charge_Date_Assignment</targetReference>
+        </connector>
+    </start>
+    <status>Draft</status>
+    <variables>
+        <name>job_collectionDate</name>
+        <dataType>Date</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>job_deliveryDate</name>
+        <dataType>Date</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>jobCharge_chargeType</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>jobCharge_createdDate</name>
+        <dataType>Date</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>jobCharge_Date</name>
+        <dataType>Date</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+</Flow>

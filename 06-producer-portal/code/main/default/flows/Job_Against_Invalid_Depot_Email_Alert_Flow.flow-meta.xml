@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Email_Compliance</name>
+        <label>Email Compliance</label>
+        <locationX>176</locationX>
+        <locationY>431</locationY>
+        <actionName>Job__c.Invalid_Depots_Against_Job</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Job__c.Invalid_Depots_Against_Job</nameSegment>
+    </actionCalls>
+    <apiVersion>58.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <environments>Default</environments>
+    <interviewLabel>Job Against Invalid Depot Email Alert {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Job Against Invalid Depot Email Alert Flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Mark_Invalid_depot_Email_Warning_as_Sent</name>
+        <label>Mark Invalid depot Email Warning as Sent</label>
+        <locationX>176</locationX>
+        <locationY>323</locationY>
+        <connector>
+            <targetReference>Email_Compliance</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Invalid_Depot_Warning_Email_Sent__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Mark_Invalid_depot_Email_Warning_as_Sent</targetReference>
+        </connector>
+        <filterFormula>AND(
+            OR(
+            {!$Record.Depot_Dispose__r.Valid__c} = FALSE,
+            {!$Record.Depot_Supply__r.Valid__c} = FALSE
+            ),
+            OR(
+            {!$Record.Depot_Dispose__r.Date_Marked_as_Invalid__c} &lt;
+            {!$Record.Collection_Date__c},
+            {!$Record.Depot_Supply__r.Date_Marked_as_Invalid__c} &lt; {!$Record.Collection_Date__c}
+            ),
+            {!$Record.Invalid_Depot_Warning_Email_Sent__c} = FALSE,
+            NOT(ISNULL({!$Record.Collection_Date__c})),
+            NOT(ISPICKVAL({!$Record.Status__c}, &apos;Cancelled&apos;)
+            )
+            )</filterFormula>
+        <object>Job__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Obsolete</status>
+</Flow>

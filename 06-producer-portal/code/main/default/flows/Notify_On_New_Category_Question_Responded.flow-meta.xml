@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Send_Email_Globally_Multiple_Action_1</name>
+        <label>Send Email Globally Multiple Action 1</label>
+        <locationX>176</locationX>
+        <locationY>323</locationY>
+        <actionName>SendEmailGloballyMultiple</actionName>
+        <actionType>apex</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>fromEmailAddress</name>
+            <value>
+                <stringValue>producers@recyclinglives-services.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendEmailIds</name>
+            <value>
+                <stringValue>producers@recyclinglives-services.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>templatename</name>
+            <value>
+                <stringValue>New_Category_Question_Responded</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>SendEmailGloballyMultiple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>06-03-2025 : added producers@recyclinglives-services.com address
+12-12-2024: from address producers@recyclinglives-services.com</description>
+    <environments>Default</environments>
+    <interviewLabel>Notify On New Category Question Responded {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Notify On New Category Question Responded</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Send_Email_Globally_Multiple_Action_1</targetReference>
+        </connector>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Reason__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>New Category</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Answered__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Validation_Question__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>

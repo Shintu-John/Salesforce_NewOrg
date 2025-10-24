@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Is_Opportunity_updated</name>
+        <label>Is Opportunity updated?</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <defaultConnector>
+            <targetReference>Update_opportunity_to_be_sent</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Opp != Sent</defaultConnectorLabel>
+        <rules>
+            <name>Opp_Sent</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Opportunity.StageName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Submitted quote &amp; proposal</stringValue>
+                </rightValue>
+            </conditions>
+            <label>Opp = Sent</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_opportunity_updated2</name>
+        <label>Is opportunity updated?</label>
+        <locationX>578</locationX>
+        <locationY>431</locationY>
+        <defaultConnector>
+            <targetReference>Update_opportunity_to_be_closed</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Opp != Closed</defaultConnectorLabel>
+        <rules>
+            <name>Opp_Closed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Opportunity.StageName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Closed won written confirmation</stringValue>
+                </rightValue>
+            </conditions>
+            <label>Opp = Closed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>What_is_the_quotes_status</name>
+        <label>What is the quotes status?</label>
+        <locationX>512</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Sent_Quote</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Sent Quote</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Is_Opportunity_updated</targetReference>
+            </connector>
+            <label>Sent Quote</label>
+        </rules>
+        <rules>
+            <name>Accepted</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Accepted</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Is_opportunity_updated2</targetReference>
+            </connector>
+            <label>Accepted</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <interviewLabel>Manage Opportunity Stage from Quote {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Manage Opportunity Stage from Quote</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_opportunity_to_be_closed</name>
+        <label>Update opportunity to be closed</label>
+        <locationX>710</locationX>
+        <locationY>539</locationY>
+        <inputAssignments>
+            <field>StageName</field>
+            <value>
+                <stringValue>Closed won written confirmation</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Opportunity</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_opportunity_to_be_sent</name>
+        <label>Update opportunity to be sent</label>
+        <locationX>182</locationX>
+        <locationY>539</locationY>
+        <inputAssignments>
+            <field>StageName</field>
+            <value>
+                <stringValue>Submitted quote &amp; proposal</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Opportunity</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>386</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>What_is_the_quotes_status</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Status</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Quote</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>

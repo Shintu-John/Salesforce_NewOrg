@@ -2,7 +2,7 @@
 
 > **Production deployment repository** for migrating customizations from OldOrg (Recycling Lives Service) to NewOrg (Recycling Lives Group)
 
-[![Deployment Progress](https://img.shields.io/badge/Deployed-4.5%2F12%20(38%25)-yellow)](https://github.com/Shintu-John/Salesforce_NewOrg)
+[![Deployment Progress](https://img.shields.io/badge/Deployed-5%2F12%20(42%25)-yellow)](https://github.com/Shintu-John/Salesforce_NewOrg)
 [![Last Deployment](https://img.shields.io/badge/Last%20Deployment-Oct%2024%2C%202025-green)](https://github.com/Shintu-John/Salesforce_NewOrg)
 [![Status](https://img.shields.io/badge/Status-Active-brightgreen)](https://github.com/Shintu-John/Salesforce_NewOrg)
 
@@ -34,10 +34,10 @@ sf apex run -f 04-scenario-name/tests/test_scenario.apex -o NewOrg
 
 ## 📊 Deployment Progress
 
-**Overall:** 4.5 of 12 scenarios deployed (38%)
+**Overall:** 5 of 12 scenarios deployed (42%)
 **Status:** ✅ Active deployment phase
 **Target Org:** NewOrg (Production)
-**Latest:** Producer Portal P0 CRITICAL bugs fixed (Oct 24)
+**Latest:** Producer Portal COMPLETE - 100% test coverage, all flows active (Oct 24)
 
 ### ✅ Completed Deployments
 
@@ -49,7 +49,7 @@ sf apex run -f 04-scenario-name/tests/test_scenario.apex -o NewOrg
 | 05 | [email-to-case-assignment](05-email-to-case-assignment/) | Oct 23 | `0AfSq000003nVNVKA2` | Automated case assignment | [📊](05-email-to-case-assignment/DEPLOYMENT_HISTORY.md) |
 | 06 | [producer-portal](06-producer-portal/) | Oct 24 | `0AfSq000003ncvFKAQ` | **P0 CRITICAL** bugs fixed | [📊](06-producer-portal/DEPLOYMENT_HISTORY.md) |
 
-### 📋 Pending Deployments (7 scenarios)
+### 📋 Pending Deployments (6 scenarios)
 
 <details>
 <summary><b>View Pending Scenarios</b></summary>
@@ -58,7 +58,6 @@ sf apex run -f 04-scenario-name/tests/test_scenario.apex -o NewOrg
 | # | Scenario | Description | Status |
 |---|----------|-------------|--------|
 | 04 | [portal-exchange-email](04-portal-exchange-email/) | Email exchange workflow fixes | ⏳ Awaiting email verification |
-| 06 | [producer-portal](06-producer-portal/) | Producer portal sharing components | ⚠️ **PARTIAL** - P0 done, sharing blocked at 73% coverage |
 | 07 | [sage-api-integration](07-sage-api-integration/) | Sage API authentication fixes | 📋 Ready to deploy |
 
 #### Medium Priority

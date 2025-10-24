@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>prevent_customer_to_modified_signed_data</fullName>
+    <active>true</active>
+    <errorConditionFormula>Internal_Verification_Complete__c = TRUE
+&amp;&amp; NOT(ISCHANGED(Status__c))
+&amp;&amp;  $User.ContactId &lt;&gt; NULL</errorConditionFormula>
+    <errorMessage>This record is locked, no further changes can be made. For assistance, please contact us using Producers@RecyclingLives-Services.com.</errorMessage>
+</ValidationRule>

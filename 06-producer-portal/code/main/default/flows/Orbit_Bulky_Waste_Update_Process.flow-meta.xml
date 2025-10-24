@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <environments>Default</environments>
+    <formulas>
+        <name>CubicYardTotalCalculated</name>
+        <dataType>Number</dataType>
+        <expression>IF({!StoreCubicYards} = 1, 70,
+IF({!StoreCubicYards} = 2, 95,
+IF({!StoreCubicYards} = 3, 120,
+IF({!StoreCubicYards} = 4, 145,
+IF({!StoreCubicYards} = 5, 170,
+IF({!StoreCubicYards} = 6, 195,
+IF({!StoreCubicYards} = 7, 220,
+IF({!StoreCubicYards} = 8, 245,
+IF({!StoreCubicYards} = 9, 270,
+IF({!StoreCubicYards} = 10, 295,
+IF({!StoreCubicYards} = 11, 320,
+IF({!StoreCubicYards} = 12, 345,
+IF({!StoreCubicYards} = 13, 370,
+IF({!StoreCubicYards} = 14, 395,
+IF(AND({!StoreCubicYards} &gt;= 15, {!StoreCubicYards} &lt;= 18), 495,
+IF(AND({!StoreCubicYards} &gt;= 19, {!StoreCubicYards} &lt;= 26), 695, 0
+))))))))))))))))</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>CustomerReference</name>
+        <dataType>String</dataType>
+        <expression>&quot;Collection of &quot; &amp;
+LEFT(
+    IF({!StoreCubicYards} &gt; 0, TEXT({!StoreCubicYards}) &amp; &quot; Cubic Yard, &quot;, &quot;&quot;) &amp;
+    IF({!StorePOPs} &gt; 0, TEXT({!StorePOPs}) &amp; &quot; POPs Item, &quot;, &quot;&quot;) &amp;
+    IF({!StoreMattress} &gt; 0, TEXT({!StoreMattress}) &amp; &quot; Mattress, &quot;, &quot;&quot;) &amp;
+    IF({!StoreTVMonitor} &gt; 0, TEXT({!StoreTVMonitor}) &amp; &quot; TV/Monitor, &quot;, &quot;&quot;) &amp;
+    IF({!StoreFF} &gt; 0, TEXT({!StoreFF}) &amp; &quot; Fridge/Freezer, &quot;, &quot;&quot;) &amp;
+    IF({!StoreCarTyre} &gt; 0, TEXT({!StoreCarTyre}) &amp; &quot; Car Tyre, &quot;, &quot;&quot;) &amp;
+    IF({!StoreAmericanFF} &gt; 0, TEXT({!StoreAmericanFF}) &amp; &quot; American Fridge Freezer, &quot;, &quot;&quot;) &amp;
+    IF({!StoreCarBattery} &gt; 0, TEXT({!StoreCarBattery}) &amp; &quot; Car Battery, &quot;, &quot;&quot;) &amp;
+    IF({!StoreGasBottle} &gt; 0, TEXT({!StoreGasBottle}) &amp; &quot; Gas Bottle, &quot;, &quot;&quot;) &amp;
+    IF({!StoreFloTube} &gt; 0, TEXT({!StoreFloTube}) &amp; &quot; Fluorescent Tube/Bulb, &quot;, &quot;&quot;),
+    LEN(
+        IF({!StoreCubicYards} &gt; 0, TEXT({!StoreCubicYards}) &amp; &quot; Cubic Yard, &quot;, &quot;&quot;) &amp;
+        IF({!StorePOPs} &gt; 0, TEXT({!StorePOPs}) &amp; &quot; POPs Item, &quot;, &quot;&quot;) &amp;
+        IF({!StoreMattress} &gt; 0, TEXT({!StoreMattress}) &amp; &quot; Mattress, &quot;, &quot;&quot;) &amp;
+        IF({!StoreTVMonitor} &gt; 0, TEXT({!StoreTVMonitor}) &amp; &quot; TV/Monitor, &quot;, &quot;&quot;) &amp;
+        IF({!StoreFF} &gt; 0, TEXT({!StoreFF}) &amp; &quot; Fridge/Freezer, &quot;, &quot;&quot;) &amp;
+        IF({!StoreCarTyre} &gt; 0, TEXT({!StoreCarTyre}) &amp; &quot; Car Tyre, &quot;, &quot;&quot;) &amp;
+        IF({!StoreAmericanFF} &gt; 0, TEXT({!StoreAmericanFF}) &amp; &quot; American Fridge Freezer, &quot;, &quot;&quot;) &amp;
+        IF({!StoreCarBattery} &gt; 0, TEXT({!StoreCarBattery}) &amp; &quot; Car Battery, &quot;, &quot;&quot;) &amp;
+        IF({!StoreGasBottle} &gt; 0, TEXT({!StoreGasBottle}) &amp; &quot; Gas Bottle, &quot;, &quot;&quot;) &amp;
+        IF({!StoreFloTube} &gt; 0, TEXT({!StoreFloTube}) &amp; &quot; Fluorescent Tube/Bulb, &quot;, &quot;&quot;)
+    ) - 2
+)</expression>
+    </formulas>
+    <formulas>
+        <name>TotalSalesPrice</name>
+        <dataType>Currency</dataType>
+        <expression>{!CubicYardTotalCalculated} +
+   NULLVALUE({!StorePOPs}, 0) * 21.50 +
+   NULLVALUE({!StoreMattress}, 0) * 21.50 +
+   NULLVALUE({!StoreTVMonitor}, 0) * 18.50 +
+   NULLVALUE({!StoreFF}, 0) * 42.50 +
+   NULLVALUE({!StoreCarTyre}, 0) * 9.50 +
+   NULLVALUE({!StoreAmericanFF}, 0) * 85.00 +
+   NULLVALUE({!StoreCarBattery}, 0) * 8.50 +
+   NULLVALUE({!StoreGasBottle}, 0) * 15.00 +
+   NULLVALUE({!StoreFloTube}, 0) * 4.00</expression>
+        <scale>2</scale>
+    </formulas>
+    <interviewLabel>Orbit Bulky Waste Update Process {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Orbit Bulky Waste Update Process</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordLookups>
+        <name>Get_Job</name>
+        <label>Get Job</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Job_Job_Charge</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Job__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Job_Job_Charge</name>
+        <label>Get Job, Job Charge</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Update_Collection_Details</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Job__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Job.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Charge_Type__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Job</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Job_Charge__c</object>
+        <queriedFields>Id</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Job_Customer_Reference</name>
+        <label>Update Job Customer Reference</label>
+        <locationX>176</locationX>
+        <locationY>566</locationY>
+        <connector>
+            <targetReference>Update_Job_Sales_Price</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Job.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Customer_Reference__c</field>
+            <value>
+                <elementReference>CustomerReference</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Job__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Job_Sales_Price</name>
+        <label>Update Job Sales Price</label>
+        <locationX>176</locationX>
+        <locationY>674</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Job_Job_Charge.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Sales_Price__c</field>
+            <value>
+                <elementReference>TotalSalesPrice</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Job_Charge__c</object>
+    </recordUpdates>
+    <screens>
+        <name>Confirmation_Screen</name>
+        <label>Confirmation Screen</label>
+        <locationX>176</locationX>
+        <locationY>458</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Update_Job_Customer_Reference</targetReference>
+        </connector>
+        <fields>
+            <name>Confirmation</name>
+            <fieldText>&lt;p&gt;This job has been updated.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Update_Collection_Details</name>
+        <label>Update Collection Details</label>
+        <locationX>176</locationX>
+        <locationY>350</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Confirmation_Screen</targetReference>
+        </connector>
+        <fields>
+            <name>Update_Collection_Details_Section1</name>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Update_Collection_Details_Section1_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Cubic_Yard_s</name>
+                    <dataType>Number</dataType>
+                    <fieldText>Total Cubic Yard</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <scale>0</scale>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>POPs_Item</name>
+                    <dataType>Number</dataType>
+                    <fieldText>Total POPs Item</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <scale>0</scale>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Total_Mattress</name>
+                    <dataType>Number</dataType>
+                    <fieldText>Total Mattress</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <scale>0</scale>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Total_TV_Monitor</name>
+                    <dataType>Number</dataType>
+                    <fieldText>Total TV/Monitor</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <scale>0</scale>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Total_Fridge_Freezer</name>
+                    <dataType>Number</dataType>
+                    <fieldText>Total Fridge/Freezer</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <scale>0</scale>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>Update_Collection_Details_Section1_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Total_Car_Tyre</name>
+                    <dataType>Number</dataType>
+                    <fieldText>Total Car Tyre</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <scale>0</scale>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Total_American_Fridge_Freezer</name>
+                    <dataType>Number</dataType>
+                    <fieldText>Total American Fridge/Freezer</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <scale>0</scale>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Total_Car_Battery</name>
+                    <dataType>Number</dataType>
+                    <fieldText>Total Car Battery</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <scale>0</scale>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Total_Gas_Bottle</name>
+                    <dataType>Number</dataType>
+                    <fieldText>Total Gas Bottle</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <scale>0</scale>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Total_Fluorescent_Tube_Bulb</name>
+                    <dataType>Number</dataType>
+                    <fieldText>Total Fluorescent Tube/Bulb</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <scale>0</scale>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithoutHeader</regionContainerType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Job</targetReference>
+        </connector>
+    </start>
+    <status>Draft</status>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>StoreAmericanFF</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <scale>0</scale>
+        <value>
+            <elementReference>Total_American_Fridge_Freezer</elementReference>
+        </value>
+    </variables>
+    <variables>
+        <name>StoreCarBattery</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <scale>0</scale>
+        <value>
+            <elementReference>Total_Car_Battery</elementReference>
+        </value>
+    </variables>
+    <variables>
+        <name>StoreCarTyre</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <scale>0</scale>
+        <value>
+            <elementReference>Total_Car_Tyre</elementReference>
+        </value>
+    </variables>
+    <variables>
+        <name>StoreCubicYards</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <scale>0</scale>
+        <value>
+            <elementReference>Cubic_Yard_s</elementReference>
+        </value>
+    </variables>
+    <variables>
+        <name>StoreFF</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <scale>0</scale>
+        <value>
+            <elementReference>Total_Fridge_Freezer</elementReference>
+        </value>
+    </variables>
+    <variables>
+        <name>StoreFloTube</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <scale>0</scale>
+        <value>
+            <elementReference>Total_Fluorescent_Tube_Bulb</elementReference>
+        </value>
+    </variables>
+    <variables>
+        <name>StoreGasBottle</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <scale>0</scale>
+        <value>
+            <elementReference>Total_Gas_Bottle</elementReference>
+        </value>
+    </variables>
+    <variables>
+        <name>StoreMattress</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <scale>0</scale>
+        <value>
+            <elementReference>Total_Mattress</elementReference>
+        </value>
+    </variables>
+    <variables>
+        <name>StorePOPs</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <scale>0</scale>
+        <value>
+            <elementReference>POPs_Item</elementReference>
+        </value>
+    </variables>
+    <variables>
+        <name>StoreTVMonitor</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <scale>0</scale>
+        <value>
+            <elementReference>Total_TV_Monitor</elementReference>
+        </value>
+    </variables>
+</Flow>

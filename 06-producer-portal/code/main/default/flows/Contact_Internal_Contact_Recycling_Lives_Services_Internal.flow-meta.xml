@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Is_Account_Recycling_Lives_Services_Internal</name>
+        <label>Is Account Recycling Lives Services Internal?</label>
+        <locationX>248</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>Yes</defaultConnectorLabel>
+        <rules>
+            <name>No_It_Is_Not</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Account.Id</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>$Setup.Static_Id__c.Account_RecyclingLivesServicesInternal__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Is_Contact_Created_by_System_Admin</targetReference>
+            </connector>
+            <label>No It Is Not</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_Contact_Created_by_System_Admin</name>
+        <label>Is Contact Created by System Admin?</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <defaultConnector>
+            <targetReference>Update_to_Recycling_Lives_Services</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Profile.Id</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>$Setup.Static_Id__c.Profile_SystemAdministrator__c</elementReference>
+                </rightValue>
+            </conditions>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <description>Force internal contacts to be added to the &quot;Recycling Lives Services Internal&quot; account.</description>
+    <environments>Default</environments>
+    <interviewLabel>Contact: Internal Contact &quot;Recycling Lives Services Internal&quot; {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Contact: Internal Contact &quot;Recycling Lives Services Internal&quot;</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_to_Recycling_Lives_Services</name>
+        <label>Update to Recycling Lives Services</label>
+        <locationX>182</locationX>
+        <locationY>539</locationY>
+        <inputAssignments>
+            <field>AccountId</field>
+            <value>
+                <elementReference>$Setup.Static_Id__c.Account_RecyclingLivesServicesInternal__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>122</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Is_Account_Recycling_Lives_Services_Internal</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Email</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>@recyclinglives-services.com</stringValue>
+            </value>
+        </filters>
+        <object>Contact</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>

@@ -13,7 +13,7 @@ public class UserSharingBackfillHelperTest {
         // Create Account with Producer records
         Account acc = new Account(
             Name = 'Test Producer Company',
-            comp_house__Company_Number__c = '12345678', // Required in NewOrg
+            comp_house__Company_Number__c = '87654321', // Required in NewOrg - different from ProducerSharingHelperTest
             OwnerId = userWithRole.Id
         );
         insert acc;
@@ -22,6 +22,7 @@ public class UserSharingBackfillHelperTest {
         Producer_Contract__c contract = new Producer_Contract__c(
             Account__c = acc.Id,
             Contract_Type__c = 'WEEE',
+            Obligation_Type__c = 'Non-Household',  // Required for Flow validation
             Contract_Start_Date__c = Date.today(),
             Contract_End_Date__c = Date.today().addYears(1),
             VAT_Registered__c = true
@@ -32,9 +33,19 @@ public class UserSharingBackfillHelperTest {
         String previousYear = String.valueOf(Date.today().year() - 1);
 
         // Create 4 quarterly POM records to satisfy validation rule
+        // Use Non_Household RecordType to match Contract's Obligation_Type__c
         Id householdRTId = Schema.SObjectType.Producer_Placed_on_Market__c
             .getRecordTypeInfosByDeveloperName()
-            .get('Household').getRecordTypeId();
+            .get('Non_Household').getRecordTypeId();
+
+        // Delete any existing POMs for this account/year/recordtype to avoid duplication
+        delete [
+            SELECT Id
+            FROM Producer_Placed_on_Market__c
+            WHERE Account__c = :acc.Id
+            AND Compliance_Year__c = :previousYear
+            AND RecordTypeId = :householdRTId
+        ];
 
         List<Producer_Placed_on_Market__c> pomRecords = new List<Producer_Placed_on_Market__c>();
         String[] quarters = new String[]{'Q1', 'Q2', 'Q3', 'Q4'};
@@ -44,25 +55,30 @@ public class UserSharingBackfillHelperTest {
                 Quarter__c = quarter,
                 Compliance_Year__c = previousYear,
                 RecordTypeId = householdRTId,
-                // Fill all 14 household categories to satisfy NewOrg validation (0 = filled but no tonnage)
-                Category_1_Household__c = 0,
-                Category_2_Household__c = 0,
-                Category_3_Household__c = 0,
-                Category_4_Household__c = 0,
-                Category_5_Household__c = 0,
-                Category_6_Household__c = 0,
-                Category_7_Household__c = 0,
-                Category_8_Household__c = 0,
-                Category_9_Household__c = 0,
-                Category_10_Household__c = 0,
-                Category_11_Household__c = 0,
-                Category_12_Household__c = 0,
-                Category_13_Household__c = 0,
-                Category_14_Household__c = 0
-                // Note: Not setting Acknowledgement - cannot satisfy NewOrg validation in tests
+                // Fill all 30 categories (both Household and NonHousehold) for Non_Household RecordType
+                Category_1_Household__c = 0, Category_1_Non_Household__c = 0,
+                Category_2_Household__c = 0, Category_2_Non_Household__c = 0,
+                Category_3_Household__c = 0, Category_3_Non_Household__c = 0,
+                Category_4_Household__c = 0, Category_4_Non_Household__c = 0,
+                Category_5_Household__c = 0, Category_5_Non_Household__c = 0,
+                Category_6_Household__c = 0, Category_6_Non_Household__c = 0,
+                Category_7_Household__c = 0, Category_7_Non_Household__c = 0,
+                Category_8_Household__c = 0, Category_8_Non_Household__c = 0,
+                Category_9_Household__c = 0, Category_9_Non_Household__c = 0,
+                Category_10_Household__c = 0, Category_10_Non_Household__c = 0,
+                Category_11_Household__c = 0, Category_11_Non_Household__c = 0,
+                Category_12_Household__c = 0, Category_12_Non_Household__c = 0,
+                Category_13_Household__c = 0, Category_13_Non_Household__c = 0,
+                Category_14_Household__c = 0, Category_14_Non_Household__c = 0,
+                Category_15_Household__c = 0, Category_15_Non_Household__c = 0,
+                Acknowledgement_of_Statements__c = true  // CRITICAL: Flow requires acknowledged POMs
             ));
         }
-        insert pomRecords;
+
+        // Insert POMs one at a time to avoid Flow duplication detection issues in test context
+        for (Producer_Placed_on_Market__c pom : pomRecords) {
+            insert pom;
+        }
 
         // Now create Obligation
         Producer_Obligation__c obligation = new Producer_Obligation__c(
@@ -72,12 +88,24 @@ public class UserSharingBackfillHelperTest {
         );
         insert obligation;
 
-        // Create Producer Placed on Market
+        // Create Producer Placed on Market for current year (different from previous year POMs above)
+        String currentYear = String.valueOf(Date.today().year());
+
+        // Delete any existing POMs for current year to avoid duplication
+        delete [
+            SELECT Id
+            FROM Producer_Placed_on_Market__c
+            WHERE Account__c = :acc.Id
+            AND Compliance_Year__c = :currentYear
+            AND RecordTypeId = :householdRTId
+            AND Quarter__c = 'Q1'
+        ];
+
         Producer_Placed_on_Market__c pom = new Producer_Placed_on_Market__c(
             Account__c = acc.Id,
             RecordTypeId = householdRTId,
             Quarter__c = 'Q1',
-            Compliance_Year__c = String.valueOf(Date.today().year())
+            Compliance_Year__c = currentYear
         );
         insert pom;
     }
@@ -126,6 +154,8 @@ public class UserSharingBackfillHelperTest {
         System.runAs(new User(Id = UserInfo.getUserId())) {
             insert portalUser;
         }
+        // Manually call backfill since trigger is not deployed yet
+        UserSharingBackfillHelper.backfillSharingForNewUsers(new List<Id>{portalUser.Id});
         Test.stopTest(); // @future methods complete here
 
         // Verify sharing records were created
@@ -160,14 +190,22 @@ public class UserSharingBackfillHelperTest {
 
     @isTest
     static void testBackfillForSecondAccount() {
+        // Get a user with a role for Account.OwnerId (required for portal users)
+        User userWithRole = [SELECT Id FROM User WHERE UserRoleId != null AND IsActive = true LIMIT 1];
+
         // Test that multiple accounts work correctly
-        Account acc2 = new Account(Name = 'Second Producer Company');
+        Account acc2 = new Account(
+            Name = 'Second Producer Company',
+            comp_house__Company_Number__c = '11223344', // Required in NewOrg
+            OwnerId = userWithRole.Id // Required for portal users
+        );
         insert acc2;
 
         // Create Contract for second account
         Producer_Contract__c contract2 = new Producer_Contract__c(
             Account__c = acc2.Id,
             Contract_Type__c = 'WEEE',
+            Obligation_Type__c = 'Non-Household',  // Required for Flow validation
             Contract_Start_Date__c = Date.today(),
             Contract_End_Date__c = Date.today().addYears(1),
             VAT_Registered__c = true
@@ -206,6 +244,8 @@ public class UserSharingBackfillHelperTest {
         System.runAs(new User(Id = UserInfo.getUserId())) {
             insert portalUser2;
         }
+        // Manually call backfill since trigger is not deployed yet
+        UserSharingBackfillHelper.backfillSharingForNewUsers(new List<Id>{portalUser2.Id});
         Test.stopTest(); // @future methods complete here
 
         // Verify user has access to second account's records (not first account)

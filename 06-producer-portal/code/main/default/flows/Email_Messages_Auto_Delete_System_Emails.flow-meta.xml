@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Should_be_deleted</name>
+        <label>Should be deleted?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Unsigned_ADOC_s</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Subject</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Unsigned ADOC&apos;s</stringValue>
+                </rightValue>
+            </conditions>
+            <label>Unsigned ADOC&apos;s</label>
+        </rules>
+        <rules>
+            <name>Apex_scheduled_job_named_xyz</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Subject</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Apex scheduled job named</stringValue>
+                </rightValue>
+            </conditions>
+            <label>Apex scheduled job named xyz</label>
+        </rules>
+        <rules>
+            <name>HMP_Reminder</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Subject</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>HMP Reminder</stringValue>
+                </rightValue>
+            </conditions>
+            <label>HMP Reminder</label>
+        </rules>
+        <rules>
+            <name>Security_Alert_New_OAuth_Authorization</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Subject</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Security Alert: New OAuth Authorization</stringValue>
+                </rightValue>
+            </conditions>
+            <label>Security Alert: New OAuth Authorization</label>
+        </rules>
+        <rules>
+            <name>Schedules_Missing_Creation_of_ADOC</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Subject</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Schedules Missing Creation of ADOC</stringValue>
+                </rightValue>
+            </conditions>
+            <label>Schedules Missing Creation of ADOC</label>
+        </rules>
+        <rules>
+            <name>Quote_Compliance_Information</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Subject</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Quote Compliance Information</stringValue>
+                </rightValue>
+            </conditions>
+            <label>Quote Compliance Information</label>
+        </rules>
+        <rules>
+            <name>Schedule_s_ADOC_Expired_Soon</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Subject</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Schedule&apos;s ADOC Expired Soon</stringValue>
+                </rightValue>
+            </conditions>
+            <label>Schedule&apos;s ADOC Expired Soon</label>
+        </rules>
+        <rules>
+            <name>Mismatch_EA_Data_on_Account</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Subject</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Mismatch EA Data on Account</stringValue>
+                </rightValue>
+            </conditions>
+            <label>Mismatch EA Data on Account</label>
+        </rules>
+        <rules>
+            <name>No_data_returned_for_Depot</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Subject</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>No data returned for Depot</stringValue>
+                </rightValue>
+            </conditions>
+            <label>No data returned for Depot</label>
+        </rules>
+        <rules>
+            <name>High_Spend_Warning</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Subject</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>: High Spend Warning</stringValue>
+                </rightValue>
+            </conditions>
+            <label>: High Spend Warning</label>
+        </rules>
+    </decisions>
+    <description>Auto delete system emails to preserve our data storage.</description>
+    <environments>Default</environments>
+    <interviewLabel>Email Messages: Auto-Delete System Emails {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Email Messages: Auto-Delete System Emails</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Orchestrator</processType>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Should_be_deleted</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Parent_Case_Number__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>EmailMessage</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>

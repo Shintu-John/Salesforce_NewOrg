@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>59.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Delivery_Date_Recent_Depot_Delivery</name>
+        <label>Delivery Date &gt; Recent Depot Delivery?</label>
+        <locationX>710</locationX>
+        <locationY>539</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Delivery_Date_Recent_Depot_Delivery1</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Delivery_Date__c</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <elementReference>$Record.Depot_Dispose__r.Last_Delivery_Job__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Last_Delivery_on_Depot</targetReference>
+            </connector>
+            <label>Delivery Date &gt; Recent Depot Delivery</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Delivery_Date_Today</name>
+        <label>Delivery Date &gt; Today?</label>
+        <locationX>512</locationX>
+        <locationY>431</locationY>
+        <defaultConnector>
+            <targetReference>Delivery_Date_Recent_Depot_Delivery</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Delivery_Today</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Delivery_Date__c</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <elementReference>NOW</elementReference>
+                </rightValue>
+            </conditions>
+            <label>Delivery &gt; Today</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Depot_Last_Delivery_Null</name>
+        <label>Depot Last Delivery Null?</label>
+        <locationX>281</locationX>
+        <locationY>323</locationY>
+        <defaultConnector>
+            <targetReference>Delivery_Date_Today</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Last_Delivery_Null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Depot_Dispose__r.Last_Delivery_Job__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Enter_First_DLD</targetReference>
+            </connector>
+            <label>Last Delivery Null?</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>NOW</name>
+        <dataType>DateTime</dataType>
+        <expression>now()</expression>
+    </formulas>
+    <interviewLabel>Manage Depot Last Delivery Job {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Manage Depot Last Delivery Job</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Enter_First_DLD</name>
+        <label>Enter First DLD</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <inputAssignments>
+            <field>Last_Delivery_Job__c</field>
+            <value>
+                <elementReference>$Record.Delivery_Date__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Depot_Dispose__r</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Last_Delivery_on_Depot</name>
+        <label>Update Last Delivery on Depot</label>
+        <locationX>578</locationX>
+        <locationY>647</locationY>
+        <inputAssignments>
+            <field>Last_Delivery_Job__c</field>
+            <value>
+                <elementReference>$Record.Delivery_Date__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Depot_Dispose__r</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>155</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Depot_Last_Delivery_Null</targetReference>
+        </connector>
+        <object>Job__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>

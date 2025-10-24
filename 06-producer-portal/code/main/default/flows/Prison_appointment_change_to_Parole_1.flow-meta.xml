@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>Migrated from the Prison appointment change to Parole process using Parole criteria.</description>
+    <label>Prison appointment change to Parole_1</label>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>myRule_1_A1</name>
+        <label>Update Prisoner</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>myRule_1_A2</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Current_RL_Status__c</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Prisoner__r</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>myRule_1_A2</name>
+        <label>Update work placement</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>myRule_1_A3</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Placement_type__c</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>ROTL</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Termination_date__c</field>
+            <value>
+                <elementReference>$Record.SystemModstamp</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Termination_reason__c</field>
+            <value>
+                <stringValue>Completed placement</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Prisoner__r.Prisoner_work_placements__r</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>myRule_1_A3</name>
+        <label>Update rotl 3/2</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Placement_type__c</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>ROTL 3/2</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Termination_date__c</field>
+            <value>
+                <elementReference>$Record.SystemModstamp</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Termination_reason__c</field>
+            <value>
+                <stringValue>Completed placement</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Prisoner__r.Prisoner_work_placements__r</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>myRule_1_A1</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Current_Prison_Status__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Current_Prison_Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Parole</stringValue>
+            </value>
+        </filters>
+        <object>Prison_Appointment__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>

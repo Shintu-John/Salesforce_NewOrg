@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Supplier_or_Sales</name>
+        <label>Supplier or Sales?</label>
+        <locationX>446</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Supplier</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Supplier_Change_Date__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Supplier_Increase_Applied__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Customer_Change_Date__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Calculate_Supplier_Increase</targetReference>
+            </connector>
+            <label>Supplier</label>
+        </rules>
+        <rules>
+            <name>Customer</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Customer_Change_Date__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Sales_Increase_Applied__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Supplier_Change_Date__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Calculate_Customer_Increase</targetReference>
+            </connector>
+            <label>Customer</label>
+        </rules>
+        <rules>
+            <name>Both</name>
+            <conditionLogic>1 AND 2 AND (3 OR 4)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Supplier_Change_Date__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Customer_Change_Date__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Supplier_Increase_Applied__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Sales_Increase_Applied__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Both</targetReference>
+            </connector>
+            <label>Both</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>CustomerIncreaseCalculator</name>
+        <dataType>Currency</dataType>
+        <expression>IF(
+  AND(
+    {!$Record.Pricing_Method__c} = &quot;Rebate&quot;,
+    OR(
+      ISNULL({!$Record.Current_Sales_Transport1__c}), 
+      ISNULL({!$Record.Sales_Transport__c})
+    )
+  ), 
+  NULL, 
+
+  IF(
+    AND(
+      {!$Record.Pricing_Method__c} &lt;&gt; &quot;Rebate&quot;,
+      OR(
+        ISNULL({!$Record.Current_Sales_Price__c}), 
+        ISNULL({!$Record.Sales_Price__c})
+      )
+    ), 
+    NULL, 
+
+    IF(
+      {!$Record.Pricing_Method__c} = &quot;Rebate&quot;,
+      ({!$Record.Sales_Transport__c} - {!$Record.Current_Sales_Transport1__c} ) / 
+        {!$Record.Current_Sales_Transport1__c} *100,
+
+      IF(
+        {!$Record.Pricing_Method__c} &lt;&gt; &quot;Rebate&quot;,
+        ({!$Record.Sales_Price__c} - {!$Record.Current_Sales_Price__c} ) / 
+          {!$Record.Current_Sales_Price__c} *100,
+
+        NULL
+      )
+    )
+  )
+)</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>SupplierIncreaseCalculator</name>
+        <dataType>Currency</dataType>
+        <expression>IF(
+  AND(
+    {!$Record.Pricing_Method__c} = &quot;Rebate&quot;,
+    OR(
+      ISNULL({!$Record.Supplier_Transport__c}), 
+      ISNULL({!$Record.Current_Supplier_Transport__c})
+    )
+  ), 
+  NULL, 
+
+  IF(
+    AND(
+      {!$Record.Pricing_Method__c} &lt;&gt; &quot;Rebate&quot;,
+      OR(
+        ISNULL({!$Record.Current_Supplier_Price__c}), 
+        ISNULL({!$Record.Supplier_Price__c})
+      )
+    ), 
+    NULL, 
+
+    IF(
+      {!$Record.Pricing_Method__c} = &quot;Rebate&quot;,
+      ( {!$Record.Supplier_Transport__c} - {!$Record.Current_Supplier_Transport__c} ) / 
+        {!$Record.Current_Supplier_Transport__c} *100, 
+
+      IF(
+        {!$Record.Pricing_Method__c} &lt;&gt; &quot;Rebate&quot;,
+        ( {!$Record.Supplier_Price__c} - {!$Record.Current_Supplier_Price__c} ) / 
+          {!$Record.Current_Supplier_Price__c} *100, 
+
+        NULL
+      )
+    )
+  )
+)</expression>
+        <scale>2</scale>
+    </formulas>
+    <interviewLabel>Price Increase: Auto Calculate Increase %s {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Price Increase: Auto Calculate Increase %s</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Calculate_Customer_Increase</name>
+        <label>Calculate Customer Increase</label>
+        <locationX>314</locationX>
+        <locationY>431</locationY>
+        <inputAssignments>
+            <field>Sales_Increase_Applied__c</field>
+            <value>
+                <elementReference>CustomerIncreaseCalculator</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Calculate_Supplier_Increase</name>
+        <label>Calculate Supplier Increase</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <inputAssignments>
+            <field>Supplier_Increase_Applied__c</field>
+            <value>
+                <elementReference>SupplierIncreaseCalculator</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Both</name>
+        <label>Update Both</label>
+        <locationX>578</locationX>
+        <locationY>431</locationY>
+        <inputAssignments>
+            <field>Sales_Increase_Applied__c</field>
+            <value>
+                <elementReference>CustomerIncreaseCalculator</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Supplier_Increase_Applied__c</field>
+            <value>
+                <elementReference>SupplierIncreaseCalculator</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>320</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Supplier_or_Sales</targetReference>
+        </connector>
+        <filterLogic>or</filterLogic>
+        <filters>
+            <field>Supplier_Increase_Applied__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Sales_Increase_Applied__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Price_Increase__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Obsolete</status>
+</Flow>

@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>This creates a text file and attaches this in a document to the current payment run object</description>
+        <name>Create_Text_File</name>
+        <label>Create Text File</label>
+        <locationX>768</locationX>
+        <locationY>67</locationY>
+        <actionName>CreateTextFileAction</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Set_File_Created_Date</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Flow_Error</targetReference>
+        </faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>fileConfigName</name>
+            <value>
+                <stringValue>PaymentRun</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>fileName</name>
+            <value>
+                <elementReference>fieldFileName</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>filterId</name>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>CreateTextFileAction</nameSegment>
+        <outputParameters>
+            <assignToReference>varContentDocumentId</assignToReference>
+            <name>contentDocumentId</name>
+        </outputParameters>
+    </actionCalls>
+    <apiVersion>50.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>added refresh functionality - clone from version - 1</description>
+    <formulas>
+        <description>This is used as the default file name</description>
+        <name>fxDefautFileName</name>
+        <dataType>String</dataType>
+        <expression>&quot;Payment Run - &quot; + {!recordId.Name} + &quot; - &quot; + TEXT({!$Flow.CurrentDate})</expression>
+    </formulas>
+    <interviewLabel>Payment Run Create File {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Payment Run Create File</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordUpdates>
+        <description>This sets the file created date/time</description>
+        <name>Set_File_Created_Date</name>
+        <label>Set File Created Date</label>
+        <locationX>998</locationX>
+        <locationY>66</locationY>
+        <connector>
+            <targetReference>File_Created</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Flow_Error</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>File_Created_On__c</field>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Payment_Run__c</object>
+    </recordUpdates>
+    <screens>
+        <description>This screen confirms the file name</description>
+        <name>Create_Payment_Run_CSV</name>
+        <label>Create Payment Run CSV</label>
+        <locationX>529</locationX>
+        <locationY>68</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Create_Text_File</targetReference>
+        </connector>
+        <fields>
+            <name>textCreateFileDescription</name>
+            <fieldText>&lt;p&gt;This will export the related invoice details into a text file which can then be submitted to finance. The file will be attached to the current Payment Run record.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>fieldFileName</name>
+            <dataType>String</dataType>
+            <defaultValue>
+                <elementReference>fxDefautFileName</elementReference>
+            </defaultValue>
+            <fieldText>File Name</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>true</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>File_Created</name>
+        <label>File Created</label>
+        <locationX>1169</locationX>
+        <locationY>67</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>textCompletionMessage</name>
+            <fieldText>&lt;p&gt;Click the link below to open the created file:&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;/{!varContentDocumentId}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;Payment Run File&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;This file can also be found attached to the current payment run.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>refreshComponent</name>
+            <extensionName>c:RefreshComponent</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Displays an error from the flow</description>
+        <name>Flow_Error</name>
+        <label>Flow Error</label>
+        <locationX>769</locationX>
+        <locationY>327</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>textFileCreationError</name>
+            <fieldText>&lt;p&gt;The following error was returned when trying to create this file:&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;{!$Flow.FaultMessage}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>50</locationX>
+        <locationY>50</locationY>
+        <connector>
+            <targetReference>Create_Payment_Run_CSV</targetReference>
+        </connector>
+    </start>
+    <status>Draft</status>
+    <variables>
+        <description>The record that triggered the flow (Summer 20 change)</description>
+        <name>recordId</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Payment_Run__c</objectType>
+    </variables>
+    <variables>
+        <description>This is the ID of the document that has been created</description>
+        <name>varContentDocumentId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

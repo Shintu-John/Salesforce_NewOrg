@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>50.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Reset_Due_Date_Flag_Assignment</name>
+        <label>Reset Due Date Flag Assignment</label>
+        <locationX>780</locationX>
+        <locationY>132</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Reset_Due_Date__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>getRelatedAccountPaymentDetails</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>This sets the due date based on the payment terms type and days</description>
+        <name>setDueDate</name>
+        <label>Set Due Date</label>
+        <locationX>1175</locationX>
+        <locationY>128</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Due_Date__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>fxCalculatedDueDate</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <description>Tests to see if the date has changed</description>
+        <name>decHasDateChanged</name>
+        <label>Has Date Changed</label>
+        <locationX>912</locationX>
+        <locationY>409</locationY>
+        <defaultConnectorLabel>No Change</defaultConnectorLabel>
+        <rules>
+            <name>Raised_Date_Changed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Raised_Date__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>varPriorRaisedDate</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>getRelatedAccountPaymentDetails</targetReference>
+            </connector>
+            <label>Raised Date Changed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Tests to see if this record is being updated</description>
+        <name>decIsRecordUpdate</name>
+        <label>Is Record Update OR No Due Date</label>
+        <locationX>543</locationX>
+        <locationY>131</locationY>
+        <defaultConnector>
+            <targetReference>getPriorInvoiceDate</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Updated Record</defaultConnectorLabel>
+        <rules>
+            <name>NewOrBlankDueDate</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Due_Date__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Reset_Due_Date__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Reset_Due_Date_Flag_Assignment</targetReference>
+            </connector>
+            <label>New or Blank Due Date</label>
+        </rules>
+    </decisions>
+    <description>21-01-2023: Reset Due Date flag added.
+        This sets the due date of an invoice based on the raised date and the related payment terms.
+        This is used instead of a formula to ensure that the date does not change if the terms on
+        the related account are changed. Added End of Next Month new picklist value.</description>
+    <environments>Default</environments>
+    <formulas>
+        <description>This is the calculated due date based on the invoice date and the payment terms</description>
+        <name>fxCalculatedDueDate</name>
+        <dataType>Date</dataType>
+        <expression>IF({!varAccountPaymentTerm} = &quot;End of month&quot;,
+            {!fxEndOfMonthDate},
+            IF({!varAccountPaymentTerm} = &quot;End of next month&quot;,
+            {!fxEndOfNextMonthDate},
+            IF({!varAccountPaymentTerm} = &quot;Days&quot;,
+            {!$Record.Raised_Date__c} + {!varPaymentTermDays},
+            {!$Record.Raised_Date__c}
+            )
+            )
+            )</expression>
+    </formulas>
+    <formulas>
+        <description>Calculates the end of the month based on the invoice date</description>
+        <name>fxEndOfMonthDate</name>
+        <dataType>Date</dataType>
+        <expression>IF(MONTH({!$Record.Raised_Date__c}) = 12,
+            DATE(YEAR({!$Record.Raised_Date__c}), 12, 31),
+            DATE(YEAR({!$Record.Raised_Date__c}), MONTH({!$Record.Raised_Date__c}) + 1, 1) - 1
+            )</expression>
+    </formulas>
+    <formulas>
+        <name>fxEndOfNextMonthDate</name>
+        <dataType>Date</dataType>
+        <expression>ADDMONTHS( {!fxEndOfMonthDate} , 1)</expression>
+    </formulas>
+    <interviewLabel>Invoice - Before Trigger - Set Due Date {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Invoice - Before Trigger - Set Due Date</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>This gets the current record prior to this save</description>
+        <name>getPriorInvoiceDate</name>
+        <label>Get Prior Invoice Date</label>
+        <locationX>556</locationX>
+        <locationY>404</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>decHasDateChanged</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <object>Invoice__c</object>
+        <outputAssignments>
+            <assignToReference>varPriorRaisedDate</assignToReference>
+            <field>Raised_Date__c</field>
+        </outputAssignments>
+    </recordLookups>
+    <recordLookups>
+        <description>This gets the payment term and days from the related account</description>
+        <name>getRelatedAccountPaymentDetails</name>
+        <label>Get Related Account Payment Details</label>
+        <locationX>915</locationX>
+        <locationY>130</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>setDueDate</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Account__c</elementReference>
+            </value>
+        </filters>
+        <object>Account</object>
+        <outputAssignments>
+            <assignToReference>varAccountPaymentTerm</assignToReference>
+            <field>Payment_Term__c</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>varPaymentTermDays</assignToReference>
+            <field>Payment_Terms_Days__c</field>
+        </outputAssignments>
+    </recordLookups>
+    <start>
+        <locationX>50</locationX>
+        <locationY>50</locationY>
+        <connector>
+            <targetReference>decIsRecordUpdate</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Raised_Date__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Account__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Invoice__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Obsolete</status>
+    <variables>
+        <description>This is the type of payment terms</description>
+        <name>varAccountPaymentTerm</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>The number of days before this payment is due</description>
+        <name>varPaymentTermDays</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <description>The original date before this save. This is used to determine whether this has
+            changed.</description>
+        <name>varPriorRaisedDate</name>
+        <dataType>Date</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

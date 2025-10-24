@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Redirect_To_Adoc</name>
+        <label>Redirect To Adoc</label>
+        <locationX>314</locationX>
+        <locationY>566</locationY>
+        <actionName>ecflc:flowURLRedirect</actionName>
+        <actionType>component</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>urlRedirect</name>
+            <value>
+                <elementReference>redirectToADOC</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>ecflc:flowURLRedirect</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <apiVersion>54.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Job_Validation</name>
+        <label>Job Validation</label>
+        <locationX>182</locationX>
+        <locationY>242</locationY>
+        <defaultConnector>
+            <targetReference>Create_ADOC_Screen</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Job_Not_Attached_with_Schedule</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>jobRec.Schedule__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Validation_Schedule_Missing</targetReference>
+            </connector>
+            <label>Job Not Attached with Schedule</label>
+        </rules>
+    </decisions>
+    <description>10-04-2024: added Disable_Default_Signature_Page parameter
+27-02-2024:  changed from address from 0D24H00000004PTSAY to 0D2Sj00000000MbKAI
+10-04-2023 : added logic to only select today&apos;s or future Date Range
+-esign__Hand_Signature_Required set to true
+- Merge_Signature_Fields set to true
+-create ADOC from esign</description>
+    <environments>Default</environments>
+    <formulas>
+        <description>10/10/2025 add to static id
+&quot;/apex/rsdoc__GenerateDocument?id=&quot;+{!jobRec.Id}+&quot;&amp;templateId=GDT-000052&amp;attach=false&amp;output=pdf&amp;signatureAction=Preview&amp;witnessRequired=false&amp;signer2Name=&amp;signer2Email=&amp;signer2EmailTemplate=&amp;counterSignMethod=No Counter Sign Needed&amp;counterSignedBy=&amp;esignparam1=Job&amp;esignparamvalue1=&quot;+{!jobRec.Id}+&quot;&amp;esignparam2=Schedule&amp;esignparamvalue2=&quot;+{!jobRec.Schedule__c}+&quot;&amp;emailTo=&quot;+{!jobRec.Site_Manager__c}+&quot;&amp;emailTemplate=00X4H000002FajxUAC&amp;emailToAdditional=&amp;emailCC=&amp;emailBCC=&amp;mergeAdditional=false&amp;redirectTo=Record&amp;emailFrom=0D2Sj00000000MbKAI&quot;+ IF({!ADOC_Activation_Date} == null,&quot;&quot;,&quot;&amp;esignparam3=ADOC_Activation_Date&amp;esignparamvalue3=&quot;+TEXT({!ADOC_Activation_Date}))+ IF({!ADOC_Expiration_Date} == null,&quot;&quot;,&quot;&amp;esignparam4=ADOC_Expiration_Date&amp;esignparamvalue4=&quot;+TEXT({!ADOC_Expiration_Date}))+&quot;&amp;esignparam5=Merge_Signature_Fields&amp;esignparamvalue5=&quot;+&quot;true&quot;+&quot;&amp;esignparam6=Hand_Signature_Required&amp;esignparamvalue6=&quot;+&quot;true&quot;</description>
+        <name>redirectToADOC</name>
+        <dataType>String</dataType>
+        <expression>&quot;/apex/rsdoc__GenerateDocument?id=&quot;+{!jobRec.Id}+&quot;&amp;templateId=$Setup.Static_Id__c.DocumentAction_CreateADOC__c&amp;attach=false&amp;output=pdf&amp;signatureAction=Preview&amp;witnessRequired=false&amp;signer2Name=&amp;signer2Email=&amp;signer2EmailTemplate=&amp;counterSignMethod=No Counter Sign Needed&amp;counterSignedBy=&amp;esignparam1=Job&amp;esignparamvalue1=&quot;+{!jobRec.Id}+&quot;&amp;esignparam2=Schedule&amp;esignparamvalue2=&quot;+{!jobRec.Schedule__c}+&quot;&amp;emailTo=&quot;+{!jobRec.Site_Manager__c}+&quot;&amp;emailTemplate=00X4H000002FajxUAC&amp;emailToAdditional=&amp;emailCC=&amp;emailBCC=&amp;mergeAdditional=false&amp;redirectTo=Record&amp;emailFrom=0D2Sj00000000MbKAI&quot;+ IF({!ADOC_Activation_Date} == null,&quot;&quot;,&quot;&amp;esignparam3=ADOC_Activation_Date&amp;esignparamvalue3=&quot;+TEXT({!ADOC_Activation_Date}))+ IF({!ADOC_Expiration_Date} == null,&quot;&quot;,&quot;&amp;esignparam4=ADOC_Expiration_Date&amp;esignparamvalue4=&quot;+TEXT({!ADOC_Expiration_Date}))+&quot;&amp;esignparam5=Merge_Signature_Fields&amp;esignparamvalue5=&quot;+&quot;true&quot;+&quot;&amp;esignparam6=Hand_Signature_Required&amp;esignparamvalue6=&quot;+&quot;true&quot;</expression>
+    </formulas>
+    <formulas>
+        <name>redirectToADOC_Conga</name>
+        <dataType>String</dataType>
+        <expression>&quot;/apex/Conga_Composer?id=&quot; + {!jobRec.Id}  + &quot;&amp;TemplateId=a56Sq0000002xDhIAI&amp;DefaultPDF=1&quot;</expression>
+    </formulas>
+    <interviewLabel>Create ADOC {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Create ADOC</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordLookups>
+        <name>jobRec</name>
+        <label>jobRec</label>
+        <locationX>182</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Job_Validation</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Job__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Schedule</name>
+        <label>Update Schedule</label>
+        <locationX>314</locationX>
+        <locationY>458</locationY>
+        <connector>
+            <targetReference>Redirect_To_Adoc</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>jobRec.Schedule__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>ADOC_Activation_Date__c</field>
+            <value>
+                <elementReference>ADOC_Activation_Date</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ADOC_Expiration_Date__c</field>
+            <value>
+                <elementReference>ADOC_Expiration_Date</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Schedule__c</object>
+    </recordUpdates>
+    <screens>
+        <name>Create_ADOC_Screen</name>
+        <label>Create ADOC Screen</label>
+        <locationX>314</locationX>
+        <locationY>350</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Update_Schedule</targetReference>
+        </connector>
+        <fields>
+            <name>Create_ADOC_Screen_Section1</name>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Create_ADOC_Screen_Section1_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>ADOC_Activation_Date</name>
+                    <dataType>Date</dataType>
+                    <fieldText>ADOC Activation Date</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                    <validationRule>
+                        <errorMessage>&lt;p&gt;Should be greater than or equal to &lt;strong&gt;TODAY&lt;/strong&gt;&apos;s Date&lt;/p&gt;</errorMessage>
+                        <formulaExpression>{!ADOC_Activation_Date} &gt;= {!$Flow.CurrentDate}</formulaExpression>
+                    </validationRule>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>Create_ADOC_Screen_Section1_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>ADOC_Expiration_Date</name>
+                    <dataType>Date</dataType>
+                    <fieldText>ADOC Expiration Date</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                    <validationRule>
+                        <errorMessage>&lt;p&gt;Should be greater than or equal to &lt;strong&gt;ADOC Activation Date&lt;/strong&gt;.&lt;/p&gt;</errorMessage>
+                        <formulaExpression>{!ADOC_Activation_Date} &lt;= {!ADOC_Expiration_Date}</formulaExpression>
+                    </validationRule>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithoutHeader</regionContainerType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Validation_Schedule_Missing</name>
+        <label>Validation Schedule Missing</label>
+        <locationX>50</locationX>
+        <locationY>350</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>scheduleMissingText</name>
+            <fieldText>&lt;p&gt;&lt;b style=&quot;font-size: 14px;&quot;&gt;This job is not attached with schedule.&lt;/b&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>jobRec</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

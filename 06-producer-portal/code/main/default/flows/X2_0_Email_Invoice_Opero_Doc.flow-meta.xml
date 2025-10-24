@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Other_Emails_Replace_with</name>
+        <label>Other Emails (Replace ; with ,)</label>
+        <locationX>578</locationX>
+        <locationY>1358</locationY>
+        <actionName>FlowUtility_ReplaceText</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Remove_Empty_Address</targetReference>
+        </connector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>originalText</name>
+            <value>
+                <elementReference>Get_Invoice_Rec.Account__r.Other_Emails__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>replaceText</name>
+            <value>
+                <stringValue>;</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>replaceWith</name>
+            <value>
+                <stringValue>,</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>FlowUtility_ReplaceText</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <actionCalls>
+        <name>Prepare_the_Invoice_Items</name>
+        <label>Prepare the Invoice Items</label>
+        <locationX>578</locationX>
+        <locationY>1682</locationY>
+        <actionName>CreateInvoiceController</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Redirect_To_URL</targetReference>
+        </connector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>inputs</name>
+            <value>
+                <elementReference>Get_Invoice_Rec.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>CreateInvoiceController</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Redirect_To_URL</name>
+        <label>Redirect To URL</label>
+        <locationX>578</locationX>
+        <locationY>1790</locationY>
+        <actionName>ecflc:flowURLRedirect</actionName>
+        <actionType>component</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>urlRedirect</name>
+            <value>
+                <elementReference>redirectToUrl</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>ecflc:flowURLRedirect</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <actionCalls>
+        <name>Remove_Empty_Address</name>
+        <label>Remove Empty Address</label>
+        <locationX>578</locationX>
+        <locationY>1466</locationY>
+        <actionName>FlowUtility_RemoveEmptyItems</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>screenEmailRecipient</targetReference>
+        </connector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>originalText</name>
+            <value>
+                <elementReference>sendToAddressesDefault</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>seperator</name>
+            <value>
+                <stringValue>,</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>FlowUtility_RemoveEmptyItems</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <apiVersion>51.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Alternative_Accounts_Email_Assignment</name>
+        <label>Alternative Accounts Email Assignment</label>
+        <locationX>930</locationX>
+        <locationY>890</locationY>
+        <assignmentItems>
+            <assignToReference>AlternativeAccountsEmail</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Iterate_Job_Charges.Job__r.Order__r.Alternative_Accounts_Email__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Iterate_Job_Charges</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Initial_Assignment</name>
+        <label>Initial Assignment</label>
+        <locationX>578</locationX>
+        <locationY>350</locationY>
+        <assignmentItems>
+            <assignToReference>AlternativeAccountsEmail</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>recordId.Accounts_Email__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Invoice_Record_Type_Decision</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Invoice_Record_Type_Decision</name>
+        <label>Invoice Record Type Decision</label>
+        <locationX>578</locationX>
+        <locationY>458</locationY>
+        <defaultConnector>
+            <targetReference>Get_Job_Charges</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Record_Type_RLCS_Invoice</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Invoice_Rec.RecordType.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>RLCS Invoice</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Document_Action_ID</targetReference>
+            </connector>
+            <label>Record Type = RLCS Invoice</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_Alternative_Accounts_Email_Available_On_Order</name>
+        <label>Is Alternative Accounts Email Available On Order</label>
+        <locationX>1062</locationX>
+        <locationY>782</locationY>
+        <defaultConnector>
+            <targetReference>Iterate_Job_Charges</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Alternative_Accounts_Email</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Iterate_Job_Charges.Job__r.Order__r.Alternative_Accounts_Email__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Alternative_Accounts_Email_Assignment</targetReference>
+            </connector>
+            <label>Alternative Accounts Email</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Validation_Decision</name>
+        <label>Validation Decision</label>
+        <locationX>314</locationX>
+        <locationY>242</locationY>
+        <defaultConnector>
+            <targetReference>Initial_Assignment</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Trading_Company_Missing</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Invoice_Rec.Template_Company_Name__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Trading_Company_Missing_Screen</targetReference>
+            </connector>
+            <label>Trading Company Missing</label>
+        </rules>
+    </decisions>
+    <description>10-10-2025 : added conga url
+01-09-2025 : added Obligation Fee (Batteries)
+        21-05-2025 : added CreateInvoiceController action
+        20-05-2025: added dynamic email template ID for RLCS</description>
+    <environments>Default</environments>
+    <formulas>
+        <description>IF({!Get_Invoice_Rec.RecordType.Name} == &quot;RLCS Invoice&quot;,
+            IF(CONTAINS(TEXT({!Get_Invoice_Rec.Invoice_Type__c}), &quot;Obligation Fee&quot; ),
+            {!$Setup.Static_Id__c.DocumentAction_CreateRLCSInvoiceObli__c},
+            IF(ISPICKVAL({!Get_Invoice_Rec.Invoice_Type__c}, &quot;Trade&quot; ),
+            {!$Setup.Static_Id__c.DocumentAction_CreateRLCSInvoiceEvidence__c},
+            IF(CONTAINS(TEXT({!Get_Invoice_Rec.Invoice_Type__c}), &quot;ProducerContract&quot; ),
+            {!$Setup.Static_Id__c.DocumentAction_CreateRLCSInvoiceMembersh__c},
+            IF(ISPICKVAL({!Get_Invoice_Rec.Invoice_Type__c}, &quot;Rebate&quot; ),
+            {!$Setup.Static_Id__c.DocumentAction_CreateRLCSInvoiceRebate__c},
+            &apos;GDT-{!$Setup.Static_Id__c.DocumentAction_CreateRLCSInvoiceRLCSJob__c}&apos;))
+            )
+            )
+            , {!$Setup.Static_Id__c.DocumentAction_CreateInvoice__c})</description>
+        <name>documentActionId</name>
+        <dataType>String</dataType>
+        <expression>IF({!Get_Invoice_Rec.RecordType.Name} == &quot;RLCS Invoice&quot;,
+            IF(CONTAINS(TEXT({!Get_Invoice_Rec.Invoice_Type__c}), &quot;Obligation Fee&quot; ),
+            {!$Setup.Static_Id__c.DocumentAction_CreateRLCSInvoiceObli__c},
+            IF(ISPICKVAL({!Get_Invoice_Rec.Invoice_Type__c}, &quot;Trade&quot; ),
+            {!$Setup.Static_Id__c.DocumentAction_CreateRLCSInvoiceEvidence__c},
+            IF(CONTAINS(TEXT({!Get_Invoice_Rec.Invoice_Type__c}), &quot;ProducerContract&quot; ),
+            {!$Setup.Static_Id__c.DocumentAction_CreateRLCSInvoiceMembersh__c},
+            IF(ISPICKVAL({!Get_Invoice_Rec.Invoice_Type__c}, &quot;Rebate&quot; ),
+            {!$Setup.Static_Id__c.DocumentAction_CreateRLCSInvoiceRebate__c},
+            &apos;GDT-$Setup.Static_Id__c.DocumentAction_CreateRLCSInvoiceRLCSJob__c&apos;))
+            )
+            )
+            , {!$Setup.Static_Id__c.DocumentAction_CreateInvoice__c})</expression>
+    </formulas>
+    <formulas>
+        <name>emailTemplateId</name>
+        <dataType>String</dataType>
+        <expression>IF({!Get_Invoice_Rec.RecordType.Name} == &quot;RLCS Invoice&quot;,
+            &quot;00XSj000001hweTMAQ&quot;
+            , &quot;00X4H000002DR9XUAW&quot;)</expression>
+    </formulas>
+    <formulas>
+        <description>&quot;/apex/rsdoc__GenerateDocument?id=&quot;+{!Get_Invoice_Rec.Id}+&quot;&amp;templateId=&quot;
+            + {!documentActionId} +
+            &quot;&amp;attach=true&amp;output=pdf&amp;saveInField=Invoice_Link__c&amp;emailAction=Preview&amp;emailToAdditional=&quot;+{!Send_To_Email}+&quot;&amp;emailTemplate=&quot;
+            + {!emailTemplateId} +
+            &quot;&amp;emailCC=&quot;+{!ccEmail}+&quot;&amp;emailBCC=&amp;emailFrom=0D2Sj00000000UfKAI&amp;mergeAdditional=false&amp;redirectTo=Record&quot;</description>
+        <name>redirectToUrl</name>
+        <dataType>String</dataType>
+        <expression>&quot;/apex/APXTConga4__Conga_Composer?id=&quot; + {!Get_Invoice_Rec.Id} + &quot;&amp;TemplateId=&quot; + {!documentActionId} + &quot;&amp;EmailTemplateId=&quot; + {!emailTemplateId} + &quot;&amp;EmailFromId=&quot; + {!$Setup.Static_Id__c.OrgWideEmailAddress_RLESInvoices__c} + &quot;&amp;EmailAdditionalTo=&quot; + {!Send_To_Email} + &quot;&amp;EmailCC=&quot; + {!ccEmail} + &quot;&amp;DS7=2&amp;DefaultPDF=1&quot;</expression>
+    </formulas>
+    <formulas>
+        <name>sendToAddressesDefault</name>
+        <dataType>String</dataType>
+        <expression>IF({!AlternativeAccountsEmail} == null , &apos;&apos;,
+            {!AlternativeAccountsEmail}) + &apos;,&apos; + {!Other_Emails_Replace_with}</expression>
+    </formulas>
+    <formulas>
+        <name>tradingCompanyErrorMessage</name>
+        <dataType>String</dataType>
+        <expression>&quot;This Client does not have a &quot; + IF({!Get_Invoice_Rec.RecordType.Name}== &apos;RLCS Invoice&apos; , &apos; RLCS &apos; , &apos;&apos;) + &quot; Trading Company associated. This is required to create the Invoice. Check with the System Admin.&quot;</expression>
+    </formulas>
+    <interviewLabel>2.0 Email Invoice (Opero Doc) {!$Flow.CurrentDateTime}</interviewLabel>
+    <isAdditionalPermissionRequiredToRun>true</isAdditionalPermissionRequiredToRun>
+    <label>2.0 Email Invoice (Opero Doc)</label>
+    <loops>
+        <name>Iterate_Job_Charges</name>
+        <label>Iterate Job Charges</label>
+        <locationX>842</locationX>
+        <locationY>674</locationY>
+        <collectionReference>Get_Job_Charges</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Is_Alternative_Accounts_Email_Available_On_Order</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Get_Document_Action_ID</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordLookups>
+        <name>Get_Document_Action_ID</name>
+        <label>Get Document Action ID</label>
+        <locationX>578</locationX>
+        <locationY>1250</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Other_Emails_Replace_with</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>documentActionId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Account</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Invoice_Rec</name>
+        <label>Get Invoice Rec</label>
+        <locationX>314</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Validation_Decision</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Invoice__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Job_Charges</name>
+        <label>Get Job Charges</label>
+        <locationX>842</locationX>
+        <locationY>566</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Iterate_Job_Charges</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Invoice__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Job_Charge__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <runInMode>SystemModeWithoutSharing</runInMode>
+    <screens>
+        <description>This gives options about what will be emailed</description>
+        <name>screenEmailRecipient</name>
+        <label>Email Recipient</label>
+        <locationX>578</locationX>
+        <locationY>1574</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Prepare_the_Invoice_Items</targetReference>
+        </connector>
+        <fields>
+            <name>textEmailSendToMessage</name>
+            <fieldText>&lt;p&gt;This will email the created invoice to the following email address.
+                You can change this, add a cc address and optionally select to recieve a
+                copy.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Send_To_Email</name>
+            <dataType>String</dataType>
+            <defaultValue>
+                <elementReference>Remove_Empty_Address</elementReference>
+            </defaultValue>
+            <fieldText>Send To Email</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <validationRule>
+                <errorMessage>&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);
+                    color: rgb(68, 68, 68);&quot;&gt;use comma as a separator instead of ; (semi
+                    colon)&lt;/span&gt;&lt;/p&gt;</errorMessage>
+                <formulaExpression>NOT(CONTAINS({!Send_To_Email}, &apos;;&apos;))</formulaExpression>
+            </validationRule>
+        </fields>
+        <fields>
+            <name>ccEmail</name>
+            <dataType>String</dataType>
+            <fieldText>CC Email</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <validationRule>
+                <errorMessage>&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);
+                    color: rgb(68, 68, 68);&quot;&gt;use comma as a separator instead of ; (semi
+                    colon)&lt;/span&gt;&lt;/p&gt;</errorMessage>
+                <formulaExpression>NOT(CONTAINS({!ccEmail}, &apos;;&apos;))</formulaExpression>
+            </validationRule>
+        </fields>
+        <fields>
+            <name>checkbocReceiveCopyViaEmail</name>
+            <dataType>Boolean</dataType>
+            <defaultValue>
+                <booleanValue>false</booleanValue>
+            </defaultValue>
+            <fieldText>Receive Copy via Email</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Trading_Company_Missing_Screen</name>
+        <label>Trading Company Missing Screen</label>
+        <locationX>50</locationX>
+        <locationY>350</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>TradingCompanyMessage</name>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;color: rgb(202, 7, 7); font-size:
+                14px;&quot;&gt;{!tradingCompanyErrorMessage}&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>188</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Invoice_Rec</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>AlternativeAccountsEmail</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This is the Invoice record that the flow was triggered from</description>
+        <name>recordId</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Invoice__c</objectType>
+    </variables>
+</Flow>

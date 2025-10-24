@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Add_Obligation_Placed_On_Market_Data_In_list</name>
+        <label>Add Obligation Placed On Market Data In list</label>
+        <locationX>270</locationX>
+        <locationY>755</locationY>
+        <assignmentItems>
+            <assignToReference>recordsToCreate</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>recordToCreate</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Iterate_Producer_Market</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Initial_Assignment</name>
+        <label>Initial Assignment</label>
+        <locationX>182</locationX>
+        <locationY>323</locationY>
+        <assignmentItems>
+            <assignToReference>quarterStartDate</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>InitialQuarterStartDate</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Producer_Placed_on_Market</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Obligation_Placed_On_Market_Data_Assignment</name>
+        <label>Obligation Placed On Market Data Assignment</label>
+        <locationX>270</locationX>
+        <locationY>647</locationY>
+        <assignmentItems>
+            <assignToReference>recordToCreate.Producer_Obligation__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>recordToCreate.Producer_Placed_on_Market__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Iterate_Producer_Market.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Add_Obligation_Placed_On_Market_Data_In_list</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Records_To_Create_Count</name>
+        <label>Records To Create Count</label>
+        <locationX>182</locationX>
+        <locationY>947</locationY>
+        <assignmentItems>
+            <assignToReference>recordsToCreateCount</assignToReference>
+            <operator>AssignCount</operator>
+            <value>
+                <elementReference>recordsToCreate</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Record_Count_Decision</targetReference>
+        </connector>
+    </assignments>
+    <customErrors>
+        <name>errorMessage</name>
+        <label>errorMessage</label>
+        <locationX>314</locationX>
+        <locationY>1163</locationY>
+        <customErrorMessages>
+            <errorMessage>Please ensure you have uploaded all the relevant (4 Quarter) on market data for {!prevYear} with Acknowledgement of Statements.</errorMessage>
+            <fieldSelection>Compliance_Year__c</fieldSelection>
+            <isFieldError>true</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <decisions>
+        <name>Record_Count_Decision</name>
+        <label>Record Count Decision</label>
+        <locationX>182</locationX>
+        <locationY>1055</locationY>
+        <defaultConnector>
+            <targetReference>errorMessage</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Record_Count_4</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recordsToCreateCount</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <numberValue>4.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Obligation_Placed_On_Market_Data</targetReference>
+            </connector>
+            <label>Record Count = 4</label>
+        </rules>
+    </decisions>
+    <description>01-05-2025 : fetch last 4 acknowledge quarters
+06-12-2024 : added Obligation Type filter on producer placed on market records
+25-11-2024 : check Acknowledgement of Statements = TRUE
+21-11-2024: removed the contract and added the account to get the market placed data
+11-11-2025: added validation: Please ensure you have uploaded all the relevant on market data for xxxx
+11-11-2025: added Obligation Placed On Market Data creation
+05-11-2025: added compliance as a default date if it&apos;s past</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>complianceDate</name>
+        <dataType>Date</dataType>
+        <expression>DATE(VALUE(TEXT({!$Record.Compliance_Year__c})), 01, 01)</expression>
+    </formulas>
+    <formulas>
+        <name>currentQuarterName</name>
+        <dataType>String</dataType>
+        <expression>&quot;Q&quot; + TEXT(FLOOR(MONTH({!quarterStartDate}) / 3) + 1)</expression>
+    </formulas>
+    <formulas>
+        <name>endDate</name>
+        <dataType>Date</dataType>
+        <expression>IF(NOT(ISNULL({!complianceDate})) &amp;&amp; {!complianceDate} &lt; {!$Flow.CurrentDate}, {!complianceDate}, {!$Flow.CurrentDate})</expression>
+    </formulas>
+    <formulas>
+        <name>InitialQuarterStartDate</name>
+        <dataType>Date</dataType>
+        <expression>CASE(
+    FLOOR((MONTH({!startDate}) - 1) / 3),
+    0, DATE(YEAR({!startDate}), 1, 1),
+    1, DATE(YEAR({!startDate}), 4, 1),
+    2, DATE(YEAR({!startDate}), 7, 1),
+    3, DATE(YEAR({!startDate}), 10, 1),
+    NULL
+)</expression>
+    </formulas>
+    <formulas>
+        <name>prevYear</name>
+        <dataType>String</dataType>
+        <expression>TEXT(VALUE(TEXT({!$Record.Compliance_Year__c})) - 1)</expression>
+    </formulas>
+    <formulas>
+        <name>startDate</name>
+        <dataType>Date</dataType>
+        <expression>ADDMONTHS( {!endDate}, -12)</expression>
+    </formulas>
+    <interviewLabel>Link Procedure Obligation To Market Data {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Link Procedure Obligation To Market Data</label>
+    <loops>
+        <name>Iterate_Producer_Market</name>
+        <label>Iterate Producer Market</label>
+        <locationX>182</locationX>
+        <locationY>539</locationY>
+        <collectionReference>Get_Producer_Placed_on_Market</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Obligation_Placed_On_Market_Data_Assignment</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Records_To_Create_Count</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_Obligation_Placed_On_Market_Data</name>
+        <label>Create Obligation Placed On Market Data</label>
+        <locationX>50</locationX>
+        <locationY>1163</locationY>
+        <inputReference>recordsToCreate</inputReference>
+    </recordCreates>
+    <recordLookups>
+        <name>Get_Producer_Placed_on_Market</name>
+        <label>Get Producer Placed on Market</label>
+        <locationX>182</locationX>
+        <locationY>431</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Iterate_Producer_Market</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Account__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Producer_Contract__r.Account__c</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Acknowledgement_of_Statements__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Record_Type_Name__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Producer_Contract__r.Obligation_Type__c</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Quarter_Start_Date__c</field>
+            <operator>LessThan</operator>
+            <value>
+                <elementReference>endDate</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Producer_Placed_on_Market__c</object>
+        <sortField>Quarter_Start_Date__c</sortField>
+        <sortOrder>Desc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Initial_Assignment</targetReference>
+        </connector>
+        <object>Producer_Obligation__c</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>quarterStartDate</name>
+        <dataType>Date</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>recordsToCreate</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Obligation_Placed_On_Market_Data__c</objectType>
+    </variables>
+    <variables>
+        <name>recordsToCreateCount</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <name>recordToCreate</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Obligation_Placed_On_Market_Data__c</objectType>
+    </variables>
+    <variables>
+        <name>validQuarterList</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

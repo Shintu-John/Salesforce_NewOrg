@@ -8,9 +8,9 @@
         <locationX>176</locationX>
         <locationY>323</locationY>
         <defaultConnector>
-            <targetReference>No_Status_Change</targetReference>
+            <targetReference>Set_Status_Waiting_For_Data</targetReference>
         </defaultConnector>
-        <defaultConnectorLabel>No Change Needed</defaultConnectorLabel>
+        <defaultConnectorLabel>Default Status</defaultConnectorLabel>
         <rules>
             <name>Is_Signed</name>
             <conditionLogic>and</conditionLogic>
@@ -138,10 +138,17 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordUpdates>
-        <name>No_Status_Change</name>
-        <label>No Status Change</label>
+        <name>Set_Status_Waiting_For_Data</name>
+        <label>Set Status: Waiting for Market Data</label>
         <locationX>50</locationX>
         <locationY>431</locationY>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Waiting for Market Data</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
     </recordUpdates>
     <recordUpdates>
         <name>Set_Status_Acknowledge_Market_Data</name>

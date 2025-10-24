@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>myRule_1</name>
+        <label>Status = Workshop</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>myRule_3</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>FALSE_Status = Workshop</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_myRule_1</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Current_RL_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Workshop</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>myRule_1_A1</targetReference>
+            </connector>
+            <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+            <label>TRUE_Status = Workshop</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>myRule_3</name>
+        <label>Status = ROTL</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>myRule_5</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>FALSE_Status = ROTL</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_myRule_3</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Current_RL_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>ROTL - RL</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>myRule_3_A1</targetReference>
+            </connector>
+            <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+            <label>TRUE_Status = ROTL</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>myRule_5</name>
+        <label>Status = ROTL External</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>myRule_7</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>FALSE_Status = ROTL External</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_myRule_5</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Current_RL_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>ROTL - External</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>myRule_5_A1</targetReference>
+            </connector>
+            <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+            <label>TRUE_Status = ROTL External</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>myRule_7</name>
+        <label>Status = Completed</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>myRule_9</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>FALSE_Status = Completed</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_myRule_7</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Current_RL_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Completed</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Actual_Release_Date__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>myRule_7_A1</targetReference>
+            </connector>
+            <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+            <label>TRUE_Status = Completed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>myRule_9</name>
+        <label>Status = No Longer Working with RL</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>FALSE_Status = No Longer Working with RL</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_myRule_9</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Current_RL_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>No longer working with RL</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>myRule_9_A1</targetReference>
+            </connector>
+            <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+            <label>TRUE_Status = No Longer Working with RL</label>
+        </rules>
+    </decisions>
+    <description>Migrated from the Prisoner Status Updates process using multiple criteria.</description>
+    <label>Prisoner Status Updates_1</label>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>myRule_1_A1</name>
+        <label>Prison App - Serving Sentence</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Current_Prison_Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Serving sentence</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Current_Prison_Status__c</field>
+            <value>
+                <stringValue>Serving sentence</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Prison_Appointments__r</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>myRule_3_A1</name>
+        <label>Prison APP - ROTL</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Current_Prison_Status__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>No longer working with RL</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Current_Prison_Status__c</field>
+            <value>
+                <stringValue>ROTL</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Prison_Appointments__r</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>myRule_5_A1</name>
+        <label>Prison APP - ROTL</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Current_Prison_Status__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>No longer working with RL</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Current_Prison_Status__c</field>
+            <value>
+                <stringValue>ROTL</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Prison_Appointments__r</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>myRule_7_A1</name>
+        <label>Prison APP - Parole</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>myRule_7_A2</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Current_Prison_Status__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>No longer working with RL</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Current_Prison_Status__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Current_Prison_Status__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Parole</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Current_Prison_Status__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Service Sentence Eligible for ROTL</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Actual_release_date__c</field>
+            <value>
+                <elementReference>$Record.Actual_Release_Date__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Current_Prison_Status__c</field>
+            <value>
+                <stringValue>Parole</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Prison_Appointments__r</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>myRule_7_A2</name>
+        <label>Workshop current status</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Workshop_current_status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Current</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Workshop_current_status__c</field>
+            <value>
+                <stringValue>Previous</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Workshop_end_date__c</field>
+            <value>
+                <elementReference>$Record.Actual_Release_Date__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Workshop_Appointment__r</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>myRule_9_A1</name>
+        <label>Prison APP - No longer working with RL</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Current_Prison_Status__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>No longer working with RL</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Current_Prison_Status__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Current_Prison_Status__c</field>
+            <value>
+                <stringValue>No longer working with RL</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Prison_Appointments__r</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>myRule_1</targetReference>
+        </connector>
+        <object>Prisoner__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>

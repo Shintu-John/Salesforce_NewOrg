@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <environments>Default</environments>
+    <interviewLabel>Openreach: Child Mixed Job Fixed Cost {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Openreach: Child Mixed Job Fixed Cost</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_Tipping_Charge</name>
+        <label>Create Tipping Charge</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>Charge_Type__c</field>
+            <value>
+                <stringValue>Tipping</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Cost__c</field>
+            <value>
+                <elementReference>$Record.Order_Product__r.Supplier_price__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description__c</field>
+            <value>
+                <stringValue>Muckaway charge</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Job__c</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Sales_Account__c</field>
+            <value>
+                <elementReference>$Record.Order_Product__r.Order.Account.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Sales_Price__c</field>
+            <value>
+                <elementReference>$Record.Order_Product__r.Sales_Price__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Vendor_Account__c</field>
+            <value>
+                <elementReference>$Record.Order_Product__r.Partner__r.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Job_Charge__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Create_Tipping_Charge</targetReference>
+        </connector>
+        <filterFormula>AND(
+{!$Record.Account__r.Id} = &quot;0014H00002QCOgYQAX&quot;,
+{!$Record.Parent_Job__r.Is_Mixed_Job__c}= TRUE,
+ISPICKVAL({!$Record.Order_Product__r.Pricing_method__c} , &quot;Fixed&quot;)
+
+)</filterFormula>
+        <object>Job__c</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>

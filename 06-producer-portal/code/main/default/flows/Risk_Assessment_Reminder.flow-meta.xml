@@ -1,0 +1,743 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>Sends an email to Gary notifying there is a new prisoners who is deemed as high risk</description>
+        <name>SendHighRiskEmailPrisoner</name>
+        <label>SendHighRiskEmailPrisoner</label>
+        <locationX>50</locationX>
+        <locationY>755</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <stringValue>gary.welsh@recyclinglives.org</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>High Risk Prisoner</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>HighRiskEmailTemplatePrisoner</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <description>Sends an email to Gary notifying there is a new prisoners who is deemed as high risk</description>
+        <name>SendHighRiskEmailPrisonertononACE</name>
+        <label>Send High Risk Email - Prisoner (not ACE)</label>
+        <locationX>314</locationX>
+        <locationY>755</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <stringValue>robert.thackray@recyclinglives.org,faye.mcmanus@recyclinglives.org</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>High Risk Prisoner</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>HighRiskEmailTemplatePrisoner</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <description>Sends an email to Gary notifying there is a new prisoners who is deemed as high risk</description>
+        <name>SendHighRiskEmailResident</name>
+        <label>SendHighRiskEmailResident</label>
+        <locationX>2426</locationX>
+        <locationY>647</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <stringValue>gary.welsh@recyclinglives.org</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>High Risk Prisoner</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>HighRiskEmailTemplateResident</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <description>Sends an email to Gary notifying there is a new prisoners who is deemed as high risk</description>
+        <name>SendHighRiskEmailSpecialistSupport</name>
+        <label>SendHighRiskEmailSpecialistSupport</label>
+        <locationX>1370</locationX>
+        <locationY>647</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <stringValue>gary.welsh@recyclinglives.org</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>High Risk Prisoner</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>HighRiskEmailTemplateSpecialSupport</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <apiVersion>58.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Decision_5</name>
+        <label>Decision 5</label>
+        <locationX>182</locationX>
+        <locationY>647</locationY>
+        <defaultConnector>
+            <targetReference>SendHighRiskEmailPrisonertononACE</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>ACE</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Prisoner__r.RecordTypeId</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>$Setup.Static_Id__c.RecordType_Prisoner_ACE__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>SendHighRiskEmailPrisoner</targetReference>
+            </connector>
+            <label>ACE</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Risk_Level_Prisoner</name>
+        <label>Risk Level Prisoner</label>
+        <locationX>644</locationX>
+        <locationY>431</locationY>
+        <defaultConnectorLabel>No risk</defaultConnectorLabel>
+        <rules>
+            <name>High_Risk_Prisoner</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Overall_Risk__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>High Risk</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_High_Risk_Prisoner</targetReference>
+            </connector>
+            <label>High Risk Prisoner</label>
+        </rules>
+        <rules>
+            <name>Medium_Risk_Prisoner</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Overall_Risk__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Medium Risk</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Medium_Risk_Prisoner</targetReference>
+            </connector>
+            <label>Medium Risk Prisoner</label>
+        </rules>
+        <rules>
+            <name>Low_Risk_Prisoner</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Overall_Risk__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Low Risk</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Low_Risk_Prisoner</targetReference>
+            </connector>
+            <label>Low Risk Prisoner</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Risk_Level_Resident</name>
+        <label>Risk Level Resident</label>
+        <locationX>2822</locationX>
+        <locationY>431</locationY>
+        <defaultConnectorLabel>No risk</defaultConnectorLabel>
+        <rules>
+            <name>High_Risk_Resident</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Overall_Risk__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>High Risk</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_High_Risk_Resident</targetReference>
+            </connector>
+            <label>High Risk Resident</label>
+        </rules>
+        <rules>
+            <name>Medium_Risk_Resident</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Overall_Risk__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Medium Risk</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Medium_Risk_Resident</targetReference>
+            </connector>
+            <label>Medium Risk Resident</label>
+        </rules>
+        <rules>
+            <name>Low_Risk_Resident</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Overall_Risk__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Low Risk</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Low_Risk_Resident</targetReference>
+            </connector>
+            <label>Low Risk Resident</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Risk_Level_Specialist_Support</name>
+        <label>Risk Level Specialist Support</label>
+        <locationX>1766</locationX>
+        <locationY>431</locationY>
+        <defaultConnectorLabel>No risk</defaultConnectorLabel>
+        <rules>
+            <name>High_Risk_Specialist_Support</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Overall_Risk__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>High Risk</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_High_Risk_Specialist_Support</targetReference>
+            </connector>
+            <label>High Risk Specialist Support</label>
+        </rules>
+        <rules>
+            <name>Medium_Risk_Specialist_Support</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Overall_Risk__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Medium Risk</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Medium_Risk_Specialist_Support</targetReference>
+            </connector>
+            <label>Medium Risk Specialist Support</label>
+        </rules>
+        <rules>
+            <name>Low_Risk_Specialist_Support</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Overall_Risk__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Low Risk</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Low_Risk_Specialist_Support</targetReference>
+            </connector>
+            <label>Low Risk Specialist Support</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>TypeOfRiskAssessment</name>
+        <label>TypeOfRiskAssessment</label>
+        <locationX>2063</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Prisoner</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Prisoner__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Risk_Level_Prisoner</targetReference>
+            </connector>
+            <label>Prisoner</label>
+        </rules>
+        <rules>
+            <name>SpecialistSupport</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Specialist_Support__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Risk_Level_Specialist_Support</targetReference>
+            </connector>
+            <label>SpecialistSupport</label>
+        </rules>
+        <rules>
+            <name>Resident</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Resident__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Risk_Level_Resident</targetReference>
+            </connector>
+            <label>Resident</label>
+        </rules>
+    </decisions>
+    <description>20/09/2025 : removed the static Id dependency
+Object: Risk Assessment
+Trigger: Overall_Risk__c is changed
+Description: Creates a task dependant for the future dependant on the overall risk level of the prisoner or resident.</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>WhatID</name>
+        <dataType>String</dataType>
+        <expression>IF(ISBLANK({!$Record.Prisoner__c}) ,{!$Record.Resident__c},{!$Record.Prisoner__c})</expression>
+    </formulas>
+    <formulas>
+        <name>X12WeeksFromNow</name>
+        <dataType>Date</dataType>
+        <expression>{!$Record.Risk_assessment_date__c} + 84</expression>
+    </formulas>
+    <formulas>
+        <name>X24WeeksFromNow</name>
+        <dataType>Date</dataType>
+        <expression>{!$Record.Risk_assessment_date__c} + 182</expression>
+    </formulas>
+    <formulas>
+        <name>X4WeeksFromNow</name>
+        <dataType>Date</dataType>
+        <expression>{!$Record.Risk_assessment_date__c} + 28</expression>
+    </formulas>
+    <interviewLabel>Risk Assessment Reminder {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Risk Assessment Reminder</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_High_Risk_Prisoner</name>
+        <label>Create High Risk Prisoner</label>
+        <locationX>182</locationX>
+        <locationY>539</locationY>
+        <connector>
+            <targetReference>Decision_5</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>X4WeeksFromNow</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$User.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Risk Assessment Due</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>WhatID</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_High_Risk_Resident</name>
+        <label>Create High Risk Resident</label>
+        <locationX>2426</locationX>
+        <locationY>539</locationY>
+        <connector>
+            <targetReference>SendHighRiskEmailResident</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>X4WeeksFromNow</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$User.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Risk Assessment Due</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>WhatID</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_High_Risk_Specialist_Support</name>
+        <label>Create High Risk Specialist Support</label>
+        <locationX>1370</locationX>
+        <locationY>539</locationY>
+        <connector>
+            <targetReference>SendHighRiskEmailSpecialistSupport</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>X4WeeksFromNow</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$User.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Risk Assessment Due</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>WhatID</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_Low_Risk_Prisoner</name>
+        <label>Create Low Risk Prisoner</label>
+        <locationX>842</locationX>
+        <locationY>539</locationY>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>X24WeeksFromNow</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$User.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Risk Assessment Due</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>WhatID</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_Low_Risk_Resident</name>
+        <label>Create Low Risk Resident</label>
+        <locationX>2954</locationX>
+        <locationY>539</locationY>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>X24WeeksFromNow</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$User.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Risk Assessment Due</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>WhatID</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_Low_Risk_Specialist_Support</name>
+        <label>Create Low Risk Specialist Support</label>
+        <locationX>1898</locationX>
+        <locationY>539</locationY>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>X24WeeksFromNow</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$User.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Risk Assessment Due</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>WhatID</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_Medium_Risk_Prisoner</name>
+        <label>Create Medium Risk Prisoner</label>
+        <locationX>578</locationX>
+        <locationY>539</locationY>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>X12WeeksFromNow</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$User.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Risk Assessment Due</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>WhatID</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_Medium_Risk_Resident</name>
+        <label>Create Medium Risk Resident</label>
+        <locationX>2690</locationX>
+        <locationY>539</locationY>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>X12WeeksFromNow</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$User.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Risk Assessment Due</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>WhatID</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_Medium_Risk_Specialist_Support</name>
+        <label>Create Medium Risk Specialist Support</label>
+        <locationX>1634</locationX>
+        <locationY>539</locationY>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>X12WeeksFromNow</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$User.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Risk Assessment Due</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>WhatID</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <start>
+        <locationX>1937</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>TypeOfRiskAssessment</targetReference>
+        </connector>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Overall_Risk__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Risk_Assessment_Form__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+    <textTemplates>
+        <description>The text template that gets sent when a prisoner is deemed as high risk</description>
+        <name>HighRiskEmailTemplatePrisoner</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Hello,
+{!$Record.Prisoner__r.Name} has been deemed as high risk.
+You can view the record https://recyclinglives.lightning.force.com/lightning/r/Prisoner__c/{!$Record.Prisoner__c}/view</text>
+    </textTemplates>
+    <textTemplates>
+        <name>HighRiskEmailTemplateResident</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Hello,
+{!$Record.Resident__r.Name} has been deemed as high risk.
+You can view the record https://recyclinglives.lightning.force.com/lightning/r/Resident__c/{!$Record.Resident__r.Id}/view</text>
+    </textTemplates>
+    <textTemplates>
+        <name>HighRiskEmailTemplateSpecialSupport</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Hello,
+{!$Record.Specialist_Support__r.Name} has been deemed as high risk.
+You can view the record: https://recyclinglives.lightning.force.com/lightning/r/Specialist_Support__c/{!$Record.Specialist_Support__r.Id}/view</text>
+    </textTemplates>
+</Flow>

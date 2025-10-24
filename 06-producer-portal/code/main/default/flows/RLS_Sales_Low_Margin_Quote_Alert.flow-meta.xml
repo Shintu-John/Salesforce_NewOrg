@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Send_email_alert</name>
+        <label>Send email alert</label>
+        <locationX>720</locationX>
+        <locationY>708</locationY>
+        <actionName>Quote.Low_Margin_Quote_Alert</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Quote.Low_Margin_Quote_Alert</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Account_OrbitGroup_Decision</name>
+        <label>Account_OrbitGroup Decision</label>
+        <locationX>423</locationX>
+        <locationY>276</locationY>
+        <defaultConnector>
+            <targetReference>Get_Account</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Account_OrbitGroup_Outcome</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.AccountId</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>$Setup.Static_Id__c.Account_OrbitGroup__c</elementReference>
+                </rightValue>
+            </conditions>
+            <label>Account_OrbitGroup Outcome</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_Warning_Valid</name>
+        <label>Is Warning Valid?</label>
+        <locationX>654</locationX>
+        <locationY>492</locationY>
+        <defaultConnector>
+            <targetReference>Still_less_than_13_5</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Yes, Valid</defaultConnectorLabel>
+        <rules>
+            <name>No_Not_Valid</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Account.No_Low_Margin_Quote_Warning__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Domestic Quote</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordTypeId</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>$Setup.Static_Id__c.RecordType_Quote_DomesticQuote__c</elementReference>
+                </rightValue>
+            </conditions>
+            <label>No, Not Valid</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Still_less_than_13_5</name>
+        <label>Still less than 13.5%</label>
+        <locationX>852</locationX>
+        <locationY>600</locationY>
+        <defaultConnectorLabel>No &lt; 13.5</defaultConnectorLabel>
+        <rules>
+            <name>Yes_13_5</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.QLI_Low_Margin__c</leftValueReference>
+                <operator>LessThanOrEqualTo</operator>
+                <rightValue>
+                    <numberValue>13.5</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_email_alert</targetReference>
+            </connector>
+            <label>Yes &gt;13.5</label>
+        </rules>
+    </decisions>
+    <description>20/09/2025 : removed the static Id dependency
+31/03/2025: Excluding Orbit Group</description>
+    <environments>Default</environments>
+    <interviewLabel>RLS Sales: Low Margin Quote Alert {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>RLS Sales: Low Margin Quote Alert</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Account</name>
+        <label>Get Account</label>
+        <locationX>654</locationX>
+        <locationY>384</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Is_Warning_Valid</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Opportunity.Account.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Account</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>QLI_Low_Margin__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>QLI_Low_Margin__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <numberValue>0.0</numberValue>
+            </value>
+        </filters>
+        <filters>
+            <field>QLI_Low_Margin__c</field>
+            <operator>LessThanOrEqualTo</operator>
+            <value>
+                <numberValue>13.5</numberValue>
+            </value>
+        </filters>
+        <filters>
+            <field>AccountId</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>0014H00002k17OnQAI</stringValue>
+            </value>
+        </filters>
+        <object>Quote</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <scheduledPaths>
+            <name>Wait_15_minutes</name>
+            <connector>
+                <targetReference>Account_OrbitGroup_Decision</targetReference>
+            </connector>
+            <label>Wait 15 minutes</label>
+            <offsetNumber>15</offsetNumber>
+            <offsetUnit>Minutes</offsetUnit>
+            <timeSource>RecordTriggerEvent</timeSource>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Obsolete</status>
+</Flow>

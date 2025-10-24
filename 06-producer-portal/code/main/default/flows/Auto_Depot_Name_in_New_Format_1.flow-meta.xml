@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>myRule_1</name>
+        <label>Fields Changed, no Specific</label>
+        <locationX>281</locationX>
+        <locationY>323</locationY>
+        <defaultConnector>
+            <targetReference>myRule_7</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>FALSE_Fields Changed, no Specific</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_myRule_1</name>
+            <conditionLogic>(1 AND 4) OR (2 AND 4) OR (3 AND 4)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Permit_Reference__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Postcode__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Specific_Depot_Name__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Specific_Depot_Name__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>myRule_1_A1</targetReference>
+            </connector>
+            <label>TRUE_Fields Changed, no Specific</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>myRule_14</name>
+        <label>No Change, Just Depot Created</label>
+        <locationX>710</locationX>
+        <locationY>539</locationY>
+        <defaultConnectorLabel>FALSE_No Change, Just Depot Created</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_myRule_14</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Address_Name__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>myRule_14_A1</targetReference>
+            </connector>
+            <label>TRUE_No Change, Just Depot Created</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>myRule_7</name>
+        <label>Fields Changed, Specific Depot Name</label>
+        <locationX>512</locationX>
+        <locationY>431</locationY>
+        <defaultConnector>
+            <targetReference>myRule_14</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>FALSE_Fields Changed, Specific Depot Name</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_myRule_7</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Permit_Reference__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Postcode__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Specific_Depot_Name__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Specific_Depot_Account_Name__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>myRule_7_A1</targetReference>
+            </connector>
+            <label>TRUE_Fields Changed, Specific Depot Name</label>
+        </rules>
+    </decisions>
+    <description>Migrated from the Auto Depot Name in New Format process using multiple criteria.
+Update Depot Name automatically in new format</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>formula_1_myRule_1_A1_9146878922</name>
+        <dataType>String</dataType>
+        <expression>LEFT(
+  &quot;(&quot; + {!$Record.Depot_Postcode_Prefix__c} + &quot;) - &quot; +
+  {!$Record.Account__r.Name_for_Depots__c} + &quot; - &quot; +
+  {!$Record.Specific_Depot_Name__c} + &quot; (&quot; +
+  {!$Record.Permit_Reference__c} + &quot;)&quot;,
+  80
+)</expression>
+    </formulas>
+    <formulas>
+        <name>formula_2_myRule_7_A1_6530865819</name>
+        <dataType>String</dataType>
+        <expression>LEFT(
+  &quot;(&quot; + {!$Record.Depot_Postcode_Prefix__c} + &quot;) - &quot; +
+  {!$Record.Specific_Depot_Account_Name__c} + &quot; - &quot; +
+  {!$Record.Specific_Depot_Name__c} + &quot; (&quot; +
+  {!$Record.Permit_Reference__c} + &quot;)&quot;,
+  80
+)</expression>
+    </formulas>
+    <formulas>
+        <name>formula_3_myRule_14_A1_6709444505</name>
+        <dataType>String</dataType>
+        <expression>LEFT(
+  &quot;(&quot; + {!$Record.Depot_Postcode_Prefix__c} + &quot;) - &quot; +
+  {!$Record.Specific_Depot_Account_Name__c} + &quot; - &quot; +
+  {!$Record.Specific_Depot_Name__c} + &quot; (&quot; +
+  {!$Record.Permit_Reference__c} + &quot;)&quot;,
+  80
+)</expression>
+    </formulas>
+    <label>Auto Depot Name in New Format_1</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>myRule_14_A1</name>
+        <label>Update to New Format</label>
+        <locationX>578</locationX>
+        <locationY>647</locationY>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>formula_3_myRule_14_A1_6709444505</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>myRule_1_A1</name>
+        <label>Update to new format</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>formula_1_myRule_1_A1_9146878922</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>myRule_7_A1</name>
+        <label>Update to new format</label>
+        <locationX>314</locationX>
+        <locationY>539</locationY>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>formula_2_myRule_7_A1_6530865819</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>155</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>myRule_1</targetReference>
+        </connector>
+        <object>Depot__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>

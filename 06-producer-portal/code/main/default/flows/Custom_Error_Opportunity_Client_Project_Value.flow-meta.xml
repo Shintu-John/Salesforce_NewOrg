@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <customErrors>
+        <name>Custom_Error</name>
+        <label>Custom Error</label>
+        <locationX>176</locationX>
+        <locationY>323</locationY>
+        <customErrorMessages>
+            <errorMessage>Please enter the total value of the project to the client. For example M6
+                Resurfacing Project = £750,000,000.</errorMessage>
+            <fieldSelection>Client_Project_Total_Value__c</fieldSelection>
+            <isFieldError>true</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <environments>Default</environments>
+    <interviewLabel>Custom Error: Opportunity Client Project Value {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Custom Error: Opportunity Client Project Value</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Custom_Error</targetReference>
+        </connector>
+        <filterLogic>1 AND (2 or 3) and (4 or 5) and (6 or 7)</filterLogic>
+        <filters>
+            <field>CreatedDate</field>
+            <operator>GreaterThanOrEqualTo</operator>
+            <value>
+                <dateTimeValue>2024-09-29T23:00:00.000Z</dateTimeValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Account_Industry__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Construction</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Account_Industry__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Infrastructure</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Type</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>RLES - Existing Business</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Type</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>RLES - New Business</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Client_Project_Total_Value__c</field>
+            <operator>EqualTo</operator>
+        </filters>
+        <filters>
+            <field>Client_Project_Total_Value__c</field>
+            <operator>LessThanOrEqualTo</operator>
+            <value>
+                <numberValue>100.0</numberValue>
+            </value>
+        </filters>
+        <object>Opportunity</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Obsolete</status>
+</Flow>

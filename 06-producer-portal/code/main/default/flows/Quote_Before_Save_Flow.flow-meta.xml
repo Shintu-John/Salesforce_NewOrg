@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>52.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Depot_Missing_Assignment</name>
+        <label>Depot Missing Assignment</label>
+        <locationX>490</locationX>
+        <locationY>1127</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Depots_Missing__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>isDepotMissing</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Populate_Quote_Date_Assignment</name>
+        <label>Populate Quote Date Assignment</label>
+        <locationX>50</locationX>
+        <locationY>1007</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Quote_Date__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>quoteCreatedDate</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <name>Contact_Change_Populated_Decision</name>
+        <label>Contact Change/Populated Decision</label>
+        <locationX>402</locationX>
+        <locationY>311</locationY>
+        <defaultConnector>
+            <targetReference>Trigger_Action</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Contact_Change_Populated</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.ContactId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.ContactId</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Contact_Details</targetReference>
+            </connector>
+            <label>Contact Change/Populated</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Quote_Date_Decision</name>
+        <label>Quote Date Decision</label>
+        <locationX>182</locationX>
+        <locationY>887</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Populate_Quote_Date</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Quote_Date__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Populate_Quote_Date_Assignment</targetReference>
+            </connector>
+            <label>Populate Quote Date</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Status_Decsion</name>
+        <label>Status Decsion</label>
+        <locationX>622</locationX>
+        <locationY>887</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Status_Pricing_Generated</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Pricing Generated</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Depot_Missing_Quote_Line_Item</targetReference>
+            </connector>
+            <label>Status = Pricing Generated</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Trigger_Action</name>
+        <label>Trigger Action</label>
+        <locationX>402</locationX>
+        <locationY>767</locationY>
+        <defaultConnector>
+            <targetReference>Status_Decsion</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Update Trigger</defaultConnectorLabel>
+        <rules>
+            <name>Insert_Trigger</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record__Prior</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Quote_Date_Decision</targetReference>
+            </connector>
+            <label>Insert Trigger</label>
+        </rules>
+    </decisions>
+    <description>25-05-2023 : populate quote date
+-by pass depot for few accounts.
+- by pass depot added in validation
+- added Depot Missing Validation.
+-Created to autoupdate fields from contact record.</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>isDepotMissing</name>
+        <dataType>Boolean</dataType>
+        <expression>IF( {!Get_Depot_Missing_Quote_Line_Item.Id} == null, false, true)</expression>
+    </formulas>
+    <formulas>
+        <name>quoteCreatedDate</name>
+        <dataType>Date</dataType>
+        <expression>DATEVALUE({!$Record.CreatedDate})</expression>
+    </formulas>
+    <interviewLabel>Quote Before Save {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Quote Before Save Flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Contact_Details</name>
+        <label>Get Contact Details</label>
+        <locationX>270</locationX>
+        <locationY>431</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Update_Cascade</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.ContactId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Contact</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Phone</queriedFields>
+        <queriedFields>Email</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Depot_Missing_Quote_Line_Item</name>
+        <label>Get Depot Missing Quote Line Item</label>
+        <locationX>490</locationX>
+        <locationY>1007</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Depot_Missing_Assignment</targetReference>
+        </connector>
+        <filterLogic>1 AND (2 OR 3) AND 4 AND 5 AND 6 AND 7 AND 8 AND 9</filterLogic>
+        <filters>
+            <field>QuoteId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Depot_Dispose__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Depot_Supply__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Bypass_Depot__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Supplier_Name_Formula__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>CLEARABEE LIMITED</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Supplier_Name_Formula__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>SLICKER RECYCLING LIMITED</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Supplier_Name_Formula__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Safety-Kleen U.K. Limited</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Supplier_Name_Formula__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Cinco Recycling Limited</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Supplier_Name_Formula__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>GREENLINE(ENVIRONMENTAL) LTD.</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>QuoteLineItem</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Cascade</name>
+        <label>Update Cascade</label>
+        <locationX>270</locationX>
+        <locationY>551</locationY>
+        <connector>
+            <targetReference>Trigger_Action</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Email</field>
+            <value>
+                <elementReference>Get_Contact_Details.Email</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Phone</field>
+            <value>
+                <elementReference>Get_Contact_Details.Phone</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>276</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Contact_Change_Populated_Decision</targetReference>
+        </connector>
+        <object>Quote</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Obsolete</status>
+</Flow>

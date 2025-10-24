@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Send_Email_To_Haulier_Decision</name>
+        <label>Send Email To Haulier Decision</label>
+        <locationX>182</locationX>
+        <locationY>242</locationY>
+        <defaultConnector>
+            <targetReference>Send_Email_To_Processor_Decision</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Send_Email_To_Haulier_Outcome</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_RLCS_Job.Haullier__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Notify_Haulier_Screen</targetReference>
+            </connector>
+            <label>Send Email To Haulier Outcome</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Send_Email_To_Processor_Decision</name>
+        <label>Send Email To Processor Decision</label>
+        <locationX>182</locationX>
+        <locationY>542</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Send_Email_To_Processor_Outcome</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_RLCS_Job.Processor__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_RLCS_Job.Processor__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>Get_RLCS_Job.Haullier__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Notify_Processor_Screen</targetReference>
+            </connector>
+            <label>Send Email To Processor Outcome</label>
+        </rules>
+    </decisions>
+    <description>03-03-2025: added from address {!$Label.fromaddress_customerservice}</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>haulier_emails</name>
+        <dataType>String</dataType>
+        <expression>{!Get_RLCS_Job.Haullier__r.Sales_Email__c}+IF(NOT(ISBLANK({!Get_RLCS_Job.Haullier__r.Other_Emails__c})), &apos;;&apos;+{!Get_RLCS_Job.Haullier__r.Other_Emails__c},&apos;&apos;)</expression>
+    </formulas>
+    <formulas>
+        <name>haulier_emailTemplate</name>
+        <dataType>String</dataType>
+        <expression>IF(TEXT({!Get_RLCS_Job.Pricing_Method__c}) == &quot;Fixed&quot;,
+
+CASE({!jobType}, &quot;Exchange&quot;, &quot;RLCS_Fixed_Job_Template_Exchange&quot;, &quot;Wait &amp; Load&quot;, &quot;RLCS_Fixed_Job_Template_Wait_Load&quot;, &quot;RLCS_Fixed_Job_Template_Delivery&quot;)
+,
+IF(TEXT({!Get_RLCS_Job.Pricing_Method__c}) ==&quot;Variable&quot;,
+
+CASE({!jobType}, &quot;Exchange&quot;, &quot;RLCS_Variable_Job_Template_Exchange&quot;, &quot;Wait &amp; Load&quot;, &quot;RLCS_Variable_Job_Template_Wait_Load&quot;, &quot;RLCS_Variable_Job_Template_Delivery&quot;)
+
+,
+IF(TEXT({!Get_RLCS_Job.Pricing_Method__c}) == &quot;Rebate&quot;,
+
+CASE({!jobType}, &quot;Exchange&quot;, &quot;RLCS_Rebate_Job_Template_Exchange&quot;, &quot;Wait &amp; Load&quot;, &quot;RLCS_Rebate_Job_Template_Wait_Load&quot;, &quot;RLCS_Rebate_Job_Template_Delivery&quot;)
+
+,
+&quot;No Template Found&quot;)))</expression>
+    </formulas>
+    <formulas>
+        <name>jobType</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_RLCS_Job.Type__c})</expression>
+    </formulas>
+    <formulas>
+        <name>processor_emails</name>
+        <dataType>String</dataType>
+        <expression>{!Get_RLCS_Job.Processor__r.Sales_Email__c}+IF(NOT(ISBLANK({!Get_RLCS_Job.Processor__r.Other_Emails__c})), &apos;;&apos;+{!Get_RLCS_Job.Processor__r.Other_Emails__c},&apos;&apos;)</expression>
+    </formulas>
+    <formulas>
+        <name>processor_emailTemplate</name>
+        <dataType>String</dataType>
+        <expression>IF(TEXT({!Get_RLCS_Job.Pricing_Method__c}) == &quot;Fixed&quot;,
+
+CASE({!jobType}, &quot;Exchange&quot;, &quot;RLCS_Fixed_Job_Template_Exchange_P&quot;, &quot;Wait &amp; Load&quot;, &quot;RLCS_Fixed_Job_Template_Wait_Load_P&quot;, &quot;RLCS_Fixed_Job_Template_Delivery_P&quot;)
+,
+IF(TEXT({!Get_RLCS_Job.Pricing_Method__c}) ==&quot;Variable&quot;,
+
+CASE({!jobType}, &quot;Exchange&quot;, &quot;RLCS_Variable_Job_Template_Exchange_P&quot;, &quot;Wait &amp; Load&quot;, &quot;RLCS_Variable_Job_Template_Wait_Load_P&quot;, &quot;RLCS_Variable_Job_Template_Delivery_P&quot;)
+
+,
+IF(TEXT({!Get_RLCS_Job.Pricing_Method__c}) == &quot;Rebate&quot;,
+
+CASE({!jobType}, &quot;Exchange&quot;, &quot;RLCS_Rebate_Job_Template_Exchange_P&quot;, &quot;Wait &amp; Load&quot;, &quot;RLCS_Rebate_Job_Template_Wait_Load_P&quot;, &quot;RLCS_Rebate_Job_Template_Delivery_P&quot;)
+
+,
+&quot;No Template Found&quot;)))</expression>
+    </formulas>
+    <interviewLabel>Manage Booking Confirmation Email Subflow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Manage Booking Confirmation Email Subflow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordLookups>
+        <name>Get_RLCS_Job</name>
+        <label>Get RLCS Job</label>
+        <locationX>182</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Send_Email_To_Haulier_Decision</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>rlcsJobId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>RLCS_Job__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <screens>
+        <name>Notify_Haulier_Screen</name>
+        <label>Notify Haulier Screen</label>
+        <locationX>50</locationX>
+        <locationY>350</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Send_Email_To_Processor_Decision</targetReference>
+        </connector>
+        <fields>
+            <name>Do_you_want_to_send_email_to_haulier</name>
+            <dataType>Boolean</dataType>
+            <fieldText>Do you want to send email to haulier?</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>sendEmailToHaulier</name>
+            <extensionName>c:sendEmailToSupplier</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>jobID</name>
+                <value>
+                    <elementReference>Get_RLCS_Job.Id</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>successStatus</name>
+                <value>
+                    <stringValue>Awaiting Supplier Confirmation</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>suppplierToEmailIDs</name>
+                <value>
+                    <elementReference>haulier_emails</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>templatename</name>
+                <value>
+                    <elementReference>haulier_emailTemplate</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>fromEmailAddress</name>
+                <value>
+                    <elementReference>$Label.fromaddress_customerservice</elementReference>
+                </value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>Do_you_want_to_send_email_to_haulier</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <booleanValue>true</booleanValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Notify_Processor_Screen</name>
+        <label>Notify Processor Screen</label>
+        <locationX>50</locationX>
+        <locationY>650</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>Do_you_want_to_send_email_to_processor</name>
+            <dataType>Boolean</dataType>
+            <fieldText>Do you want to send email to processor?</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>sendEmailToProcessor</name>
+            <extensionName>c:sendEmailToSupplier</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>jobID</name>
+                <value>
+                    <elementReference>Get_RLCS_Job.Id</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>suppplierToEmailIDs</name>
+                <value>
+                    <elementReference>processor_emails</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>templatename</name>
+                <value>
+                    <elementReference>processor_emailTemplate</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>fromEmailAddress</name>
+                <value>
+                    <elementReference>$Label.fromaddress_customerservice</elementReference>
+                </value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>Do_you_want_to_send_email_to_processor</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <booleanValue>true</booleanValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_RLCS_Job</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>rlcsJobId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

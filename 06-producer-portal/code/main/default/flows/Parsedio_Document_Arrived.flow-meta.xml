@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Intial_Assignment</name>
+        <label>Intial Assignment</label>
+        <locationX>732</locationX>
+        <locationY>384</locationY>
+        <assignmentItems>
+            <assignToReference>JobNumbereqWTNRef</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_File_Import_Record</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>JobNumbereqWTNRef_TRUE</name>
+        <label>JobNumbereqWTNRef = TRUE</label>
+        <locationX>1348</locationX>
+        <locationY>276</locationY>
+        <assignmentItems>
+            <assignToReference>JobNumbereqWTNRef</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Parsed_Document_Arrived_NEW_Autolaunch</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Document_Processed_Decision</name>
+        <label>Document Processed Decision</label>
+        <locationX>908</locationX>
+        <locationY>276</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Completed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.iparseio__ProcessStatus__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Completed</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Intial_Assignment</targetReference>
+            </connector>
+            <label>Completed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_Updated_after_1_min_Decision</name>
+        <label>Is Updated after 1 min Decision</label>
+        <locationX>248</locationX>
+        <locationY>384</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Is_Updated_after_1_min</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>CreatedDateAfter1Min</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <elementReference>$Flow.CurrentDateTime</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <isGoTo>true</isGoTo>
+                <targetReference>Intial_Assignment</targetReference>
+            </connector>
+            <label>Is Updated after 1 min</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Process_File_Import_Creation_Decision</name>
+        <label>Process File Import Creation Decision</label>
+        <locationX>732</locationX>
+        <locationY>600</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Process_File_Import_Creation</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_File_Import_Record</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Parsed_Document_Arrived_NEW_Autolaunch</targetReference>
+            </connector>
+            <label>Process File Import Creation</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Trigger_Action</name>
+        <label>Trigger Action</label>
+        <locationX>50</locationX>
+        <locationY>276</locationY>
+        <defaultConnector>
+            <targetReference>Is_Updated_after_1_min_Decision</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Updated</defaultConnectorLabel>
+        <rules>
+            <name>Created</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record__Prior</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>Created</label>
+        </rules>
+    </decisions>
+    <description>18-06-2024 : convert it into autolaunch flow
+17-06-2024 : added Get charge type from Value Lines
+14-06-2024 : schedule JobNumbereqWTNRef
+23-05-2024 : added tagOverride
+13-10-2023 : added Site Clear - Consignment Note Rule
+21-09-2023 : process mixed job
+39-03-2023 : Bulkify the Case Process and Create File Import if there&apos;s no file import on process document
+15-03-20223 : tweak map_invoicetotal formula
+27-02-2023 : process invoice at last
+27-02-2023 : Cihan : invoice total mapping added
+17-02-2023 : charge types max 255
+15-02-2023 : Sign Detected Added
+14-02-2023 : Changed Failed File Import Sub Flow
+14-02-2023 : Migrated from old namespace package
+24-02-2023 : Invoice Total tag value added</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>CreatedDateAfter1Min</name>
+        <dataType>DateTime</dataType>
+        <expression>{!$Record.CreatedDate} + (1/1440)</expression>
+    </formulas>
+    <interviewLabel>Parsed Document Arrived {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Parsed Document Arrived (NEW)</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_File_Import_Record</name>
+        <label>Get File Import Record</label>
+        <locationX>732</locationX>
+        <locationY>492</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Process_File_Import_Creation_Decision</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Processed_Document_io__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>File_Import__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>573</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Trigger_Action</targetReference>
+        </connector>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+        <filterLogic>or</filterLogic>
+        <filters>
+            <field>iparseio__ProcessStatus__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </filters>
+        <object>iparseio__ProcessedDocument__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <scheduledPaths>
+            <name>One_Minute_After_Created</name>
+            <connector>
+                <targetReference>Document_Processed_Decision</targetReference>
+            </connector>
+            <label>One Minute After Created</label>
+            <maxBatchSize>1</maxBatchSize>
+            <offsetNumber>1</offsetNumber>
+            <offsetUnit>Minutes</offsetUnit>
+            <recordField>CreatedDate</recordField>
+            <timeSource>RecordField</timeSource>
+        </scheduledPaths>
+        <scheduledPaths>
+            <name>Run_JobNumbereqWTNRef</name>
+            <connector>
+                <targetReference>JobNumbereqWTNRef_TRUE</targetReference>
+            </connector>
+            <label>Run JobNumbereqWTNRef</label>
+            <offsetNumber>0</offsetNumber>
+            <offsetUnit>Minutes</offsetUnit>
+            <recordField>Run_Job_Number_WTN_Ref__c</recordField>
+            <timeSource>RecordField</timeSource>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>Parsed_Document_Arrived_NEW_Autolaunch</name>
+        <label>Parsed Document Arrived (NEW) (Autolaunch)</label>
+        <locationX>699</locationX>
+        <locationY>1079</locationY>
+        <flowName>Parsed_Document_Arrived_NEW_Autolaunch</flowName>
+        <inputAssignments>
+            <name>JobNumbereqWTNRef</name>
+            <value>
+                <elementReference>JobNumbereqWTNRef</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+    <variables>
+        <name>JobNumbereqWTNRef</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+</Flow>

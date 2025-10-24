@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Status__c</fullName>
+    <description>Auto-calculated status field that provides granular status indicators for Producer Portal users. Updated by the Producer POM - Update Status flow.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Current status of this POM record. This field is automatically updated based on acknowledgement, questions, and signature status.</inlineHelpText>
+    <label>Status</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Waiting for Market Data</fullName>
+                <default>true</default>
+                <label>Waiting for Market Data</label>
+            </value>
+            <value>
+                <fullName>Ready to Acknowledge</fullName>
+                <default>false</default>
+                <label>Ready to Acknowledge</label>
+            </value>
+            <value>
+                <fullName>Acknowledge Market Data</fullName>
+                <default>false</default>
+                <label>Acknowledge Market Data</label>
+            </value>
+            <value>
+                <fullName>Questions Required</fullName>
+                <default>false</default>
+                <label>Questions Required</label>
+            </value>
+            <value>
+                <fullName>Pending Director Review</fullName>
+                <default>false</default>
+                <label>Pending Director Review</label>
+            </value>
+            <value>
+                <fullName>Signed</fullName>
+                <default>false</default>
+                <label>Signed</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

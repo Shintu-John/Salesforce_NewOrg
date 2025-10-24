@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>Migrated from the Update attendance fields based on defaults process using Attendance created criteria.
+when an attendance is created, update fields based on session defaults</description>
+    <formulas>
+        <name>formula_4_myRule_1_A1_9200460139</name>
+        <dataType>Boolean</dataType>
+        <expression>If(ispickval({!$Record.Workshop_Session__c.Default_value_present__c}, &quot;True&quot;), True, False )</expression>
+    </formulas>
+    <label>Update attendance fields based on defaults_1</label>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>myRule_1_A1</name>
+        <label>Update fields</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>Attendance_payment__c</field>
+            <value>
+                <elementReference>$Record.Workshop_Session__r.Default_attendance_payment__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Bonus__c</field>
+            <value>
+                <elementReference>$Record.Workshop_Session__r.Default_value_Bonus__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Hours__c</field>
+            <value>
+                <elementReference>$Record.Workshop_Session__r.Session_Hours__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Present__c</field>
+            <value>
+                <elementReference>formula_4_myRule_1_A1_9200460139</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>myRule_1_A1</targetReference>
+        </connector>
+        <object>Workshop_Attendance__c</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>

@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Automatic_Charge_Creation_Decision</name>
+        <label>Automatic Charge Creation Decision</label>
+        <locationX>380</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Automatic_Charge_Creation_Outcome</name>
+            <conditionLogic>((1 OR 6) AND 2) OR (3 AND 4 AND 5)</conditionLogic>
+            <conditions>
+                <leftValueReference>ISNEW</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Buy</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Sell</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Draft Note</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Total_Traded_Value__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Automatic_Record_Type</targetReference>
+            </connector>
+            <label>Automatic Charge Creation Outcome</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Trade_Charge_Available_Decision</name>
+        <label>Trade Charge Available Decision</label>
+        <locationX>182</locationX>
+        <locationY>647</locationY>
+        <defaultConnector>
+            <targetReference>Create_Trade_RLCS_Charge_Record</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Trade_Charge_Available</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Trade_RLCS_Charge.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Trade_RLCS_Charge_Record</targetReference>
+            </connector>
+            <label>Trade Charge Available</label>
+        </rules>
+    </decisions>
+    <description>03/06/2025 : Bug fixed
+03/06/2025 : when buy trade populate the vendor account, when sell trade populate sales account
+25-04-2025 : changed the sales account to trade contract account
+17-03-2025 : added trigger point to create buy trade when total traded value chagne
+25-02-2025: added trigger points for automatic charge creation
+06-01-2024: added vat mapping
+26-12-2024: added sales account mapping and added date</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>cost</name>
+        <dataType>Currency</dataType>
+        <expression>IF({!$Record.RecordType.DeveloperName} == &quot;Buy&quot;, {!$Record.Total_Value__c}, {!Get_Trade_RLCS_Charge.Cost__c})</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>isBuyTrade</name>
+        <dataType>Boolean</dataType>
+        <expression>{!$Record.RecordType.DeveloperName} == &quot;Buy&quot;</expression>
+    </formulas>
+    <formulas>
+        <name>ISNEW</name>
+        <dataType>Boolean</dataType>
+        <expression>ISNEW()</expression>
+    </formulas>
+    <formulas>
+        <name>isSellTrade</name>
+        <dataType>Boolean</dataType>
+        <expression>{!$Record.RecordType.DeveloperName} == &quot;Sell&quot;</expression>
+    </formulas>
+    <formulas>
+        <name>salesAccountID</name>
+        <dataType>String</dataType>
+        <expression>IF({!isSellTrade}, {!$Record.Trade_Contract__r.Account__c}, null)</expression>
+    </formulas>
+    <formulas>
+        <name>salesPrice</name>
+        <dataType>Currency</dataType>
+        <expression>IF({!$Record.RecordType.DeveloperName} == &quot;Sell&quot;, {!$Record.Total_Value__c}, {!Get_Trade_RLCS_Charge.Sales_Price__c})</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>vat</name>
+        <dataType>String</dataType>
+        <expression>IF({!$Record.Trade_Agreement__r.Agreement_with__r.X0_VAT__c}, &quot;0&quot;, &quot;20&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>vendorAccountId</name>
+        <dataType>String</dataType>
+        <expression>IF({!isBuyTrade}, {!$Record.Trade_Contract__r.Account__c}, null)</expression>
+    </formulas>
+    <interviewLabel>Manage Automatic Trade Charges {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Manage Automatic Trade Charges</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_Trade_RLCS_Charge_Record</name>
+        <label>Create Trade RLCS Charge Record</label>
+        <locationX>314</locationX>
+        <locationY>755</locationY>
+        <inputAssignments>
+            <field>Charge_Type__c</field>
+            <value>
+                <stringValue>Trade</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Cost__c</field>
+            <value>
+                <elementReference>cost</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Date__c</field>
+            <value>
+                <elementReference>$Flow.CurrentDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <elementReference>Get_Automatic_Record_Type.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Sales_Account__c</field>
+            <value>
+                <elementReference>salesAccountID</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Sales_Price__c</field>
+            <value>
+                <elementReference>salesPrice</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Trade__c</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>VAT__c</field>
+            <value>
+                <elementReference>vat</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Vendor_Account__c</field>
+            <value>
+                <elementReference>vendorAccountId</elementReference>
+            </value>
+        </inputAssignments>
+        <object>RLCS_Charge__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordLookups>
+        <name>Get_Automatic_Record_Type</name>
+        <label>Get Automatic Record Type</label>
+        <locationX>182</locationX>
+        <locationY>431</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Trade_RLCS_Charge</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Automatic</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>SobjectType</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>RLCS_Charge__c</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>RecordType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Trade_RLCS_Charge</name>
+        <label>Get Trade RLCS Charge</label>
+        <locationX>182</locationX>
+        <locationY>539</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Trade_Charge_Available_Decision</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>RecordTypeId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Automatic_Record_Type.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Trade__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>RLCS_Charge__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Trade_RLCS_Charge_Record</name>
+        <label>Update Trade RLCS Charge Record</label>
+        <locationX>50</locationX>
+        <locationY>755</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Trade_RLCS_Charge.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Cost__c</field>
+            <value>
+                <elementReference>cost</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Sales_Price__c</field>
+            <value>
+                <elementReference>salesPrice</elementReference>
+            </value>
+        </inputAssignments>
+        <object>RLCS_Charge__c</object>
+    </recordUpdates>
+    <start>
+        <locationX>254</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Automatic_Charge_Creation_Decision</targetReference>
+        </connector>
+        <object>Trade__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>

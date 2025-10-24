@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Submit_for_Approval</name>
+        <label>Submit for Approval</label>
+        <locationX>50</locationX>
+        <locationY>647</locationY>
+        <actionName>submit</actionName>
+        <actionType>submit</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>objectId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>processDefinitionNameOrId</name>
+            <value>
+                <stringValue>Trade_Approval</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>submit</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Obligation_Over_on_Category_Decision</name>
+        <label>Obligation Over on Category Decision</label>
+        <locationX>182</locationX>
+        <locationY>539</locationY>
+        <defaultConnector>
+            <targetReference>Update_Trade_Status_Agreed</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Prevent_Obligation_Over_on_Category</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>obligationRemain</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <elementReference>$Record.Total_Tonnes_Traded__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Submit_for_Approval</targetReference>
+            </connector>
+            <label>Prevent Obligation Over on Category</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Re_calculate_Balance_Over_on_Trade_Agreement_Decision</name>
+        <label>Re-calculate Balance Over on Trade Agreement Decision</label>
+        <locationX>677</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Re_calculate_Balance_Over_on_Trade_Agreement</name>
+            <conditionLogic>1  AND (2 OR 3 OR 4)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Total_Tonnes_Traded__c</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>ISNEW</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Total_Tonnes_Traded__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.WEEE_Category__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Trade_Record_Type_Decision</targetReference>
+            </connector>
+            <label>Re-calculate Balance Over on Trade Agreement</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Trade_Record_Type_Decision</name>
+        <label>Trade Record Type Decision</label>
+        <locationX>424</locationX>
+        <locationY>431</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Trade_Record_Type_Buy</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Buy</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Obligation_Over_on_Category_Decision</targetReference>
+            </connector>
+            <label>Trade Record Type = Buy</label>
+        </rules>
+        <rules>
+            <name>Trade_Record_Type_Sell</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Sell</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Trade_Status_Agreed</targetReference>
+            </connector>
+            <label>Trade Record Type = Sell</label>
+        </rules>
+    </decisions>
+    <description>12-12-2024 : changed obligationRemain formula</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>ISNEW</name>
+        <dataType>Boolean</dataType>
+        <expression>ISNEW()</expression>
+    </formulas>
+    <formulas>
+        <name>obligationRemain</name>
+        <dataType>Number</dataType>
+        <expression>IF(ISNULL({!$Record.WEEE_Category__r.Obligation_Remain__c}), 0, {!$Record.WEEE_Category__r.Obligation_Remain__c}) + IF({!ISNEW} || ISNULL({!$Record__Prior.Total_Tonnes_Traded__c}) || ISCHANGED({!$Record.WEEE_Category__c}), 0, {!$Record__Prior.Total_Tonnes_Traded__c})</expression>
+        <scale>3</scale>
+    </formulas>
+    <interviewLabel>Manage Approval and Notification {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Manage Approval and Notification</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_Trade_Status_Agreed</name>
+        <label>Update Trade Status = Agreed</label>
+        <locationX>424</locationX>
+        <locationY>1031</locationY>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Awaiting Note</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>551</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Re_calculate_Balance_Over_on_Trade_Agreement_Decision</targetReference>
+        </connector>
+        <object>Trade__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>

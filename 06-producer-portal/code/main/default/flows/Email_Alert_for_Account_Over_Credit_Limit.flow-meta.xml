@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Send_Alert</name>
+        <label>Send Alert</label>
+        <locationX>176</locationX>
+        <locationY>323</locationY>
+        <actionName>Account.ACCOUNT_OVER_CREDIT_LIMIT_WARNING</actionName>
+        <actionType>emailAlert</actionType>
+        <connector>
+            <targetReference>Mark_as_alert_sent</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <stringValue>{!$Record.Id}</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>Account.ACCOUNT_OVER_CREDIT_LIMIT_WARNING</nameSegment>
+    </actionCalls>
+    <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <environments>Default</environments>
+    <interviewLabel>Email Alert for Account Over Credit Limit {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Email Alert for Account Over Credit Limit</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Mark_as_alert_sent</name>
+        <label>Mark as alert sent</label>
+        <locationX>176</locationX>
+        <locationY>431</locationY>
+        <inputAssignments>
+            <field>Credit_Warning_Sent__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Send_Alert</targetReference>
+        </connector>
+        <filterFormula>ISCHANGED({!$Record.Last_4_Weeks_Spend__c}) &amp;&amp;
+{!$Record.Last_4_Weeks_Spend__c} &gt; {!$Record.Credit_Limit__c} &amp;&amp;
+{!$Record.Credit_Warning_Sent__c} = FALSE &amp;&amp;
+{!$Record.RecordType.Name} &lt;&gt; &quot;Domestic Customer&quot;</filterFormula>
+        <object>Account</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Obsolete</status>
+</Flow>

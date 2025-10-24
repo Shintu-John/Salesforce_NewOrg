@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Is_Benefits_Null</name>
+        <label>Is Benefits Null?</label>
+        <locationX>50</locationX>
+        <locationY>731</locationY>
+        <defaultConnector>
+            <targetReference>Update_Benefits_field_on_Prisoner_Record</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Benefits_is_Null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Benefits__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Is_Housing_Status_Null</targetReference>
+            </connector>
+            <label>Benefits is Null</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_Gender_Null</name>
+        <label>Is Gender Null?</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <defaultConnector>
+            <targetReference>Update_Gender_field_on_Prisoner_Record</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Gender_is_Null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Gender__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Is_Benefits_Null</targetReference>
+            </connector>
+            <label>Gender is Null</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_Housing_Status_Null</name>
+        <label>Is Housing Status Null?</label>
+        <locationX>50</locationX>
+        <locationY>1031</locationY>
+        <defaultConnector>
+            <targetReference>Update_Housing_Status_field_on_Prisoner_Record</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Housing_Status_is_Null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Housing_Status__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Is_Prison_Status_Null</targetReference>
+            </connector>
+            <label>Housing Status is Null</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_Prison_Status_Null</name>
+        <label>Is Prison Status Null</label>
+        <locationX>50</locationX>
+        <locationY>1331</locationY>
+        <defaultConnector>
+            <targetReference>Update_Prison_Status_field_on_Prisoner_Record</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Prison_Status_is_Null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Prison_Status__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>Prison Status is Null</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_Prisoner_an_ACE_Record_Type</name>
+        <label>Is Prisoner an ACE Record Type?</label>
+        <locationX>248</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Prisoner__r.RecordTypeId</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>$Setup.Static_Id__c.RecordType_Prisoner_ACE__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Is_Gender_Null</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <description>20/09/2025 : removed the static Id dependency
+Object: Other Personal Information
+Trigger: Record is created or updated
+Notes: For managing the Prison status, gender, housing status and benefits fields on the Prisoner record as ACE gather this information at the Other Personal Information stage.</description>
+    <environments>Default</environments>
+    <interviewLabel>Update ACE Prisoner when Other Personal Information is filled out {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Update ACE Prisoner when Other Personal Information is filled out</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_Benefits_field_on_Prisoner_Record</name>
+        <label>Update Benefits field on Prisoner Record</label>
+        <locationX>138</locationX>
+        <locationY>839</locationY>
+        <connector>
+            <targetReference>Is_Housing_Status_Null</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Prisoner__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Benefits__c</field>
+            <value>
+                <elementReference>$Record.Benefits__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Prisoner__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Gender_field_on_Prisoner_Record</name>
+        <label>Update Gender field on Prisoner Record</label>
+        <locationX>138</locationX>
+        <locationY>539</locationY>
+        <connector>
+            <targetReference>Is_Benefits_Null</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Prisoner__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Gender__c</field>
+            <value>
+                <elementReference>$Record.Gender__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Prisoner__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Housing_Status_field_on_Prisoner_Record</name>
+        <label>Update Housing Status field on Prisoner Record</label>
+        <locationX>138</locationX>
+        <locationY>1139</locationY>
+        <connector>
+            <targetReference>Is_Prison_Status_Null</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Prisoner__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Housing_Status__c</field>
+            <value>
+                <elementReference>$Record.Housing_Status__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Prisoner__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Prison_Status_field_on_Prisoner_Record</name>
+        <label>Update Prison Status field on Prisoner Record</label>
+        <locationX>182</locationX>
+        <locationY>1439</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Prisoner__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Prison_Status__c</field>
+            <value>
+                <elementReference>$Record.Prison_Status__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Prisoner__c</object>
+    </recordUpdates>
+    <start>
+        <locationX>122</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Is_Prisoner_an_ACE_Record_Type</targetReference>
+        </connector>
+        <object>Other_Personal_Information__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>

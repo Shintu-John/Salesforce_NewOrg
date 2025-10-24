@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>50.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>03-03-2025 : added Manage Booking Confirmation Email Subflow</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>emails</name>
+        <dataType>String</dataType>
+        <expression>{!Get_RLCS_Job.Haullier__r.Sales_Email__c}+IF(NOT(ISBLANK({!Get_RLCS_Job.Haullier__r.Other_Emails__c})), &apos;;&apos;+{!Get_RLCS_Job.Haullier__r.Other_Emails__c},&apos;&apos;)</expression>
+    </formulas>
+    <formulas>
+        <name>FromEmailSupplier</name>
+        <dataType>String</dataType>
+        <expression>{!$Label.From_Address_Supplier}</expression>
+    </formulas>
+    <formulas>
+        <name>templateName</name>
+        <dataType>String</dataType>
+        <expression>IF(TEXT({!Get_RLCS_Job.Pricing_Method__c})=&quot;Fixed&quot;,
+
+CASE(TEXT({!Get_RLCS_Job.Type__c}), &quot;Exchange&quot;, &quot;RLCS_Fixed_Job_Template_Exchange&quot;, &quot;Wait &amp; Load&quot;, &quot;RLCS_Fixed_Job_Template_Wait_Load&quot;, &quot;RLCS_Fixed_Job_Template_Delivery&quot;)
+,
+IF(TEXT({!Get_RLCS_Job.Pricing_Method__c})=&quot;Variable&quot;,
+
+CASE(TEXT({!Get_RLCS_Job.Type__c}), &quot;Exchange&quot;, &quot;RLCS_Variable_Job_Template_Exchange&quot;, &quot;Wait &amp; Load&quot;, &quot;RLCS_Variable_Job_Template_Wait_Load&quot;, &quot;RLCS_Variable_Job_Template_Delivery&quot;)
+
+,
+IF(TEXT({!Get_RLCS_Job.Pricing_Method__c})=&quot;Rebate&quot;,
+
+CASE(TEXT({!Get_RLCS_Job.Type__c}), &quot;Exchange&quot;, &quot;RLCS_Rebate_Job_Template_Exchange&quot;, &quot;Wait &amp; Load&quot;, &quot;RLCS_Rebate_Job_Template_Wait_Load&quot;, &quot;RLCS_Rebate_Job_Template_Delivery&quot;)
+
+,
+&quot;No Template Found&quot;)))</expression>
+    </formulas>
+    <interviewLabel>RLCS Booking Confirmation Email {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>RLCS Booking Confirmation Email</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordLookups>
+        <name>Get_RLCS_Job</name>
+        <label>Get RLCS Job</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Note_Screen</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>RLCS_Job__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_RLCS_Job</name>
+        <label>Update RLCS Job</label>
+        <locationX>176</locationX>
+        <locationY>350</locationY>
+        <connector>
+            <targetReference>Manage_Booking_Confirmation_Email_Subflow</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Notes_on_Supplier_PO__c</field>
+            <value>
+                <elementReference>Supplier_Note</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Notes_to_Supplier_for_Collection__c</field>
+            <value>
+                <elementReference>Supplier_Collection_Notes</elementReference>
+            </value>
+        </inputAssignments>
+        <object>RLCS_Job__c</object>
+    </recordUpdates>
+    <screens>
+        <name>Note_Screen</name>
+        <label>Note Screen</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Update_RLCS_Job</targetReference>
+        </connector>
+        <fields>
+            <name>Supplier_Note</name>
+            <defaultValue>
+                <stringValue>{!Get_RLCS_Job.Notes_on_Supplier_PO__c}</stringValue>
+            </defaultValue>
+            <fieldText>Supplier Note</fieldText>
+            <fieldType>LargeTextArea</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>templateName</leftValueReference>
+                    <operator>NotEqualTo</operator>
+                    <rightValue>
+                        <stringValue>Organise_Collection_Job_Template</stringValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
+            <name>Supplier_Collection_Notes</name>
+            <defaultValue>
+                <stringValue>{!Get_RLCS_Job.Notes_to_Supplier_for_Collection__c}</stringValue>
+            </defaultValue>
+            <fieldText>Supplier Collection Notes</fieldText>
+            <fieldType>LargeTextArea</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>templateName</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>Organise_Collection_Job_Template</stringValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
+            <name>DisplayTemplateName</name>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;font-size: 10px;&quot;&gt;{!templateName}&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_RLCS_Job</targetReference>
+        </connector>
+    </start>
+    <status>Draft</status>
+    <subflows>
+        <name>Manage_Booking_Confirmation_Email_Subflow</name>
+        <label>Manage Booking Confirmation Email Subflow</label>
+        <locationX>176</locationX>
+        <locationY>458</locationY>
+        <flowName>Manage_Booking_Confirmation_Email_Subflow</flowName>
+        <inputAssignments>
+            <name>rlcsJobId</name>
+            <value>
+                <elementReference>Get_RLCS_Job.Id</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

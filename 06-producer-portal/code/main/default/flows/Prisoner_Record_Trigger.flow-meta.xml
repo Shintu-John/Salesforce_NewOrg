@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>https://recyclinglives.lightning.force.com/lightning/setup/WorkflowEmails/page?address=%2F01W8e000000wmPl</description>
+        <name>Prisoner_Status_Changed_Closed</name>
+        <label>Prisoner Status Changed (Closed)</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <actionName>Prisoner__c.Prisoner_Status_changed</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Prisoner__c.Prisoner_Status_changed</nameSegment>
+    </actionCalls>
+    <apiVersion>58.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>StatusValue</name>
+        <label>StatusValue</label>
+        <locationX>182</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>StatusIsClosedorNLWWRL</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Current_RL_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Closed</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Current_RL_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>No longer working with RL</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Prisoner_Status_Changed_Closed</targetReference>
+            </connector>
+            <label>StatusIsClosedorNLWWRL</label>
+        </rules>
+    </decisions>
+    <description>Object: Prisoner
+Trigger: Record is created or updated
+Description: General flow for anytime a prisoner is created or updated. Currently when the RL Current Status is changed to Closed or not longer working with RL the flow sends an email to Robert notifying him.</description>
+    <environments>Default</environments>
+    <interviewLabel>Prisoner - Record Trigger {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Prisoner - Record Trigger</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>StatusValue</targetReference>
+        </connector>
+        <filterLogic>1 AND (2 OR 3)</filterLogic>
+        <filters>
+            <field>Current_RL_Status__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Current_RL_Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Closed</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Current_RL_Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>No longer working with RL</stringValue>
+            </value>
+        </filters>
+        <object>Prisoner__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+    <textTemplates>
+        <name>StatusChangeEmail</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;Hello Robert,&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;{!$Record.Name}&apos;s status has been changed to {!$Record.Current_RL_Status__c}.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Record - https://recyclinglives.lightning.force.com/lightning/r/Prisoner__c/{!$Record.Id}/view&lt;/p&gt;</text>
+    </textTemplates>
+</Flow>

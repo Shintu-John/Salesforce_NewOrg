@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>Object: Food Distribution
+        Trigger: Record is new or month date field is updated
+        Update: Updates the name of the record</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>fMonthYear</name>
+        <dataType>String</dataType>
+        <expression>CASE(MONTH({!$Record.Month__c}), 1, &quot;January&quot;, 2,
+            &quot;February&quot;, 3, &quot;March&quot;, 4, &quot;April&quot;, 5, &quot;May&quot;, 6,
+            &quot;June&quot;, 7, &quot;July&quot;, 8, &quot;August&quot;, 9, &quot;September&quot;,
+            10, &quot;October&quot;, 11, &quot;November&quot;, 12, &quot;December&quot;,
+            &quot;None&quot;) + &quot; &quot; + TEXT(YEAR({!$Record.Month__c}))</expression>
+    </formulas>
+    <interviewLabel>Food Distribution Record Naming {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Food Distribution Record Naming</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_Triggering_Record</name>
+        <label>Update Triggering Record</label>
+        <locationX>176</locationX>
+        <locationY>287</locationY>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>fMonthYear</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Update_Triggering_Record</targetReference>
+        </connector>
+        <filterFormula>ISNEW()||
+            ISCHANGED({!$Record.Month__c})</filterFormula>
+        <object>Food_Distribution__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>

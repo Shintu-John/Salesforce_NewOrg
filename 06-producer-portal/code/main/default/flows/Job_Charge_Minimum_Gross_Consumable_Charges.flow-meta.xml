@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Applicable_Charge</name>
+        <label>Applicable Charge?</label>
+        <locationX>182</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>(1 OR 2 OR 3) AND 4 AND 5 AND 6</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Charge_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Wasted Journey</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Charge_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Rental</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Charge_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Contamination</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>jobChargeMargin</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <numberValue>30.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Sales_Account__r.Account_Uses_Ratecard__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Wasted_Journey_Reason__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>RLS Error</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Salesprice</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <description>15/01/2025: Process the charge on save, don&apos;t wait for Sales Price to be
+        added.
+
+        Force Minimum Margin on Wasted Journey/Rental/Contamination Charges.</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>Add_30p_Margin</name>
+        <dataType>Currency</dataType>
+        <expression>IF(
+            {!$Record.Cost__c} &gt; 0,
+            ROUND({!$Record.Cost__c} / (1 - 0.3), 0),
+            NULL
+            )</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>jobChargeMargin</name>
+        <dataType>Number</dataType>
+        <expression>IF( {!$Record.Cost__c} &gt; 0,
+            (({!$Record.Sales_Price__c} - {!$Record.Cost__c})/{!$Record.Sales_Price__c})*100,
+
+            99)</expression>
+        <scale>2</scale>
+    </formulas>
+    <interviewLabel>Job Charge: Minimum Gross Consumable Charges {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Job Charge: Minimum Gross Consumable Charges</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_Salesprice</name>
+        <label>Update Salesprice</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <inputAssignments>
+            <field>Sales_Price__c</field>
+            <value>
+                <elementReference>Add_30p_Margin</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Applicable_Charge</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>CreatedDate</field>
+            <operator>GreaterThan</operator>
+            <value>
+                <dateTimeValue>2025-01-15T00:01:00.000Z</dateTimeValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Don_t_Apply_Auto_Margin__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Job_Charge__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Obsolete</status>
+</Flow>
