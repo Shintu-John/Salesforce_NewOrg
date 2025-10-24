@@ -7,7 +7,14 @@ public class ProducerSharingHelperTest {
 
     // Utility: create a basic Account
     private static Account makeAccount(String name) {
-        Account a = new Account(Name = name);
+        // Get a user with a role for Account.OwnerId (required for portal users)
+        User userWithRole = [SELECT Id FROM User WHERE UserRoleId != null AND IsActive = true LIMIT 1];
+
+        Account a = new Account(
+            Name = name,
+            comp_house__Company_Number__c = '12345678', // Required in NewOrg
+            OwnerId = userWithRole.Id
+        );
         insert a;
         return a;
     }
@@ -26,9 +33,18 @@ public class ProducerSharingHelperTest {
     }
 
     // Utility: create an Obligation (include required boolean field)
-    // Sets Compliance_Year__c to current year, but validation checks for previous year's POM
+    // Sets Compliance_Year__c to current year, validation checks for previous year's POM
+    // Create quarterly POM records first to satisfy validation
     private static Producer_Obligation__c makeObligation(Id contractId) {
         String currentYear = String.valueOf(Date.today().year());
+        String previousYear = String.valueOf(Date.today().year() - 1);
+
+        // Get Account from Contract
+        Producer_Contract__c contract = [SELECT Account__c FROM Producer_Contract__c WHERE Id = :contractId];
+
+        // Create 4 quarterly POM records for previous year with all required data
+        createQuarterlyPOMRecords(contract.Account__c, previousYear);
+
         Producer_Obligation__c ob = new Producer_Obligation__c(
             Producer_Contract__c = contractId,
             Compliance_Year__c = currentYear,
@@ -63,7 +79,22 @@ public class ProducerSharingHelperTest {
                 Quarter__c = quarter,
                 Compliance_Year__c = complianceYear,
                 RecordTypeId = householdRTId,  // Type__c will auto-calculate to 'WEEE'
-                Acknowledgement_of_Statements__c = true  // Required for validation
+                // Fill all 14 household categories to satisfy NewOrg validation (0 = filled but no tonnage)
+                Category_1_Household__c = 0,
+                Category_2_Household__c = 0,
+                Category_3_Household__c = 0,
+                Category_4_Household__c = 0,
+                Category_5_Household__c = 0,
+                Category_6_Household__c = 0,
+                Category_7_Household__c = 0,
+                Category_8_Household__c = 0,
+                Category_9_Household__c = 0,
+                Category_10_Household__c = 0,
+                Category_11_Household__c = 0,
+                Category_12_Household__c = 0,
+                Category_13_Household__c = 0,
+                Category_14_Household__c = 0
+                // Note: Not setting Acknowledgement - cannot satisfy NewOrg validation in tests
             ));
         }
         insert pomRecords;
@@ -326,7 +357,15 @@ public class ProducerSharingHelperTest {
     @isTest
     static void testContractUpdateTrigger() {
         Producer_Contract__c contract = [SELECT Id, Account__c FROM Producer_Contract__c LIMIT 1];
-        Account newAccount = new Account(Name = 'New Account');
+
+        // Get a user with a role for Account.OwnerId (required for portal users)
+        User userWithRole = [SELECT Id FROM User WHERE UserRoleId != null AND IsActive = true LIMIT 1];
+
+        Account newAccount = new Account(
+            Name = 'New Account',
+            comp_house__Company_Number__c = '87654321', // Required in NewOrg
+            OwnerId = userWithRole.Id
+        );
         insert newAccount;
 
         Test.startTest();

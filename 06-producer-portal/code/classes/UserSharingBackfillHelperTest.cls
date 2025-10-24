@@ -7,8 +7,15 @@ public class UserSharingBackfillHelperTest {
 
     @testSetup
     static void setup() {
+        // Get a user with a role for Account.OwnerId (required for portal users)
+        User userWithRole = [SELECT Id FROM User WHERE UserRoleId != null AND IsActive = true LIMIT 1];
+
         // Create Account with Producer records
-        Account acc = new Account(Name = 'Test Producer Company');
+        Account acc = new Account(
+            Name = 'Test Producer Company',
+            comp_house__Company_Number__c = '12345678', // Required in NewOrg
+            OwnerId = userWithRole.Id
+        );
         insert acc;
 
         // Create Producer Contract
@@ -37,7 +44,22 @@ public class UserSharingBackfillHelperTest {
                 Quarter__c = quarter,
                 Compliance_Year__c = previousYear,
                 RecordTypeId = householdRTId,
-                Acknowledgement_of_Statements__c = true
+                // Fill all 14 household categories to satisfy NewOrg validation (0 = filled but no tonnage)
+                Category_1_Household__c = 0,
+                Category_2_Household__c = 0,
+                Category_3_Household__c = 0,
+                Category_4_Household__c = 0,
+                Category_5_Household__c = 0,
+                Category_6_Household__c = 0,
+                Category_7_Household__c = 0,
+                Category_8_Household__c = 0,
+                Category_9_Household__c = 0,
+                Category_10_Household__c = 0,
+                Category_11_Household__c = 0,
+                Category_12_Household__c = 0,
+                Category_13_Household__c = 0,
+                Category_14_Household__c = 0
+                // Note: Not setting Acknowledgement - cannot satisfy NewOrg validation in tests
             ));
         }
         insert pomRecords;
