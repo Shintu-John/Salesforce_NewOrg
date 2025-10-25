@@ -1355,12 +1355,373 @@ sf data delete bulk --sobject Producer_Placed_on_Market__Share --where "RowCause
 
 ---
 
+## Producer Portal Navigation Tab Visibility Issue - RESOLVED (OldOrg)
+
+**Issue Date**: 2025-10-25
+**Affected Users**: 11 Customer Community Plus Login users
+**Status**: RESOLVED in OldOrg - Configuration documented for NewOrg deployment
+**Root Cause**: B2B Navigation menu item pointing to inaccessible object
+**Resolution**: Updated B2B Navigation menu item configuration
+
+### Issue Summary
+
+**Problem**: 11 specific Customer Community Plus Login license users could not see "Placed On Market Data" and "Reports" tabs in the Producer Portal, while other users with the same license type could see these tabs.
+
+**Affected Users**:
+1. Alison Harvey (Blue Badger Wholesale Ltd)
+2. Chris Neal (Hacel Lighting Limited)
+3. Iain Donaldson (Greengage Agritech Limited)
+4. Mark Smith (Welbilt (Halesowen) Limited)
+5. Ralph Scollay (Coca-Cola Europacific Partners Great Britain Limited)
+6. Richard Barbarash (Fineplan Securities Limited)
+7. Sharon Cook (Alesi Surgical Limited)
+8. Sharon Leake (Environmental & Technical Services Limited)
+9. Simon Miller (KOKI GROUP UK LIMITED)
+10. Trevor Leake (account TBD)
+11. Multiple "Recycling Lives" users (internal test accounts)
+
+**Common Factor**: All affected users have `Account.Producer_Obligation_Yype__c = "B2B"`
+
+### Root Cause Analysis
+
+#### Discovery 1: Two Producer Obligation Type Fields
+
+Found TWO fields on Account object with similar names:
+1. **Producer_Contract_Obligation_Types__c** (Multi-select picklist) - "Producer Contract Obligation Types"
+   - Values: "Household", "Non-Household", "Household & Non-Household"
+2. **Producer_Obligation_Yype__c** (Picklist with typo "Yype") - "Producer Obligation Type"
+   - Values: "B2B", null, others
+   - **THIS field is used by audience targeting**
+
+#### Discovery 2: B2B Navigation is Site Default
+
+Experience Bundle configuration (`/tmp/experience-bundle/experiences/Producer_Portal1/variations/defaultThemeNavigationMenuComponentProperties.json`):
+
+```json
+{
+  "componentVariants" : [ {
+    "id" : "bd46eaeb-8640-4b3d-aaf5-6e46a02b4a52",
+    "propertyOverrides" : {
+      "componentAttributes" : {
+        "navigationMenuEditorRefresh" : "B2B_Navigation"
+      }
+    },
+    "targetId" : "05e6a085-4225-4f57-b697-d5f3c084eda1",
+    "type" : "componentVariant"
+  } ],
+  "developerName" : "Default_Theme_Navigation_Menu_Component_Properties",
+  "id" : "5587f18d-f49f-4e03-babb-3e7f3881df6c",
+  "type" : "experienceVariation"
+}
+```
+
+**Key Finding**: `B2B_Navigation` is the DEFAULT navigation menu for ALL users in Producer Portal.
+
+#### Discovery 3: Audience Targeting Configuration
+
+**Audience Rule**: "User > Contact > Account > Producer Obligation Type equals: B2B"
+- This rule targets users whose `Account.Producer_Obligation_Yype__c = "B2B"`
+- The 11 affected Login users ALL have this field value
+- **Therefore, they correctly see B2B Navigation**
+
+#### Discovery 4: B2B Navigation Menu Item Configuration
+
+**Navigation MenuItem Query Results** (NavigationMenuItem table):
+
+**B2B Navigation (0LmSj00000009hdKAA)** - Site Default:
+| Label | Type | Target | Status | Issue |
+|-------|------|--------|--------|-------|
+| Contract Details | SalesforceObject | Producer_Contract__c | ✅ Working | Users have access |
+| **Placed On Market Data** | **SalesforceObject** | **ACE_Web_Form__c** | **❌ BROKEN** | **Login users have NO access** |
+| Dashboard | InternalLink | /dashboard-b2b | ✅ Working | Page accessible |
+| Compliance Documentation | InternalLink | /compliance-documentation | ✅ Working | Page accessible |
+| Invoices | InternalLink | /invoices | ✅ Working | Page accessible |
+| **Reports** | - | - | **❌ MISSING** | **Tab does not exist** |
+
+**Default Navigation (0LmSj00000008DhKAI)** - For non-B2B users:
+| Label | Type | Target | Status |
+|-------|------|--------|--------|
+| Contract Details | SalesforceObject | Producer_Contract__c | ✅ Working |
+| Placed On Market Data | SalesforceObject | Producer_Placed_on_Market__c | ✅ Working |
+| Dashboard | InternalLink | /dashboard | ✅ Working |
+| Compliance Documentation | InternalLink | /compliance-documentation | ✅ Working |
+| **Reports** | InternalLink | **/reports** | **✅ EXISTS** |
+| Invoices | InternalLink | /invoices | ✅ Working |
+
+#### Discovery 5: Object Permissions Analysis
+
+**Customer_Community_Plus Permission Set** (`/home/john/Projects/Salesforce/force-app/main/default/permissionsets/Customer_Community_Plus.permissionset-meta.xml`):
+
+| Object | Read | Create | Edit | Delete | View All | Modify All |
+|--------|------|--------|------|--------|----------|------------|
+| Producer_Placed_on_Market__c | ✅ true | ✅ true | ✅ true | ❌ false | ❌ false | ❌ false |
+| ACE_Web_Form__c | **❌ NOT IN PERMISSION SET** | - | - | - | - | - |
+| Producer_Contract__c | ✅ true | ❌ false | ❌ false | ❌ false | ❌ false | ❌ false |
+
+**Critical Finding**: Login users have permission to `Producer_Placed_on_Market__c` but NOT to `ACE_Web_Form__c`.
+
+**Salesforce Behavior**: When a navigation menu item points to an object the user cannot access, Salesforce automatically **hides the entire tab** from the navigation menu.
+
+### The Complete Picture
+
+1. **B2B Navigation is the site default** for Producer Portal
+2. **Audience targeting rule** shows B2B Navigation to users with `Producer_Obligation_Yype__c = "B2B"`
+3. **11 affected Login users** have accounts with this field = "B2B"
+4. **B2B Navigation's "Placed On Market Data" tab** pointed to `ACE_Web_Form__c`
+5. **Login users don't have permission** to `ACE_Web_Form__c`
+6. **Salesforce auto-hid the tab** due to lack of object permissions
+7. **"Reports" tab doesn't exist** in B2B Navigation at all
+
+### Resolution Implemented (OldOrg)
+
+**Step 1: Fixed "Placed On Market Data" Tab** (COMPLETED)
+- Accessed Experience Builder → Settings → Navigation Menus → B2B Navigation
+- Changed "Placed On Market Data" menu item target from `ACE_Web_Form__c` to `Producer_Placed_on_Market__c`
+- Published the Experience Cloud site
+- **Result**: "Placed On Market Data" tab is NOW VISIBLE to Login users
+
+**Step 2: "Reports" Tab Still Missing** (PENDING)
+- "Reports" tab exists in Default Navigation but NOT in B2B Navigation
+- Login users with B2B accounts continue to see B2B Navigation (as designed)
+- **Solution Required**: Add "Reports" menu item to B2B Navigation
+
+### NewOrg Deployment Checklist - Navigation Configuration
+
+**CRITICAL**: When deploying Producer Portal to NewOrg, ensure the following navigation configuration:
+
+#### Pre-Deployment Verification
+
+1. **Query Account Field Values**:
+```sql
+SELECT COUNT(), Producer_Obligation_Yype__c
+FROM Account
+WHERE Producer_Obligation_Yype__c != null
+GROUP BY Producer_Obligation_Yype__c
+```
+Expected: Confirm which accounts have "B2B" value
+
+2. **Verify Experience Bundle Variation**:
+```bash
+sf project retrieve start --metadata ExperienceBundle --target-org NewOrg
+# Check: experiences/Producer_Portal1/variations/defaultThemeNavigationMenuComponentProperties.json
+# Confirm: navigationMenuEditorRefresh = "B2B_Navigation" or "Default_Navigation"
+```
+
+3. **Query Navigation Menu Items**:
+```sql
+SELECT Label, Type, Target, NavigationLinkSetId, Position
+FROM NavigationMenuItem
+WHERE NavigationLinkSetId IN (
+  SELECT Id FROM NavigationLinkSet WHERE MasterLabel IN ('B2B Navigation', 'Default Navigation')
+)
+ORDER BY NavigationLinkSetId, Position
+```
+
+#### Deployment Steps
+
+**Step 1: Retrieve Navigation Menus from OldOrg**
+```bash
+sf data query --query "SELECT Id, MasterLabel, DeveloperName FROM NavigationLinkSet WHERE MasterLabel IN ('B2B Navigation', 'Default Navigation')" --target-org OldOrg
+
+sf data query --query "SELECT Id, Label, Type, Target, Position, NavigationLinkSetId, DefaultListViewId, AccessRestriction FROM NavigationMenuItem WHERE NavigationLinkSetId IN (SELECT Id FROM NavigationLinkSet WHERE MasterLabel IN ('B2B Navigation', 'Default Navigation')) ORDER BY NavigationLinkSetId, Position" --target-org OldOrg
+```
+
+**Step 2: Configure B2B Navigation in NewOrg Experience Builder**
+
+1. Open Experience Builder for Producer Portal in NewOrg
+2. Go to Settings → Navigation Menus → B2B Navigation
+3. **Verify/Update existing menu items**:
+   - Contract Details → Producer_Contract__c ✅
+   - **Placed On Market Data → Producer_Placed_on_Market__c** (NOT ACE_Web_Form__c)
+   - Dashboard → /dashboard-b2b ✅
+   - Compliance Documentation → /compliance-documentation ✅
+   - Invoices → /invoices ✅
+
+4. **ADD "Reports" menu item**:
+   - Click "+ Add Menu Item"
+   - Label: "Reports"
+   - Type: Salesforce Object or URL
+   - Page Type: "Reports"
+   - Target: `/reports` or Reports object
+   - Position: 5 (after Compliance Documentation, before Invoices)
+   - Access Restriction: None
+
+5. **Save and Publish** the Experience Cloud site
+
+**Step 3: Configure Default Navigation in NewOrg**
+
+1. Go to Settings → Navigation Menus → Default Navigation
+2. Verify all menu items:
+   - Contract Details → Producer_Contract__c ✅
+   - Placed On Market Data → Producer_Placed_on_Market__c ✅
+   - Dashboard → /dashboard ✅
+   - Compliance Documentation → /compliance-documentation ✅
+   - **Reports → /reports** ✅ (should already exist)
+   - Invoices → /invoices ✅
+
+**Step 4: Verify Permission Sets**
+
+Ensure Customer_Community_Plus permission set grants access to:
+- Producer_Placed_on_Market__c (Read, Create, Edit)
+- Producer_Contract__c (Read)
+- **NOT** ACE_Web_Form__c (remove if exists)
+
+#### Post-Deployment Validation
+
+**Test User Scenario 1: B2B Account Login User**
+
+1. Create test Contact with Account where `Producer_Obligation_Yype__c = "B2B"`
+2. Create User:
+   - Profile: Producer Director User Login
+   - License: Customer Community Plus Login
+   - Contact: Test Contact (B2B account)
+3. Assign Customer_Community_Plus permission set
+4. Login to Producer Portal as test user
+5. **Verify Navigation Tabs Visible**:
+   - Contract Details ✅
+   - Placed On Market Data ✅
+   - Reports ✅ (NEW - should be visible)
+   - Dashboard ✅
+   - Compliance Documentation ✅
+   - Invoices ✅
+
+**Test User Scenario 2: Non-B2B Account Login User**
+
+1. Create test Contact with Account where `Producer_Obligation_Yype__c = null` or other value
+2. Create User (same profile/license as above)
+3. Login to Producer Portal
+4. **Verify Navigation**: Should see Default Navigation (not B2B Navigation)
+5. All tabs should be visible including Reports
+
+**Test User Scenario 3: Full License User (Customer Community Plus)**
+
+1. Use existing full license user
+2. Login to Producer Portal
+3. Verify navigation works regardless of `Producer_Obligation_Yype__c` value
+
+### Key Learnings for Future Maintenance
+
+1. **Navigation Menu Architecture**:
+   - Producer Portal uses **TWO navigation menus**: "Default Navigation" and "B2B Navigation"
+   - B2B Navigation is the **site default** (configured in Experience Bundle variation)
+   - Audience targeting may show Default Navigation to certain user segments
+
+2. **Tab Visibility Mechanism**:
+   - Salesforce **automatically hides** navigation tabs when users lack object permissions
+   - No error shown - tab simply doesn't appear
+   - Always ensure navigation menu items point to objects users can access
+
+3. **Audience Targeting Fields**:
+   - Uses `Account.Producer_Obligation_Yype__c` (note typo in API name)
+   - Different from `Account.Producer_Contract_Obligation_Types__c`
+   - Query both fields to understand user segmentation
+
+4. **Permission Set Requirements**:
+   - Login license users require **explicit permission sets** for object access
+   - Full license users have **implicit access** via license
+   - Always assign Customer_Community_Plus permission set to Login users
+
+5. **Experience Cloud Publishing**:
+   - Navigation changes in **Draft** state are NOT visible to users
+   - Must **Publish** the site for changes to take effect
+   - Check Published vs Draft status when troubleshooting
+
+### Related Components for NewOrg Deployment
+
+**Permission Sets**:
+- [Customer_Community_Plus.permissionset-meta.xml](code/main/default/permissionsets/Customer_Community_Plus.permissionset-meta.xml)
+
+**Account Fields**:
+- Producer_Contract_Obligation_Types__c (Multi-select picklist)
+- Producer_Obligation_Yype__c (Picklist - used by audience targeting)
+
+**Navigation Menus** (Manual UI Configuration Required):
+- B2B Navigation (0LmSj00000009hdKAA in OldOrg)
+- Default Navigation (0LmSj00000008DhKAI in OldOrg)
+
+**Objects Referenced**:
+- Producer_Placed_on_Market__c (accessible by Login users)
+- Producer_Contract__c (accessible by Login users)
+- ACE_Web_Form__c (NOT accessible by Login users - do NOT use in nav)
+
+### Technical Details for Reference
+
+**Experience Bundle File Structure**:
+```
+experiences/Producer_Portal1/
+├── config/
+│   ├── mainAppPage.json
+│   ├── nativeConfig.json
+│   └── loginAppPage.json
+├── variations/
+│   └── defaultThemeNavigationMenuComponentProperties.json  ← Navigation default
+└── routes/
+    ├── dashboard.json
+    ├── dashboard-b2b.json
+    └── ...
+```
+
+**Variation Configuration** (`defaultThemeNavigationMenuComponentProperties.json`):
+```json
+{
+  "componentVariants" : [ {
+    "propertyOverrides" : {
+      "componentAttributes" : {
+        "navigationMenuEditorRefresh" : "B2B_Navigation"  ← Site default
+      }
+    }
+  } ]
+}
+```
+
+**Navigation MenuItem SOQL Queries**:
+```sql
+-- Get all navigation menus
+SELECT Id, MasterLabel, DeveloperName, NetworkId
+FROM NavigationLinkSet
+WHERE NetworkId IN (SELECT Id FROM Network WHERE Name = 'Producer Portal')
+
+-- Get all menu items for a specific menu
+SELECT Id, Label, Type, Target, Position, DefaultListViewId, AccessRestriction
+FROM NavigationMenuItem
+WHERE NavigationLinkSetId = '0LmSj00000009hdKAA'
+ORDER BY Position
+```
+
+**User Query for Troubleshooting**:
+```sql
+SELECT Name, Profile.Name, UserType, Contact.Account.Producer_Obligation_Yype__c,
+       Contact.Account.Producer_Contract_Obligation_Types__c,
+       (SELECT PermissionSet.Name FROM PermissionSetAssignments
+        WHERE PermissionSet.Name = 'Customer_Community_Plus')
+FROM User
+WHERE Profile.Name LIKE '%Producer%Login%' AND IsActive = true
+```
+
+### References
+
+**OldOrg Analysis Files** (Temporary locations - retrieved 2025-10-25):
+- Experience Bundle: `/tmp/experience-bundle/experiences/Producer_Portal1/`
+- Navigation configuration: `/tmp/experience-bundle/experiences/Producer_Portal1/variations/defaultThemeNavigationMenuComponentProperties.json`
+- Producer Flows: `/tmp/producer-flows/unpackaged/flows/`
+
+**Related Documentation**:
+- Producer Portal Sharing Mechanism Analysis: `/home/john/Projects/Salesforce/PRODUCER_PORTAL_SHARING_MECHANISM_ANALYSIS.md`
+- Permission Set File: [Customer_Community_Plus.permissionset-meta.xml](code/main/default/permissionsets/Customer_Community_Plus.permissionset-meta.xml)
+
+**Deployment History**:
+- Issue #1-5 Fixes: See "Issues Fixed - Implementation History" section above
+- Navigation Fix: 2025-10-25 (OldOrg only - manual UI change, not metadata deployment)
+
+---
+
 ## Conclusion
 
 This deployment package contains:
 1. **CRITICAL VERSION UPDATE**: ProducerPlacedOnMarketTriggerHelper.cls v1.0 → v2.4 (fixes 5 production bugs)
 2. **Login License Sharing Solution** (Issue #5 fix): 4 classes + 4 triggers
 3. **UX Improvements** (V2.4): 2 flows for status management and user feedback
+4. **Navigation Configuration Guide** (NEW - 2025-10-25): B2B Navigation and Default Navigation menu setup for Login users
 
 **Deployment Status**: CRITICAL VERSION MISMATCH DETECTED - MUST UPDATE BEFORE GO-LIVE
 
@@ -1400,9 +1761,10 @@ This deployment package contains:
 **Document History**:
 - **V1.0** (2025-10-22): Initial NewOrg deployment package
 - **V2.0** (2025-10-23): CRITICAL UPDATE - Added version mismatch analysis based on actual NewOrg queries
+- **V2.1** (2025-10-25): Added "Producer Portal Navigation Tab Visibility Issue" section - Complete analysis of B2B Navigation configuration, permission set requirements, and manual UI configuration steps for NewOrg deployment
 
 **Contact**: Shintu John (shintu.john@recyclinglives.com)
-**Last Updated**: 2025-10-23
+**Last Updated**: 2025-10-25
 **Deployment Target**: NewOrg (Recycling Lives Group)
 **Priority**: P0 CRITICAL - DEPLOY BEFORE GO-LIVE
 
