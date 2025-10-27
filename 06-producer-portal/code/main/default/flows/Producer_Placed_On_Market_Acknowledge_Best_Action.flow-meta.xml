@@ -246,8 +246,8 @@
         <label>Confirmation Screen</label>
         <locationX>578</locationX>
         <locationY>350</locationY>
-        <allowBack>false</allowBack>
-        <allowFinish>true</allowFinish>
+        <allowBack>true</allowBack>
+        <allowFinish>false</allowFinish>
         <allowPause>false</allowPause>
         <connector>
             <targetReference>Update_Placed_On_Market_Records</targetReference>
@@ -336,6 +336,7 @@
                 <formulaExpression>{!Iconfirm}</formulaExpression>
             </validationRule>
         </fields>
+        <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
         <showFooter>true</showFooter>
         <showHeader>false</showHeader>
     </screens>
