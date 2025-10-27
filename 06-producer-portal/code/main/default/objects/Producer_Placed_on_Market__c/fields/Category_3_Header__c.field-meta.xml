@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Category_3_Header__c</fullName>
+    <externalId>false</externalId>
+    <formula>&quot;CATEGORY 3: IT AND TELECOMMUNICATIONS EQUIPMENT || Examples: Computers, printers, telephones, mobile phones, laptops, tablets&quot;</formula>
+    <label>Category 3 Header</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

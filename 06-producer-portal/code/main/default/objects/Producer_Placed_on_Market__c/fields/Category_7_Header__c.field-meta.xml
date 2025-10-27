@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Category_7_Header__c</fullName>
+    <externalId>false</externalId>
+    <formula>&quot;CATEGORY 7: TOYS LEISURE AND SPORTS EQUIPMENT || Examples: Electric trains, video games, sports equipment with electric components&quot;</formula>
+    <label>Category 7 Header</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

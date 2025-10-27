@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>History_List_View__c</fullName>
+    <formula>IF($Permission.Producer_Standard_User, ISPICKVAL(Status__c, &quot;Signed&quot;) || ISPICKVAL(Status__c, &quot;Acknowledge Market Data&quot;),
+  ISPICKVAL(Status__c, &quot;Signed&quot;)
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>History List View</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

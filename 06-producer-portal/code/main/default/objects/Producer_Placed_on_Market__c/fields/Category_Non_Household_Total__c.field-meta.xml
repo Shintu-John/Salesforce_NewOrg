@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Category_Non_Household_Total__c</fullName>
+    <externalId>false</externalId>
+    <formula>Category_1_Non_Household__c + 
+Category_2_Non_Household__c + 
+Category_3_Non_Household__c + 
+Category_4_Non_Household__c + 
+Category_5_Non_Household__c + 
+Category_6_Non_Household__c + 
+Category_7_Non_Household__c + 
+Category_8_Non_Household__c + 
+Category_9_Non_Household__c + 
+Category_10_Non_Household__c + 
+Category_11_Non_Household__c + 
+Category_12_Non_Household__c + 
+Category_13_Non_Household__c + 
+Category_14_Non_Household__c + 
+Category_15_Non_Household__c</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Category Non-Household Total</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>3</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

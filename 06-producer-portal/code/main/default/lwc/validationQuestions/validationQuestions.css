@@ -1,0 +1,39 @@
+.slds-box {
+    border: 1px solid #d8dde6;
+    padding: 1rem;
+    background-color: #f4f6f9;
+}
+.scroll-container {
+    max-height: 300px; /* Adjust height as needed */
+    overflow-y: auto;
+    margin-bottom: 1rem; /* Space between the container and the Save button */
+    padding-right: 1rem; /* Add padding to prevent horizontal scroll */
+}
+
+.fixed-footer {
+    position: sticky;
+    bottom: 0;
+    background-color: #ffffff;
+    text-align: right;
+    padding: 0.5rem;
+    border-top: 1px solid #d8dde6;
+}
+
+/* Character Counter Styling */
+.character-counter {
+    font-size: 0.75rem;
+    color: #706e6b;
+}
+
+.character-counter-error {
+    font-size: 0.75rem;
+    color: #c23934;
+    font-weight: bold;
+}
+
+/* Character counter warning styles */
+.character-counter-warning {
+    font-size: 0.75rem;
+    color: #fe9339;
+    font-weight: bold;
+}

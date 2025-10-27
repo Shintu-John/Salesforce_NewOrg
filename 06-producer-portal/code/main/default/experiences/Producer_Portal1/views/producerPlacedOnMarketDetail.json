@@ -1,0 +1,147 @@
+{
+  "appPageId" : "da16499f-19e2-4e0b-924f-75b25b3c3710",
+  "componentName" : "siteforce:sldsTwoCol84Layout",
+  "dataProviders" : [ ],
+  "id" : "3364127d-4bc1-45a5-8140-b0c53e703cca",
+  "label" : "Producer Placed on Market Detail",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "richTextValue" : "<p></p>"
+      },
+      "componentName" : "forceCommunity:htmlBlock",
+      "id" : "3e2b71ad-a0fd-4e87-a136-c46ec0cead97",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    }, {
+      "componentAttributes" : {
+        "recordId" : "{!recordId}"
+      },
+      "componentName" : "forceCommunity:recordHeadline",
+      "id" : "b470f7bc-99eb-4b91-b45d-572a89a921b4",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    }, {
+      "componentAttributes" : {
+        "richTextValue" : "<div style=\"background-color: #f98232; color: #000F50; border-radius: 10px; padding: 16px; font-size: 18px; text-align: center; font-weight: normal;\">\n    <p>Please enter <strong>all weights in tonnes</strong>, to 3 decimal places of the new electrical and electronic equipment (EEE) placed on the UK market for the period specified.\n    <br><br>\n    If you require guidance on the category your EEE needs to be reported in, please contact us for further information.\n        <br><br>\n    *To convert kilograms to tonnes, divide your figure by 1,000.</p>\n</div>"
+      },
+      "componentName" : "forceCommunity:htmlBlock",
+      "id" : "6beb3c4f-7474-44bb-ab8e-0ea1de5e657e",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "1c5d06d2-5eee-4dad-a16c-1d5d01eab6bf",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "recordId" : "{!recordId}"
+      },
+      "componentName" : "forceCommunity:recordDetail",
+      "id" : "a30368fe-5b09-4343-b32e-1b027dd87e4d",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    }, {
+      "componentAttributes" : {
+        "recordId" : ""
+      },
+      "componentName" : "c:ProducerPomAutoAcknowledge",
+      "id" : "f7b7acb0-439a-43cd-8418-478d718c3aee",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    }, {
+      "componentAttributes" : { },
+      "componentName" : "c:rlcs_acknowledgeMarketDataMessage",
+      "id" : "075738f2-44e3-4807-b0db-454786034998",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "188af49e-bff9-42ff-8498-df79d55223a9",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "id" : "2c895415-af6e-4833-837b-380833b82d30",
+    "regionName" : "footer",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "{!Record._Object}: {!Record._Title}"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "c282df1b-ea69-45fc-baa0-8b8640b19914",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "b47f3b7b-9217-4125-bccf-622e33f17d63",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "relatedListApiName" : "Validation_Questions__r",
+        "relatedListComponentOverride" : "GRID",
+        "width" : "SMALL"
+      },
+      "componentName" : "forceCommunity:responsiveRelatedListSingle",
+      "id" : "d4403cb6-e4e3-47ef-a530-33536fe96705",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    }, {
+      "componentAttributes" : {
+        "allowClose" : true,
+        "booleanFieldApi" : "Show_Signature_Popup__c",
+        "flowApiName" : "Producer_Placed_On_Market_Signature_Best_Action",
+        "objectApiName" : "Producer_Placed_on_Market__c",
+        "title" : "Capture Signature"
+      },
+      "componentName" : "c:customFlowPopup",
+      "id" : "28ab12aa-81aa-4197-afa7-62e69ee00e8f",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    }, {
+      "componentAttributes" : {
+        "allowClose" : false,
+        "booleanFieldApi" : "Show_Popup_For_Validation_Question__c",
+        "flowApiName" : "validationQuestionsFlow",
+        "objectApiName" : "Producer_Placed_on_Market__c",
+        "title" : "Validation Questions"
+      },
+      "componentName" : "c:customFlowPopup",
+      "id" : "3e02d150-7ea7-448b-b702-1e52faa06784",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    }, {
+      "componentAttributes" : {
+        "allowClose" : false,
+        "booleanFieldApi" : "Show_Acknowledgement_PopUp__c",
+        "flowApiName" : "Producer_Placed_On_Market_Acknowledge_Best_Action",
+        "objectApiName" : "Producer_Placed_on_Market__c",
+        "title" : "Data Acknowledgement"
+      },
+      "componentName" : "c:customFlowPopup",
+      "id" : "57715c45-7675-430e-842a-3998cef594d9",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "a1f3503b-c4cc-49b1-95df-5036daf657b1",
+    "regionName" : "sidebar",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "detail-a4d"
+}

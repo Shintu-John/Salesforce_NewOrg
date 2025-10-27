@@ -1,0 +1,12 @@
+{
+  "activeViewId" : "e7327ca0-5b7d-4a5f-8b45-1157f8fc77da",
+  "appPageId" : "da16499f-19e2-4e0b-924f-75b25b3c3710",
+  "configurationTags" : [ ],
+  "devName" : "Invoice_List__c",
+  "id" : "cad8e01e-16ae-43f4-bf96-b5ea3182d68a",
+  "label" : "Invoice List",
+  "objectApiName" : "Invoice__c",
+  "routeType" : "list-a28",
+  "type" : "route",
+  "urlPrefix" : "invoice"
+}

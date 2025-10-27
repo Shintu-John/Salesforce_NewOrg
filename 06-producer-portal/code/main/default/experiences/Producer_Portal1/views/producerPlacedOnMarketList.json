@@ -1,0 +1,274 @@
+{
+  "appPageId" : "da16499f-19e2-4e0b-924f-75b25b3c3710",
+  "componentName" : "siteforce:sldsOneColLayout",
+  "dataProviders" : [ ],
+  "id" : "6e4ea772-4448-4b40-834d-0ac207787803",
+  "label" : "Producer Placed on Market List",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "richTextValue" : "<p></p>"
+      },
+      "componentName" : "forceCommunity:htmlBlock",
+      "id" : "01dab8fe-d893-4461-9555-16ea13d3762c",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "c245e6d8-a401-42e5-99e4-f4c2b2151e34",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "tabsetConfig" : {
+          "UUID" : "375c55cd-9ac8-4a53-b8b7-7e58017df7bb",
+          "activeTab" : "",
+          "tabs" : [ {
+            "UUID" : "085a54bc-461b-4a5d-9e9f-e51d870c65ba",
+            "allowGuestUser" : false,
+            "locked" : false,
+            "seedComponents" : [ ],
+            "tabKey" : "2",
+            "tabName" : "Due Now"
+          }, {
+            "UUID" : "180fe30b-f17e-4519-8539-12915556744b",
+            "allowGuestUser" : false,
+            "locked" : false,
+            "seedComponents" : [ ],
+            "tabKey" : "15beb",
+            "tabName" : "Additional Information Required"
+          }, {
+            "UUID" : "bf9be141-9b5e-450b-ab13-81d99fc7d384",
+            "allowGuestUser" : false,
+            "locked" : false,
+            "seedComponents" : [ ],
+            "tabKey" : "12fc6",
+            "tabName" : "Signature Required"
+          }, {
+            "UUID" : "a6d47913-2510-4a45-a61c-0303db2f5755",
+            "allowGuestUser" : false,
+            "locked" : false,
+            "seedComponents" : [ ],
+            "tabKey" : "3",
+            "tabName" : "Completed Submissions"
+          }, {
+            "UUID" : "57130671-1aa9-4b5c-bd27-915b0654322f",
+            "allowGuestUser" : false,
+            "locked" : false,
+            "seedComponents" : [ ],
+            "tabKey" : "1",
+            "tabName" : "Upcoming Dates"
+          } ],
+          "useOverflowMenu" : true
+        }
+      },
+      "componentName" : "forceCommunity:tabLayout",
+      "id" : "375c55cd-9ac8-4a53-b8b7-7e58017df7bb",
+      "regions" : [ {
+        "components" : [ {
+          "componentAttributes" : {
+            "richTextValue" : "<p></p>"
+          },
+          "componentName" : "forceCommunity:htmlBlock",
+          "id" : "4557a35e-f524-4683-af20-33c6a36b549f",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        }, {
+          "componentAttributes" : {
+            "enableInlineEdit" : false,
+            "filterName" : "Past_Due",
+            "layout" : "FULL",
+            "pageSize" : 25,
+            "scope" : "Producer_Placed_on_Market__c",
+            "showActionBar" : false,
+            "showChartsPanel" : false,
+            "showDisplay" : "grid",
+            "showFilterPanel" : false,
+            "showImageIcon" : false,
+            "showManualRefreshButton" : false,
+            "showObjectName" : false,
+            "showPinnedList" : false,
+            "showSearchBar" : false
+          },
+          "componentName" : "forceCommunity:objectHome",
+          "id" : "5c1d864e-65ac-49da-8c5c-218950974ef5",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "085a54bc-461b-4a5d-9e9f-e51d870c65ba",
+        "regionLabel" : "Due Now",
+        "regionName" : "2",
+        "renditionMap" : { },
+        "type" : "region"
+      }, {
+        "components" : [ {
+          "componentAttributes" : {
+            "richTextValue" : "<p></p>"
+          },
+          "componentName" : "forceCommunity:htmlBlock",
+          "id" : "b736a554-0ffe-4e8b-8cc4-7a205846ca11",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        }, {
+          "componentAttributes" : {
+            "enableInlineEdit" : false,
+            "filterName" : "Unanswered_Questions",
+            "layout" : "FULL",
+            "pageSize" : 25,
+            "scope" : "Producer_Placed_on_Market__c",
+            "showActionBar" : false,
+            "showChartsPanel" : false,
+            "showDisplay" : "grid",
+            "showFilterPanel" : false,
+            "showImageIcon" : false,
+            "showManualRefreshButton" : false,
+            "showObjectName" : false,
+            "showPinnedList" : false,
+            "showSearchBar" : false
+          },
+          "componentName" : "forceCommunity:objectHome",
+          "id" : "5e47ffde-c76c-4c04-90ab-28a74ac6f402",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "180fe30b-f17e-4519-8539-12915556744b",
+        "regionLabel" : "Additional Information Required",
+        "regionName" : "15beb",
+        "renditionMap" : { },
+        "type" : "region"
+      }, {
+        "components" : [ {
+          "componentAttributes" : {
+            "richTextValue" : "<p></p>"
+          },
+          "componentName" : "forceCommunity:htmlBlock",
+          "id" : "1d35d5e4-80ab-45d8-be12-c83da6589cfa",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        }, {
+          "componentAttributes" : {
+            "enableInlineEdit" : false,
+            "filterName" : "Signature_Required",
+            "layout" : "FULL",
+            "pageSize" : 25,
+            "scope" : "Producer_Placed_on_Market__c",
+            "showActionBar" : false,
+            "showChartsPanel" : false,
+            "showDisplay" : "grid",
+            "showFilterPanel" : false,
+            "showImageIcon" : false,
+            "showManualRefreshButton" : false,
+            "showObjectName" : false,
+            "showPinnedList" : false,
+            "showSearchBar" : false
+          },
+          "componentName" : "forceCommunity:objectHome",
+          "id" : "c21fae3e-c8be-4a90-a9c7-17fbac4c80c3",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "bf9be141-9b5e-450b-ab13-81d99fc7d384",
+        "regionLabel" : "Signature Required",
+        "regionName" : "12fc6",
+        "renditionMap" : { },
+        "type" : "region"
+      }, {
+        "components" : [ {
+          "componentAttributes" : {
+            "richTextValue" : "<p></p>"
+          },
+          "componentName" : "forceCommunity:htmlBlock",
+          "id" : "324d0d70-6a8e-4409-b2e0-83b4966e00eb",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        }, {
+          "componentAttributes" : {
+            "enableInlineEdit" : false,
+            "filterName" : "History",
+            "layout" : "FULL",
+            "pageSize" : 25,
+            "scope" : "Producer_Placed_on_Market__c",
+            "showActionBar" : false,
+            "showChartsPanel" : false,
+            "showDisplay" : "grid",
+            "showFilterPanel" : false,
+            "showImageIcon" : false,
+            "showManualRefreshButton" : false,
+            "showObjectName" : false,
+            "showPinnedList" : false,
+            "showSearchBar" : false
+          },
+          "componentName" : "forceCommunity:objectHome",
+          "id" : "6fd628f0-64a6-45c0-8996-ff5e62d5d7e9",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "a6d47913-2510-4a45-a61c-0303db2f5755",
+        "regionLabel" : "Completed Submissions",
+        "regionName" : "3",
+        "renditionMap" : { },
+        "type" : "region"
+      }, {
+        "components" : [ {
+          "componentAttributes" : {
+            "richTextValue" : "<p></p>"
+          },
+          "componentName" : "forceCommunity:htmlBlock",
+          "id" : "7776a7c2-5f05-4daf-88a3-14e32ab2a86a",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        }, {
+          "componentAttributes" : {
+            "enableInlineEdit" : false,
+            "filterName" : "Upcoming_Dates",
+            "layout" : "FULL",
+            "pageSize" : 25,
+            "scope" : "Producer_Placed_on_Market__c",
+            "showActionBar" : false,
+            "showChartsPanel" : false,
+            "showDisplay" : "grid",
+            "showFilterPanel" : false,
+            "showImageIcon" : false,
+            "showManualRefreshButton" : false,
+            "showObjectName" : false,
+            "showPinnedList" : false,
+            "showSearchBar" : false
+          },
+          "componentName" : "forceCommunity:objectHome",
+          "id" : "57420f21-6a1e-4c57-8020-0d1044990c6f",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "57130671-1aa9-4b5c-bd27-915b0654322f",
+        "regionLabel" : "Upcoming Dates",
+        "regionName" : "1",
+        "renditionMap" : { },
+        "type" : "region"
+      } ],
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "88b4e91f-c59f-48f9-b061-ef0bf9e3a464",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "id" : "67ce5f2e-5967-4192-8ada-267d89d368bb",
+    "regionName" : "footer",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "list-a4d"
+}

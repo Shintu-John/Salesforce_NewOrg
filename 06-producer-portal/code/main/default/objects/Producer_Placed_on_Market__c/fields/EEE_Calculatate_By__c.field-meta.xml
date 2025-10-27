@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>EEE_Calculatate_By__c</fullName>
+    <label>EEE Calculated By</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Purchases</fullName>
+                <default>false</default>
+                <label>Purchases</label>
+            </value>
+            <value>
+                <fullName>Sales</fullName>
+                <default>false</default>
+                <label>Sales</label>
+            </value>
+            <value>
+                <fullName>Manufacturing</fullName>
+                <default>false</default>
+                <label>Manufacturing</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+            <value>
+                <fullName>Imports</fullName>
+                <default>false</default>
+                <label>Imports</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

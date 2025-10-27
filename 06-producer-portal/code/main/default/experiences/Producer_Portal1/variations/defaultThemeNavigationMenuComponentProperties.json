@@ -1,0 +1,15 @@
+{
+  "componentVariants" : [ {
+    "id" : "bd46eaeb-8640-4b3d-aaf5-6e46a02b4a52",
+    "propertyOverrides" : {
+      "componentAttributes" : {
+        "navigationMenuEditorRefresh" : "B2B_Navigation"
+      }
+    },
+    "targetId" : "05e6a085-4225-4f57-b697-d5f3c084eda1",
+    "type" : "componentVariant"
+  } ],
+  "developerName" : "Default_Theme_Navigation_Menu_Component_Properties",
+  "id" : "5587f18d-f49f-4e03-babb-3e7f3881df6c",
+  "type" : "experienceVariation"
+}

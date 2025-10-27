@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>History</fullName>
+    <columns>NAME</columns>
+    <columns>Quarter_With_Year__c</columns>
+    <columns>Director_Sign_By__c</columns>
+    <columns>Director_Sign_Date_Time__c</columns>
+    <columns>RECORDTYPE</columns>
+    <columns>Status__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Status__c</field>
+        <operation>equals</operation>
+        <value>Signed</value>
+    </filters>
+    <label>History</label>
+</ListView>

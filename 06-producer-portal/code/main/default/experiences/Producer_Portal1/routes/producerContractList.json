@@ -1,0 +1,12 @@
+{
+  "activeViewId" : "cd9a5897-88b8-47ed-b325-340b6636d8da",
+  "appPageId" : "da16499f-19e2-4e0b-924f-75b25b3c3710",
+  "configurationTags" : [ ],
+  "devName" : "Producer_Contract_List__c",
+  "id" : "b7737605-5123-456b-bc10-ac829b270e49",
+  "label" : "Producer Contract List",
+  "objectApiName" : "Producer_Contract__c",
+  "routeType" : "list-a4a",
+  "type" : "route",
+  "urlPrefix" : "producer-contract"
+}

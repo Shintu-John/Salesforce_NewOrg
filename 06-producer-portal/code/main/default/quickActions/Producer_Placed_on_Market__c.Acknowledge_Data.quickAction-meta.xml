@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QuickAction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Acknowledge Data</label>
+    <optionsCreateFeedItem>false</optionsCreateFeedItem>
+    <targetObject>Producer_Placed_on_Market__c</targetObject>
+    <type>Flow</type>
+    <flow>Producer_Placed_On_Market_Acknowledge_Best_Action</flow>
+</QuickAction>

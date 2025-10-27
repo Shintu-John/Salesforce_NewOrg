@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Producer POM Record Form</masterLabel>
+    <description>Custom record edit form for Producer Placed on Market that automatically launches acknowledge flow after save</description>
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <property name="recordId" type="String" default="{!recordId}" />
+            <objects>
+                <object>Producer_Placed_on_Market__c</object>
+            </objects>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

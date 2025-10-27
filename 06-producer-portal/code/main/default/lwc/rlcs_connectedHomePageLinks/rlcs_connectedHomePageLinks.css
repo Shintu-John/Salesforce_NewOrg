@@ -1,0 +1,437 @@
+/* ==========================================================================
+   CONTAINER & WRAPPER STYLES
+   ========================================================================== */
+   .rls-navigation-wrapper {
+    width: 100%;
+    max-width: 100%;
+    height: 400px;
+    max-height: 400px;
+    min-height: 400px;
+    display: block;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+.navigation-container {
+    display: flex;
+    gap: 15px;
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+.main-menu-container, .sub-menu-container {
+    border-radius: 10px;
+}
+
+/* ==========================================================================
+   MAIN MENU STYLES
+   ========================================================================== */
+.calendar-dates-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    box-sizing: border-box;
+    min-width: 0;
+    overflow-x: hidden;
+}
+
+.navigation-links-container {
+    flex: 2;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    background-color: #000F50;
+    border-radius: 10px;
+    box-sizing: border-box;
+    min-width: 0;
+}
+
+.sub-menu-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    background-color: #000F50;
+    width: 100%;
+}
+
+.main-menu {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    justify-content: center;
+}
+
+.main-menu.three-buttons {
+    gap: 20px; /* Reduced gap if Book Grab present */
+}
+
+.menu-item-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.menu-item {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* ==========================================================================
+   SUB MENU STYLES
+   ========================================================================== */
+.sub-menu {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, auto);
+    gap: 20px;
+    padding: 10px;
+    position: relative;
+}
+
+.sub-menu-item {
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: transform 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+/* ==========================================================================
+   IMAGE STYLES
+   ========================================================================== */
+.menu-item-image {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    transition: opacity 0.3s ease;
+}
+
+.menu-item-image.hover {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+}
+
+/* ==========================================================================
+   HOVER EFFECTS
+   ========================================================================== */
+.menu-item:hover .menu-item-image.default {
+    opacity: 0;
+}
+
+.menu-item:hover .menu-item-image.hover {
+    opacity: 1;
+}
+
+.main-menu .menu-item:hover {
+    transform: scale(1.10);
+    transition: transform 0.3s ease;
+}
+
+.sub-menu-item:hover {
+    transform: scale(1.20);
+    transition: transform 0.3s ease;
+}
+
+/* ==========================================================================
+   ACCESSIBILITY STYLES
+   ========================================================================== */
+.slds-assistive-text {
+    position: absolute !important;
+    margin: -1px !important;
+    border: 0 !important;
+    padding: 0 !important;
+    width: 1px !important;
+    height: 1px !important;
+    overflow: hidden !important;
+    clip: rect(0 0 0 0) !important;
+    text-transform: none !important;
+    white-space: nowrap !important;
+}
+
+/* ==========================================================================
+   RLS Squiggle Bottom Right
+   ========================================================================== */
+   .bottom-right-image {
+    position: absolute;
+    bottom: -47px;
+    right: -20px;
+    z-index: 1;
+    width: 60%;
+    height: 60%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    pointer-events: none;
+}
+
+.bottom-right-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    opacity: 0.3;
+}
+
+/* ==========================================================================
+   MOBILE RESPONSIVE STYLES
+   ========================================================================== */
+@media (max-width: 768px) {
+    /* Container Adjustments */
+    .rls-navigation-wrapper {
+        height: auto;
+        max-height: none;
+        min-height: auto;
+    }
+    
+    .navigation-container {
+        flex-direction: column;
+        height: auto;
+        max-height: none;
+        gap: 15px;
+    }
+
+    .calendar-dates-container {
+        flex: 1;
+        order: 2;
+        height: auto;
+        max-height: none;
+    }
+
+    .navigation-links-container {
+        flex: 1;
+        order: 1;
+        height: auto;
+        max-height: none;
+    }
+
+    /* Calendar/Dates Mobile Adjustments */
+    .calendar-dates-container {
+        gap: 10px;
+    }
+
+    .section-header {
+        gap: 10px;
+    }
+
+    .section-icon img {
+        height: 40px;
+    }
+
+    .section-title {
+        font-size: 14px;
+    }
+
+    .date-item {
+        padding: 8px;
+    }
+
+    .date-description {
+        font-size: 12px;
+    }
+
+    .scrollable-list {
+        max-height: 150px;
+    }
+
+
+
+    /* Sub Menu Mobile Adjustments */
+    .sub-menu {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(5, auto);
+        gap: 15px;
+    }
+
+    .sub-menu a {
+        grid-column: 1 !important;
+        height: 40px;
+    }
+
+    .sub-menu-item {
+        height: 40px;
+        background-size: contain;
+    }
+
+    /* Reset grid positioning on mobile */
+    .sub-menu a:nth-child(3),
+    .sub-menu a:nth-child(4),
+    .sub-menu a:nth-child(5) {
+        grid-column: 1;
+    }
+
+    /* Bottom Right Image Mobile Adjustments */
+    .bottom-right-image {
+        bottom: -10px;
+        right: -10px;
+        width: 50%;
+        height: 50%;
+    }
+}
+
+/* Very Small Screens */
+@media (max-width: 480px) {
+    .main-menu-container,
+    .sub-menu-container {
+    }
+
+    .menu-item-image,
+    .sub-menu-item {
+        width: 85%;
+    }
+}
+
+
+/* ==========================================================================
+   CALENDAR/DATES SECTION STYLES
+   ========================================================================== */
+.upcoming-dates-section,
+.past-due-section {
+    background-color: #000F50;
+    border-radius: 10px;
+    padding: 20px;
+    color: white;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Simple Overdue Alert Styling */
+.overdue-alert {
+    background-color: #8B0000;
+    border: 2px solid #FF6347;
+    border-radius: 10px;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    gap: 15px;
+}
+
+.section-icon img {
+    height: 50px;
+    width: auto;
+}
+
+.section-title {
+    color: #32f982;
+    font-size: 16px;
+}
+
+/* Simple Overdue Title */
+.overdue-alert .section-title {
+    color: #FFFF00;
+    font-size: 16px;
+}
+
+.section-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.dates-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.scrollable-list {
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.date-item {
+    padding: 10px;
+    border-left: 3px solid #32f982;
+    background-color: rgba(50, 249, 130, 0.1);
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.date-item:hover {
+    background-color: rgba(50, 249, 130, 0.2);
+}
+
+.clickable-item {
+    cursor: pointer;
+}
+
+.clickable-item:hover {
+    background-color: rgba(50, 249, 130, 0.3);
+}
+
+/* Simple Overdue Items */
+.overdue-item {
+    border-left: 4px solid #FF6347;
+    background-color: rgba(255, 99, 71, 0.15);
+}
+
+.date-value {
+    font-weight: bold;
+    color: #32f982;
+    margin-bottom: 5px;
+}
+
+.date-description {
+    font-size: 14px;
+    color: white;
+    line-height: 1.4;
+}
+
+.clickable-link {
+    color: white;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.clickable-link:hover {
+    color: #32f982;
+}
+
+.no-data-message {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
+    font-style: italic;
+    padding: 20px;
+}
+
+/* Make the scrollbar smaller */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #a0a0a0;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #808080;
+}

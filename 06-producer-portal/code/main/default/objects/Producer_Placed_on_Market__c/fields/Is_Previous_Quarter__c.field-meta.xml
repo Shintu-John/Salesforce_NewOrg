@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Is_Previous_Quarter__c</fullName>
+    <formula>VALUE(LEFT(Quarter_With_Year__c, 4)) &lt; YEAR(TODAY()) ||
+(
+    VALUE(LEFT(Quarter_With_Year__c, 4)) = YEAR(TODAY()) &amp;&amp;
+    VALUE(RIGHT(Quarter_With_Year__c, 1)) &lt; CEILING(MONTH(TODAY()) / 3)
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Is Previous Quarter?</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

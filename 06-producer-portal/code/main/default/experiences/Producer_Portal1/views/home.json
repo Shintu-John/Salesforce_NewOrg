@@ -1,0 +1,82 @@
+{
+  "appPageId" : "da16499f-19e2-4e0b-924f-75b25b3c3710",
+  "componentName" : "siteforce:sldsTwoCol84Layout",
+  "dataProviders" : [ ],
+  "id" : "9de2cc50-750c-4cdb-838a-33fb014a536c",
+  "label" : "Home",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "richTextValue" : "<p></p>"
+      },
+      "componentName" : "forceCommunity:htmlBlock",
+      "id" : "5a6603be-7283-4425-9350-3406cc6b47b8",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "2085a961-280a-4e09-b858-604566bb7af9",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : { },
+      "componentName" : "c:rlcs_connectedHomePageLinks",
+      "id" : "648fad3e-268a-493b-a299-3a744dd6afc8",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    }, {
+      "componentAttributes" : { },
+      "componentName" : "c:rlsConnectedAdditionalServices",
+      "id" : "a1342a39-6367-4a20-a1ff-6b5d087acbff",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "a741c60e-d918-4287-8b81-559cd81bfcfa",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "id" : "28b090e5-cd2f-4c14-a7ba-900d195b51e3",
+    "regionName" : "footer",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "Home"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "414ee83f-b772-41fd-b042-4388f2be80b2",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "6854ec5b-99bb-417a-b4c5-9815b22e7ace",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : { },
+      "componentName" : "c:rlcs_accountOwnerImageDisplay",
+      "id" : "71169c67-ebb9-4609-8af4-631130916002",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    }, {
+      "componentAttributes" : { },
+      "componentName" : "c:linkedinEmbed",
+      "id" : "32f081d4-6f55-4caa-88db-f6d88d41fc40",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "0f912a65-ae06-4e42-9660-bc8f4e58e149",
+    "regionName" : "sidebar",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "home"
+}

@@ -1,0 +1,12 @@
+{
+  "activeViewId" : "ae6978f8-e43c-4c44-8efc-6d5e4b2641c5",
+  "appPageId" : "da16499f-19e2-4e0b-924f-75b25b3c3710",
+  "configurationTags" : [ ],
+  "devName" : "Validation_Question_Detail__c",
+  "id" : "a5164607-f0ae-4522-be0f-2e264b6aad0e",
+  "label" : "Validation Question Detail",
+  "objectApiName" : "Validation_Question__c",
+  "routeType" : "detail-a4j",
+  "type" : "route",
+  "urlPrefix" : "validation-question"
+}

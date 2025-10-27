@@ -1,0 +1,98 @@
+<template>
+    <lightning-card title={title} icon-name={cardIconName}>
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template>
+        <template if:false={isLoading}>
+            <!-- Show Thank You Screen -->
+            <template if:true={showThankYou}>
+                <div class="slds-p-around_large slds-text-align_center">
+                    <div class="slds-m-bottom_large">
+                        <lightning-icon icon-name="action:approval" size="large" variant="success"></lightning-icon>
+                    </div>
+                    <h2 class="slds-text-heading_medium slds-m-bottom_medium">Thank you for confirming</h2>
+                    <p class="slds-text-body_regular slds-m-bottom_large">Your validation questions have been completed successfully.</p>
+                    <br>
+                    <div style="color: rgb(15,125,0);" class="slds-text-body_regular slds-m-bottom_large">
+                        <p>Thank you for making your quarterly data submission. We will now complete our standard checks and will be in touch within the upcoming days if we have any queries.</p>
+                        <br>
+                        <p><strong>Please note that your submission is not completed until signed by an appropriate person.</strong> Ensure the appropriate person logs in with their user details to complete the submission ASAP, as required by the regulations.</p>
+                       <br>
+                        <p>If you need to make any changes to your submission, or have any other questions, please contact the team at producers@recyclinglives-services.com.</p>
+                    </div>
+                    <lightning-button
+                        label="Complete"
+                        variant="brand"
+                        onclick={handleComplete}
+                        class="slds-m-top_medium">
+                    </lightning-button>
+                </div>
+            </template>
+            
+            <!-- Show Questions -->
+            <template if:false={showThankYou}>
+                <template if:true={questions.length}>
+                    <div class="scroll-container">
+                        <template for:each={questions} for:item="question">
+                            <div key={question.Id} class="slds-box slds-m-bottom_small">
+                                <lightning-textarea
+                                    label={question.Name}
+                                    value={question.Answer__c}
+                                    data-id={question.Id}
+                                    onchange={handleInputChange}
+                                    maxlength="255">
+                                </lightning-textarea>
+                                
+                                <!-- Character Counter -->
+                                <div class="slds-m-top_x-small slds-text-align_right">
+                                    <template if:true={question.isOverLimit}>
+                                        <span class="character-counter-error">
+                                            {question.characterCount}/255
+                                        </span>
+                                    </template>
+                                    <template if:false={question.isOverLimit}>
+                                        <span class="character-counter">
+                                            {question.characterCount}/255
+                                        </span>
+                                    </template>
+                                </div>
+                                
+                                <!-- Error Message for Over Limit -->
+                                <template if:true={question.isOverLimit}>
+                                    <div class="slds-m-top_x-small">
+                                        <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                                            <span class="slds-assistive-text">error</span>
+                                            <span class="slds-icon_container slds-icon-utility-error slds-m-right_x-small">
+                                                <lightning-icon icon-name="utility:error" size="x-small" variant="error"></lightning-icon>
+                                            </span>
+                                            <h2 class="slds-text-body_small">
+                                                Answer exceeds maximum character limit of 255. Current length: {question.characterCount}
+                                            </h2>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                    <div class="fixed-footer">
+                        <lightning-button
+                            label="Save"
+                            variant="brand"
+                            onclick={handleSave}
+                            disabled={hasCharacterLimitErrors}>
+                        </lightning-button>
+                        <template if:true={hasCharacterLimitErrors}>
+                            <div class="slds-m-top_x-small slds-text-color_error slds-text-align_center">
+                                <lightning-icon icon-name="utility:warning" size="x-small" variant="warning"></lightning-icon>
+                                {charactersOverLimitCount} answer(s) exceed character limit
+                            </div>
+                        </template>
+                    </div>
+                </template>
+                <template if:false={questions.length}>
+                    <div class="slds-p-left_xx-large slds-p-top_small">Thank you for providing this information.</div>
+                </template>
+            </template>
+        </template>
+    </lightning-card>
+</template>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <accessMappings>
+        <accessLevel>Read</accessLevel>
+        <object>Account</object>
+        <objectField>Id</objectField>
+        <userField>Account</userField>
+    </accessMappings>
+    <accessMappings>
+        <accessLevel>Edit</accessLevel>
+        <object>Case</object>
+        <objectField>Account</objectField>
+        <userField>Account</userField>
+    </accessMappings>
+    <accessMappings>
+        <accessLevel>Read</accessLevel>
+        <object>Invoice__c</object>
+        <objectField>Account__c</objectField>
+        <userField>Account</userField>
+    </accessMappings>
+    <accessMappings>
+        <accessLevel>Edit</accessLevel>
+        <object>Job__c</object>
+        <objectField>Account__c</objectField>
+        <userField>Account</userField>
+    </accessMappings>
+    <accessMappings>
+        <accessLevel>Read</accessLevel>
+        <object>Producer_Contract__c</object>
+        <objectField>Account__c</objectField>
+        <userField>Account</userField>
+    </accessMappings>
+    <accessMappings>
+        <accessLevel>Read</accessLevel>
+        <object>Producer_Obligation_Pricing__c</object>
+        <objectField>Producer_Contract__c.Account__c</objectField>
+        <userField>Account</userField>
+    </accessMappings>
+    <accessMappings>
+        <accessLevel>Read</accessLevel>
+        <object>Producer_Obligation__c</object>
+        <objectField>Producer_Contract__c.Account__c</objectField>
+        <userField>Account</userField>
+    </accessMappings>
+    <accessMappings>
+        <accessLevel>Edit</accessLevel>
+        <object>Producer_Placed_on_Market__c</object>
+        <objectField>Account__c</objectField>
+        <userField>Account</userField>
+    </accessMappings>
+    <accessMappings>
+        <accessLevel>Read</accessLevel>
+        <object>RLCS_Job__c</object>
+        <objectField>Customer_Account__c</objectField>
+        <userField>Account</userField>
+    </accessMappings>
+    <accessMappings>
+        <accessLevel>Edit</accessLevel>
+        <object>Site__c</object>
+        <objectField>Account__c</objectField>
+        <userField>Account</userField>
+    </accessMappings>
+    <name>RLCC &amp; RLCS</name>
+    <profiles>rlcc - rlcs producer director</profiles>
+    <profiles>rlcc - rlcs producer standard</profiles>
+</SharingSet>

@@ -1,0 +1,12 @@
+{
+  "activeViewId" : "ac72a6bf-c0c5-4ded-9444-117ed809adf2",
+  "appPageId" : "da16499f-19e2-4e0b-924f-75b25b3c3710",
+  "configurationTags" : [ ],
+  "devName" : "Validation_Question_List__c",
+  "id" : "09d0cbc0-9d38-40c3-b2d2-465bfb604106",
+  "label" : "Validation Question List",
+  "objectApiName" : "Validation_Question__c",
+  "routeType" : "list-a4j",
+  "type" : "route",
+  "urlPrefix" : "validation-question"
+}

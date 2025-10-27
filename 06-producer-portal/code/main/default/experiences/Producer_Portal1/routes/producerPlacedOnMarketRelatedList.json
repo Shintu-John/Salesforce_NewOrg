@@ -1,0 +1,12 @@
+{
+  "activeViewId" : "e5f763fc-56c8-459f-bb6b-e8066055239c",
+  "appPageId" : "da16499f-19e2-4e0b-924f-75b25b3c3710",
+  "configurationTags" : [ ],
+  "devName" : "Producer_Placed_on_Market_Related_List__c",
+  "id" : "7eb438c6-176e-45ff-b63d-425586518207",
+  "label" : "Producer Placed on Market Related List",
+  "objectApiName" : "Producer_Placed_on_Market__c",
+  "routeType" : "relatedlist-a4d",
+  "type" : "route",
+  "urlPrefix" : "producer-placed-on-market"
+}

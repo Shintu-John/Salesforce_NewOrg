@@ -344,8 +344,8 @@
         <label>Success Screen</label>
         <locationX>578</locationX>
         <locationY>674</locationY>
-        <allowBack>false</allowBack>
-        <allowFinish>true</allowFinish>
+        <allowBack>true</allowBack>
+        <allowFinish>false</allowFinish>
         <allowPause>false</allowPause>
         <connector>
             <targetReference>Redirect_To_Record_Id</targetReference>
@@ -488,7 +488,7 @@
             <targetReference>Get_Market_Record</targetReference>
         </connector>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
     <variables>
         <name>recordId</name>
         <dataType>String</dataType>

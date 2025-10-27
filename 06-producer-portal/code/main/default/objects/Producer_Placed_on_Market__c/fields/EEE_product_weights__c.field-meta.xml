@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>EEE_product_weights__c</fullName>
+    <label>EEE Product Weights</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Supplier weights</fullName>
+                <default>false</default>
+                <label>Supplier weights</label>
+            </value>
+            <value>
+                <fullName>Sample weighing</fullName>
+                <default>false</default>
+                <label>Sample weighing</label>
+            </value>
+            <value>
+                <fullName>Estimated</fullName>
+                <default>false</default>
+                <label>Estimated</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+            <value>
+                <fullName>Manufacturer weights</fullName>
+                <default>false</default>
+                <label>Manufacturer weights</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

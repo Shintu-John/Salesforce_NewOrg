@@ -1,0 +1,9 @@
+<aura:documentation>
+	<aura:description>
+		<p>Auto-redirect component for Producer Placed on Market records.</p>
+		<p>When a record is saved and becomes ready to acknowledge (Is_Ready_To_Acknowledge__c = true)
+		   but has not been acknowledged yet (Acknowledgement_of_Statements__c = false),
+		   this component automatically redirects the user to the Acknowledge flow.</p>
+		<p>Usage: Add this component to the Producer Placed on Market record page in Experience Builder.</p>
+	</aura:description>
+</aura:documentation>

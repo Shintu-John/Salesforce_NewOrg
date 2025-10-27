@@ -1,0 +1,73 @@
+{
+  "appPageId" : "da16499f-19e2-4e0b-924f-75b25b3c3710",
+  "componentName" : "siteforce:sldsTwoCol84Layout",
+  "dataProviders" : [ ],
+  "id" : "d8467205-6b77-4ad7-a446-e6d65d914771",
+  "label" : "Invoice Detail",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "recordId" : "{!recordId}"
+      },
+      "componentName" : "forceCommunity:recordHeadline",
+      "id" : "2dcfd491-045e-4481-bf3c-fbf9ebfd22c9",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "30a0be4c-42d0-4cff-b07c-1c980f81e7dd",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "recordId" : "{!recordId}"
+      },
+      "componentName" : "forceCommunity:recordDetail",
+      "id" : "f695dd4e-06b1-43ae-8413-ea3a33952a50",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "302c3ea8-56bf-42e7-95b3-0b547aa84da1",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "id" : "d73f13c8-eb72-4e38-a588-1f29abd5e143",
+    "regionName" : "footer",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "{!Record._Object}: {!Record._Title}"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "a3f21e71-f6c0-4cc8-b622-2439b1d7730b",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "6b9d2856-d41f-4da1-8213-f783d27f783f",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "recordId" : "{!recordId}",
+        "width" : "MEDIUM"
+      },
+      "componentName" : "forceCommunity:relatedRecords",
+      "id" : "777b9d88-943e-4af2-ae71-e72a692c29b7",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "4e48e224-378b-4976-a97a-feea921e1d10",
+    "regionName" : "sidebar",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "detail-a28"
+}

@@ -1,0 +1,88 @@
+<template>
+    <template if:true={hasActions}>
+        <article class="slds-card">
+            <div class="slds-card__header slds-grid">
+                <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                    <div class="slds-media__body">
+                        <h2 class="slds-card__header-title">
+                            <span>Next Best Action</span>
+                        </h2>
+                    </div>
+                </header>
+            </div>
+            <div class="slds-card__body slds-card__body_inner">
+
+                <template if:true={showValidationQuestions}>
+                    <div class="slds-box slds-box_x-small slds-theme_info slds-m-bottom_small">
+                        <h3 class="slds-text-heading_small slds-m-bottom_xx-small">Answer Validation Questions</h3>
+                        <p class="slds-text-body_small slds-m-bottom_small">
+                            Please provide some additional information relating to your placed on market data.
+                        </p>
+                        <lightning-button
+                            variant="brand"
+                            label="Answer Questions"
+                            onclick={handleValidationQuestions}
+                            class="slds-m-top_small">
+                        </lightning-button>
+                    </div>
+                </template>
+
+                <template if:true={showAcknowledgement}>
+                    <div class="slds-box slds-box_x-small slds-theme_warning slds-m-bottom_small">
+                        <h3 class="slds-text-heading_small slds-m-bottom_xx-small">Acknowledge Data</h3>
+                        <p class="slds-text-body_small slds-m-bottom_small">
+                            Please acknowledge the data you have provided is accurate and correct.
+                        </p>
+                        <lightning-button
+                            variant="brand"
+                            label="Acknowledge"
+                            onclick={handleAcknowledgement}
+                            class="slds-m-top_small">
+                        </lightning-button>
+                    </div>
+                </template>
+
+                <template if:true={showSignature}>
+                    <div class="slds-box slds-box_x-small slds-theme_success slds-m-bottom_small">
+                        <h3 class="slds-text-heading_small slds-m-bottom_xx-small">Sign Data</h3>
+                        <p class="slds-text-body_small slds-m-bottom_small">
+                            Please sign to confirm that the placed on market data provided is accurate.
+                        </p>
+                        <lightning-button
+                            variant="brand"
+                            label="Sign"
+                            onclick={handleSignature}
+                            class="slds-m-top_small">
+                        </lightning-button>
+                    </div>
+                </template>
+
+            </div>
+        </article>
+    </template>
+
+    <!-- Flow Modals -->
+    <template if:true={showValidationQuestionsFlow}>
+        <lightning-flow
+            flow-api-name="Producer_Placed_On_Market_Question_Best_Action"
+            flow-input-variables={flowInputVariables}
+            onstatuschange={handleFlowStatusChange}>
+        </lightning-flow>
+    </template>
+
+    <template if:true={showSignatureFlow}>
+        <lightning-flow
+            flow-api-name="Producer_Placed_On_Market_Signature_Best_Action"
+            flow-input-variables={flowInputVariables}
+            onstatuschange={handleFlowStatusChange}>
+        </lightning-flow>
+    </template>
+
+    <template if:true={showAcknowledgementFlow}>
+        <lightning-flow
+            flow-api-name="Producer_Placed_On_Market_Acknowledge_Best_Action"
+            flow-input-variables={flowInputVariables}
+            onstatuschange={handleFlowStatusChange}>
+        </lightning-flow>
+    </template>
+</template>

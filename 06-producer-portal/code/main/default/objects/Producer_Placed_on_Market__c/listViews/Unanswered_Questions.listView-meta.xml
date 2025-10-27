@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Unanswered_Questions</fullName>
+    <columns>NAME</columns>
+    <columns>Quarter_With_Year__c</columns>
+    <columns>Unanswered_Questions__c</columns>
+    <columns>RECORDTYPE</columns>
+    <columns>Status__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Past_Due_List_View__c</field>
+        <operation>equals</operation>
+        <value>1</value>
+    </filters>
+    <filters>
+        <field>Unanswered_Questions__c</field>
+        <operation>greaterThan</operation>
+        <value>0</value>
+    </filters>
+    <label>Unanswered Questions</label>
+</ListView>

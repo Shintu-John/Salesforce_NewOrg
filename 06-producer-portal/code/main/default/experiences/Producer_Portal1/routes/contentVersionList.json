@@ -1,0 +1,11 @@
+{
+  "activeViewId" : "9ee94a22-2824-4f6b-bb11-e770ea43c7ea",
+  "appPageId" : "da16499f-19e2-4e0b-924f-75b25b3c3710",
+  "configurationTags" : [ ],
+  "devName" : "Content_Version_List__c",
+  "id" : "ace1b08e-d6ed-4fad-b606-e700b3cc586f",
+  "label" : "Content Version List",
+  "routeType" : "list-068",
+  "type" : "route",
+  "urlPrefix" : "contentversion"
+}

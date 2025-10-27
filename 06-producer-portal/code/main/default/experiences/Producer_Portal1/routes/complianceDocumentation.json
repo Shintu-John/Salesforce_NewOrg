@@ -1,0 +1,12 @@
+{
+  "activeViewId" : "462710b2-205f-4acc-a8bc-7151bb07080c",
+  "appPageId" : "da16499f-19e2-4e0b-924f-75b25b3c3710",
+  "configurationTags" : [ ],
+  "devName" : "compliance_documentation__c",
+  "id" : "4630cc03-bce8-4e6c-a4bb-119d190f4a36",
+  "label" : "Compliance Documentation",
+  "pageAccess" : "UseParent",
+  "routeType" : "custom-compliance-documentation",
+  "type" : "route",
+  "urlPrefix" : "compliance-documentation"
+}

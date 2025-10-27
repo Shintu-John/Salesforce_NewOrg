@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Is_Ready_To_Acknowledge__c</fullName>
+    <formula>AND(
+NOT(
+OR(
+ISBLANK(Category_1_Household__c),
+ISBLANK(Category_2_Household__c),
+ISBLANK(Category_3_Household__c),
+ISBLANK(Category_4_Household__c),
+ISBLANK(Category_5_Household__c),
+ISBLANK(Category_6_Household__c),
+ISBLANK(Category_7_Household__c),
+ISBLANK(Category_8_Household__c),
+ISBLANK(Category_9_Household__c),
+ISBLANK(Category_10_Household__c),
+ISBLANK(Category_11_Household__c),
+ISBLANK(Category_12_Household__c),
+ISBLANK(Category_13_Household__c),
+ISBLANK(Category_14_Household__c),
+ISBLANK(Category_15_Household__c ) 
+)
+&amp;&amp;
+RecordTypeId &lt;&gt; &apos;012Sj000000C5iL&apos;
+),
+NOT(
+OR(
+ISBLANK(Category_1_Non_Household__c),
+ISBLANK(Category_2_Non_Household__c),
+ISBLANK(Category_3_Non_Household__c),
+ISBLANK(Category_4_Non_Household__c),
+ISBLANK(Category_5_Non_Household__c),
+ISBLANK(Category_6_Non_Household__c),
+ISBLANK(Category_7_Non_Household__c),
+ISBLANK(Category_8_Non_Household__c),
+ISBLANK(Category_9_Non_Household__c),
+ISBLANK(Category_10_Non_Household__c),
+ISBLANK(Category_11_Non_Household__c),
+ISBLANK(Category_12_Non_Household__c),
+ISBLANK(Category_13_Non_Household__c),
+ISBLANK(Category_14_Non_Household__c),
+ISBLANK(Category_15_Non_Household__c ) 
+)
+&amp;&amp;
+RecordTypeId &lt;&gt; &apos;012Sj000000C5iJ&apos;
+)
+)</formula>
+    <label>Is Ready To Acknowledge?</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

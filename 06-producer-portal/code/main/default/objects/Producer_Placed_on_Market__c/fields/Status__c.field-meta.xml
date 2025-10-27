@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Status__c</fullName>
     <description>Auto-calculated status field that provides granular status indicators for Producer Portal users. Updated by the Producer POM - Update Status flow.</description>
-    <externalId>false</externalId>
     <inlineHelpText>Current status of this POM record. This field is automatically updated based on acknowledgement, questions, and signature status.</inlineHelpText>
     <label>Status</label>
     <required>false</required>
@@ -42,6 +41,12 @@
                 <fullName>Signed</fullName>
                 <default>false</default>
                 <label>Signed</label>
+            </value>
+            <value>
+                <fullName>Draft</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Draft</label>
             </value>
         </valueSetDefinition>
     </valueSet>

@@ -1,0 +1,71 @@
+<template>
+    <lightning-card>
+        <lightning-record-edit-form
+            object-api-name={objectApiName}
+            record-id={recordId}
+            onsubmit={handleSubmit}
+            onsuccess={handleSuccess}
+            onerror={handleError}
+            onload={handleLoad}>
+
+            <lightning-messages></lightning-messages>
+
+            <!-- Category fields for Household -->
+            <template if:true={recordId}>
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <div class="slds-col slds-size_1-of-2">
+                        <h3 class="slds-text-heading_small slds-m-bottom_small">Household Categories</h3>
+                        <lightning-input-field field-name="Category_1_Household__c"></lightning-input-field>
+                        <lightning-input-field field-name="Category_2_Household__c"></lightning-input-field>
+                        <lightning-input-field field-name="Category_3_Household__c"></lightning-input-field>
+                        <lightning-input-field field-name="Category_4_Household__c"></lightning-input-field>
+                        <lightning-input-field field-name="Category_5_Household__c"></lightning-input-field>
+                        <lightning-input-field field-name="Category_6_Household__c"></lightning-input-field>
+                        <lightning-input-field field-name="Category_7_Household__c"></lightning-input-field>
+                        <lightning-input-field field-name="Category_8_Household__c"></lightning-input-field>
+                        <lightning-input-field field-name="Category_9_Household__c"></lightning-input-field>
+                        <lightning-input-field field-name="Category_10_Household__c"></lightning-input-field>
+                        <lightning-input-field field-name="Category_11_Household__c"></lightning-input-field>
+                        <lightning-input-field field-name="Category_12_Household__c"></lightning-input-field>
+                        <lightning-input-field field-name="Category_13_Household__c"></lightning-input-field>
+                        <lightning-input-field field-name="Category_14_Household__c"></lightning-input-field>
+                        <lightning-input-field field-name="Category_15_Household__c"></lightning-input-field>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <h3 class="slds-text-heading_small slds-m-bottom_small">Non-Household Categories</h3>
+                        <lightning-input-field field-name="Category_1_Non_Household__c"></lightning-input-field>
+                        <lightning-input-field field-name="Category_2_Non_Household__c"></lightning-input-field>
+                        <lightning-input-field field-name="Category_3_Non_Household__c"></lightning-input-field>
+                        <lightning-input-field field-name="Category_4_Non_Household__c"></lightning-input-field>
+                        <lightning-input-field field-name="Category_5_Non_Household__c"></lightning-input-field>
+                        <lightning-input-field field-name="Category_6_Non_Household__c"></lightning-input-field>
+                        <lightning-input-field field-name="Category_7_Non_Household__c"></lightning-input-field>
+                        <lightning-input-field field-name="Category_8_Non_Household__c"></lightning-input-field>
+                        <lightning-input-field field-name="Category_9_Non_Household__c"></lightning-input-field>
+                        <lightning-input-field field-name="Category_10_Non_Household__c"></lightning-input-field>
+                        <lightning-input-field field-name="Category_11_Non_Household__c"></lightning-input-field>
+                        <lightning-input-field field-name="Category_12_Non_Household__c"></lightning-input-field>
+                        <lightning-input-field field-name="Category_13_Non_Household__c"></lightning-input-field>
+                        <lightning-input-field field-name="Category_14_Non_Household__c"></lightning-input-field>
+                        <lightning-input-field field-name="Category_15_Non_Household__c"></lightning-input-field>
+                    </div>
+                </div>
+            </template>
+
+            <div class="slds-m-top_medium slds-text-align_center">
+                <lightning-button
+                    variant="neutral"
+                    type="reset"
+                    label="Cancel"
+                    class="slds-m-right_small">
+                </lightning-button>
+                <lightning-button
+                    variant="brand"
+                    type="submit"
+                    label="Save"
+                    disabled={isLoading}>
+                </lightning-button>
+            </div>
+        </lightning-record-edit-form>
+    </lightning-card>
+</template>

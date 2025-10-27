@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Obligation_Types__c</fullName>
+    <label>Obligation Types</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Household</fullName>
+                <default>false</default>
+                <label>Household</label>
+            </value>
+            <value>
+                <fullName>Non-household</fullName>
+                <default>false</default>
+                <label>Non-household</label>
+            </value>
+            <value>
+                <fullName>Household &amp; Non-household</fullName>
+                <default>false</default>
+                <label>Household &amp; Non-household</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

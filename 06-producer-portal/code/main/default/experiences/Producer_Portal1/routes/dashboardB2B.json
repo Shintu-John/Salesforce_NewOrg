@@ -1,0 +1,12 @@
+{
+  "activeViewId" : "ad65a92f-65ab-4ab3-b9f8-3c6e2101031e",
+  "appPageId" : "da16499f-19e2-4e0b-924f-75b25b3c3710",
+  "configurationTags" : [ ],
+  "devName" : "dashboard_b2b__c",
+  "id" : "546fa504-901f-49a2-a65f-9953d56fb812",
+  "label" : "Dashboard B2B",
+  "pageAccess" : "UseParent",
+  "routeType" : "custom-dashboard-b2b",
+  "type" : "route",
+  "urlPrefix" : "dashboard-b2b"
+}

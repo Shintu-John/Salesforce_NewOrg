@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<NavigationMenu xmlns="http://soap.sforce.com/2006/04/metadata">
+    <container>Partner Community</container>
+    <containerType>Network</containerType>
+    <label>Default Navigation</label>
+    <navigationMenuItem>
+        <label>Account</label>
+        <menuItemBranding>
+            <tileImage>Account_Details1</tileImage>
+        </menuItemBranding>
+        <position>1</position>
+        <publiclyAvailable>false</publiclyAvailable>
+        <target>Account</target>
+        <type>SalesforceObject</type>
+    </navigationMenuItem>
+    <navigationMenuItem>
+        <defaultListViewId>All</defaultListViewId>
+        <label>Depots</label>
+        <position>2</position>
+        <publiclyAvailable>false</publiclyAvailable>
+        <target>Depot__c</target>
+        <type>SalesforceObject</type>
+    </navigationMenuItem>
+    <navigationMenuItem>
+        <label>New Orders</label>
+        <menuItemBranding>
+            <tileImage>PO_Details</tileImage>
+        </menuItemBranding>
+        <position>3</position>
+        <publiclyAvailable>false</publiclyAvailable>
+        <target>/new-orders</target>
+        <type>InternalLink</type>
+    </navigationMenuItem>
+    <navigationMenuItem>
+        <label>Completed Orders</label>
+        <menuItemBranding>
+            <tileImage>PO_Details</tileImage>
+        </menuItemBranding>
+        <position>4</position>
+        <publiclyAvailable>false</publiclyAvailable>
+        <target>/completed-jobs</target>
+        <type>InternalLink</type>
+    </navigationMenuItem>
+    <navigationMenuItem>
+        <label>Movements</label>
+        <position>5</position>
+        <publiclyAvailable>false</publiclyAvailable>
+        <target>/movements</target>
+        <type>InternalLink</type>
+    </navigationMenuItem>
+    <navigationMenuItem>
+        <label>Awaiting Weight</label>
+        <position>6</position>
+        <publiclyAvailable>false</publiclyAvailable>
+        <target>/awaiting-weight</target>
+        <type>InternalLink</type>
+    </navigationMenuItem>
+    <navigationMenuItem>
+        <label>Awaiting Evidence</label>
+        <position>7</position>
+        <publiclyAvailable>false</publiclyAvailable>
+        <target>/awaiting-evidence</target>
+        <type>InternalLink</type>
+    </navigationMenuItem>
+    <navigationMenuItem>
+        <defaultListViewId>All</defaultListViewId>
+        <label>Invoices</label>
+        <position>8</position>
+        <publiclyAvailable>false</publiclyAvailable>
+        <target>Vendor_Invoice__c</target>
+        <type>SalesforceObject</type>
+    </navigationMenuItem>
+</NavigationMenu>

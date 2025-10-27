@@ -1,0 +1,77 @@
+{
+  "appPageId" : "da16499f-19e2-4e0b-924f-75b25b3c3710",
+  "componentName" : "siteforce:dynamicLayout",
+  "dataProviders" : [ ],
+  "id" : "51e9c991-b147-4201-a2f8-276351538ab9",
+  "label" : "Reports",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "background" : "background: rgba(0,0,0,0)",
+        "backgroundOverlay" : "rgba(0,0,0,0.5)",
+        "contentAreaWidth" : 100,
+        "sectionConfig" : {
+          "UUID" : "8cc27d6f-a03f-4f7b-996c-5be7ed08b6c4",
+          "columns" : [ {
+            "UUID" : "58ef12b7-7d94-4ba0-ad40-ac5e253c931e",
+            "columnKey" : "1",
+            "columnName" : "Column 1",
+            "columnWidth" : "12",
+            "seedComponents" : [ ]
+          } ]
+        },
+        "sectionHeight" : 300
+      },
+      "componentName" : "forceCommunity:section",
+      "id" : "8cc27d6f-a03f-4f7b-996c-5be7ed08b6c4",
+      "regions" : [ {
+        "components" : [ {
+          "componentAttributes" : {
+            "richTextValue" : "<p> </p>"
+          },
+          "componentName" : "forceCommunity:richTextInline",
+          "id" : "0d4a510b-eef4-46ac-962f-eefed7a2ab7d",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        }, {
+          "componentAttributes" : { },
+          "componentName" : "c:rlcs_report",
+          "id" : "db1799b2-5dba-4bbe-95c9-f2c7a800b9b1",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "58ef12b7-7d94-4ba0-ad40-ac5e253c931e",
+        "regionLabel" : "Column 1",
+        "regionName" : "1",
+        "renditionMap" : { },
+        "type" : "region"
+      } ],
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "ac389c24-7e3a-4861-ba33-8c5061f4497d",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "Reports"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "b112142a-5fad-4be5-b9d9-9dd73db61231",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "83e09b91-4c78-438f-a3fd-7e6912968f27",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "custom-reports"
+}

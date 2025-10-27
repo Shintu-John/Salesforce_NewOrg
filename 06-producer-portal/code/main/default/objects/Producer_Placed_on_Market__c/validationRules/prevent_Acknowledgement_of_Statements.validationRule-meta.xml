@@ -3,5 +3,5 @@
     <fullName>prevent_Acknowledgement_of_Statements</fullName>
     <active>true</active>
     <errorConditionFormula>NOT(Is_Ready_To_Acknowledge__c) &amp;&amp; Acknowledgement_of_Statements__c</errorConditionFormula>
-    <errorMessage>Category 1-14 Household should be filled before marking &quot;Acknowledgement of Statements&quot;.</errorMessage>
+    <errorMessage>Category 1-15 Household should be filled before marking &quot;Acknowledgement of Statements&quot;.</errorMessage>
 </ValidationRule>

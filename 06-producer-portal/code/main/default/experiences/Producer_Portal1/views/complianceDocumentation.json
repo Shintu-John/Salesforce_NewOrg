@@ -1,0 +1,77 @@
+{
+  "appPageId" : "da16499f-19e2-4e0b-924f-75b25b3c3710",
+  "componentName" : "siteforce:dynamicLayout",
+  "dataProviders" : [ ],
+  "id" : "462710b2-205f-4acc-a8bc-7151bb07080c",
+  "label" : "Compliance Documentation",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "background" : "background: rgba(0,0,0,0)",
+        "backgroundOverlay" : "rgba(0,0,0,0.5)",
+        "contentAreaWidth" : 100,
+        "sectionConfig" : {
+          "UUID" : "3cd535f6-d632-46c2-94cc-d914fbaf0a73",
+          "columns" : [ {
+            "UUID" : "f1984c7e-3fba-4bae-8d29-ff58d02072d7",
+            "columnKey" : "1",
+            "columnName" : "Column 1",
+            "columnWidth" : "12",
+            "seedComponents" : [ ]
+          } ]
+        },
+        "sectionHeight" : 300
+      },
+      "componentName" : "forceCommunity:section",
+      "id" : "3cd535f6-d632-46c2-94cc-d914fbaf0a73",
+      "regions" : [ {
+        "components" : [ {
+          "componentAttributes" : {
+            "richTextValue" : "<p style=\"text-align: center;\"><br></p><p style=\"text-align: center;\"><br></p>"
+          },
+          "componentName" : "forceCommunity:richTextInline",
+          "id" : "86935e32-2d43-4085-88d4-3f6236afc001",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        }, {
+          "componentAttributes" : { },
+          "componentName" : "c:rlcs_compliance",
+          "id" : "0af2c820-29f9-412b-b1b4-aaf1808ba774",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "f1984c7e-3fba-4bae-8d29-ff58d02072d7",
+        "regionLabel" : "Column 1",
+        "regionName" : "1",
+        "renditionMap" : { },
+        "type" : "region"
+      } ],
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "aab8a8d5-6e3e-4d91-8cb1-7a73a3a3923f",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "Compliance Documentation"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "20ed2bbb-04a8-45e6-83ff-d6fc86d40529",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "5cdc438c-7fa0-4c2d-b58d-85de35d98d8d",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "custom-compliance-documentation"
+}

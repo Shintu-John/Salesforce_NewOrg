@@ -1,0 +1,12 @@
+{
+  "activeViewId" : "3364127d-4bc1-45a5-8140-b0c53e703cca",
+  "appPageId" : "da16499f-19e2-4e0b-924f-75b25b3c3710",
+  "configurationTags" : [ ],
+  "devName" : "Producer_Placed_on_Market_Detail__c",
+  "id" : "67e0d095-f350-4d80-83c7-11d120263f25",
+  "label" : "Producer Placed on Market Detail",
+  "objectApiName" : "Producer_Placed_on_Market__c",
+  "routeType" : "detail-a4d",
+  "type" : "route",
+  "urlPrefix" : "producer-placed-on-market"
+}

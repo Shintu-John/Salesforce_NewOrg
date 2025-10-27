@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Quarter_Start_Date__c</fullName>
+    <formula>DATE(
+    VALUE(TEXT(Compliance_Year__c)), /* Extract Year */
+    CASE(
+        TEXT(Quarter__c),      /* Extract Quarter */
+        &quot;Q1&quot;, 1,                           /* January for Q1 */
+        &quot;Q2&quot;, 4,                           /* April for Q2 */
+        &quot;Q3&quot;, 7,                           /* July for Q3 */
+        &quot;Q4&quot;, 10,                          /* October for Q4 */
+        1                                  /* Default (January, for safety) */
+    ),
+    1                                      /* Day always starts on 1 */
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Quarter Start Date</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>

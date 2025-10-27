@@ -1,0 +1,3 @@
+<design:component label="Producer POM Auto Acknowledge">
+    <design:attribute name="recordId" label="Record ID" description="The ID of the Producer Placed on Market record" />
+</design:component>

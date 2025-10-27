@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Past_Due</fullName>
+    <columns>NAME</columns>
+    <columns>Quarter_With_Year__c</columns>
+    <columns>RECORDTYPE</columns>
+    <columns>Status__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Past_Due_List_View__c</field>
+        <operation>equals</operation>
+        <value>1</value>
+    </filters>
+    <filters>
+        <field>Status__c</field>
+        <operation>equals</operation>
+        <value>Waiting for Market Data</value>
+    </filters>
+    <label>Due Now</label>
+</ListView>
