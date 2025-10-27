@@ -1,0 +1,50 @@
+.custom-container{
+	color : black;
+}
+
+/* File upload styling */
+.file-upload-input {
+    margin: 0.5rem auto;
+    padding: 0.5rem;
+    border: 2px dashed #0176d3;
+    border-radius: 0.25rem;
+    background-color: #f3f3f3;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: block;
+    width: 300px;
+}
+
+.file-upload-input:hover {
+    background-color: #e8f4fd;
+    border-color: #014486;
+}
+
+/* Signature instructions styling */
+.signature-instructions {
+    color: #706e6b;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Canvas styling */
+canvas[name="canvasItem"] {
+    width: 400px;
+    height: 200px;
+    max-width: 100%;
+    border-radius: 0.25rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: block;
+    margin: 0 auto;
+}
+
+/* Signature preview label */
+.signature-preview-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #3e3e3c;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}

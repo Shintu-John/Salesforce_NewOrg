@@ -145,19 +145,6 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordUpdates>
-        <name>Set_Status_Waiting_For_Data</name>
-        <label>Set Status: Waiting for Market Data</label>
-        <locationX>50</locationX>
-        <locationY>431</locationY>
-        <inputAssignments>
-            <field>Status__c</field>
-            <value>
-                <stringValue>Waiting for Market Data</stringValue>
-            </value>
-        </inputAssignments>
-        <inputReference>$Record</inputReference>
-    </recordUpdates>
-    <recordUpdates>
         <name>Set_Status_Acknowledge_Market_Data</name>
         <label>Set Status: Acknowledge Market Data</label>
         <locationX>484</locationX>
@@ -218,6 +205,19 @@
             <field>Status__c</field>
             <value>
                 <stringValue>Signed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Set_Status_Waiting_For_Data</name>
+        <label>Set Status: Waiting for Market Data</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Waiting for Market Data</stringValue>
             </value>
         </inputAssignments>
         <inputReference>$Record</inputReference>

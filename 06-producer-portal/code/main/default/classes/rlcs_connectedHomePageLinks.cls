@@ -27,6 +27,19 @@ public class rlcs_connectedHomePageLinks {
                 ORDER BY Quarter_End_Date__c ASC];
     }
 
+    @AuraEnabled(Cacheable=true)
+    public static List<Producer_Placed_on_Market__c> getSignatureRequired(){
+        Id userAccountId = getUserAccountId();
+        if (userAccountId == null) {
+            return new List<Producer_Placed_on_Market__c>();
+        }
+        return [Select Id, Quarter_With_Year__c, Action_Date__c, Status__c
+                from Producer_Placed_on_Market__c
+                Where Status__c = 'Pending Director Review'
+                AND Account__c = :userAccountId
+                ORDER BY Quarter_End_Date__c ASC];
+    }
+
     /**
      * Helper method to get current user's Account ID
      */

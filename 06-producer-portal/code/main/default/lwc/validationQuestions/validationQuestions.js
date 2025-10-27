@@ -2,7 +2,6 @@ import { LightningElement, api, track } from 'lwc';
 import getQuestions from '@salesforce/apex/ValidationQuestionController.getQuestions';
 import saveAnswers from '@salesforce/apex/ValidationQuestionController.saveAnswers';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import { FlowNavigationFinishEvent } from 'lightning/flowSupport';
 
 export default class ValidationQuestions extends LightningElement {
     @api recordId;
@@ -102,9 +101,8 @@ export default class ValidationQuestions extends LightningElement {
     }
 
     handleComplete() {
-        // Use Flow Navigation to finish the flow
-        const navigateFinishEvent = new FlowNavigationFinishEvent();
-        this.dispatchEvent(navigateFinishEvent);
+        // Navigation is handled by the screen footer button
+        // This method is no longer needed but kept for compatibility
     }
 
     showToast(title, message, variant) {

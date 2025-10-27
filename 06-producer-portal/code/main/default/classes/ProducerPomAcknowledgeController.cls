@@ -60,7 +60,7 @@ public with sharing class ProducerPomAcknowledgeController {
             if (isDirector &&
                 pom.Show_Acknowledgement_PopUp__c == false &&
                 (pom.Unanswered_Questions__c == null || pom.Unanswered_Questions__c == 0) &&
-                pom.Status__c == 'Acknowledge Market Data' &&
+                pom.Status__c == 'Pending Director Review' &&
                 pom.Is_Record_Signed__c == false) {
                 shouldShowSignature = true;
             }

@@ -12,6 +12,10 @@
         <apexClass>ValidationQuestionController</apexClass>
         <enabled>true</enabled>
     </classAccesses>
+    <classAccesses>
+        <apexClass>rlcs_connectedHomePageLinks</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
     <fieldPermissions>
         <editable>true</editable>
         <field>Validation_Question__c.Answer__c</field>
@@ -31,17 +35,13 @@
         <enabled>true</enabled>
         <flow>Producer_Placed_On_Market_Acknowledge_Best_Action</flow>
     </flowAccesses>
+    <flowAccesses>
+        <enabled>true</enabled>
+        <flow>Producer_Placed_On_Market_Signature_Best_Action</flow>
+    </flowAccesses>
     <hasActivationRequired>false</hasActivationRequired>
     <label>Customer Community Plus</label>
     <license>Customer Community Plus Login</license>
-    <tabVisibilities>
-        <tab>Producer_Placed_on_Market__c</tab>
-        <visibility>DefaultOn</visibility>
-    </tabVisibilities>
-    <tabVisibilities>
-        <tab>Reports</tab>
-        <visibility>DefaultOn</visibility>
-    </tabVisibilities>
     <objectPermissions>
         <allowCreate>false</allowCreate>
         <allowDelete>false</allowDelete>
@@ -102,4 +102,8 @@
         <viewAllFields>true</viewAllFields>
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
+    <tabSettings>
+        <tab>Producer_Placed_on_Market__c</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
 </PermissionSet>

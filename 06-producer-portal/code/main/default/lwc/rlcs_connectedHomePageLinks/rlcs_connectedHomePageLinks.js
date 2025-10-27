@@ -2,8 +2,10 @@ import { LightningElement, track, wire } from 'lwc';
 import { getRecord } from 'lightning/uiRecordApi';
 import getUpcomingDates from '@salesforce/apex/rlcs_connectedHomePageLinks.getUpcomingDates';
 import getPastDue from '@salesforce/apex/rlcs_connectedHomePageLinks.getPastDue';
+import getSignatureRequired from '@salesforce/apex/rlcs_connectedHomePageLinks.getSignatureRequired';
 import getCurrentUserAccountInfo from '@salesforce/apex/rlcs_connectedHomePageLinks.getCurrentUserAccountInfo';
 import USER_ID from '@salesforce/user/Id';
+import USER_PROFILE_NAME from '@salesforce/schema/User.Profile.Name';
 import IMAGES from './constants';
 
 export default class Rlcs_connectedHomePageLinks extends LightningElement {
@@ -12,6 +14,12 @@ export default class Rlcs_connectedHomePageLinks extends LightningElement {
 
     pastDues = [];
     get isPastDuesAvaialble(){return this.pastDues.length > 0;}
+
+    signatureRequired = [];
+    isDirector = false;
+    get isSignatureRequiredAvailable(){
+        return this.isDirector && this.signatureRequired.length > 0;
+    }
 
     @track showGrabButton = false;
     @track menuItems = [];
@@ -31,12 +39,17 @@ export default class Rlcs_connectedHomePageLinks extends LightningElement {
 
     @wire(getRecord, {
         recordId: USER_ID,
-        fields: ['User.Contact.AccountId']
+        fields: ['User.Contact.AccountId', USER_PROFILE_NAME]
     })
     wiredUser({ error, data }) {
         if (data) {
             const accountId = data.fields.Contact.value?.fields?.AccountId?.value;
             this.showGrabButton = accountId === '0014H00002QCOgYQAX';
+
+            // Check if user is a director based on profile name containing "Director"
+            const profileName = data.fields.Profile?.value?.fields?.Name?.value;
+            this.isDirector = profileName && profileName.toLowerCase().includes('director');
+
             if (!this.initialLoadComplete) {
                 this.initializeMenuItems();
                 this.initialLoadComplete = true;
@@ -72,6 +85,15 @@ export default class Rlcs_connectedHomePageLinks extends LightningElement {
       }
     }
 
+    @wire(getSignatureRequired)
+    wiredData_getSignatureRequired({ error, data }) {
+      if (data) {
+         this.signatureRequired = data;
+      } else if (error) {
+        console.error('Error:', error);
+      }
+    }
+
     @wire(getCurrentUserAccountInfo)
     wiredAccountInfo({ error, data }) {
         if (data) {
@@ -84,7 +106,9 @@ export default class Rlcs_connectedHomePageLinks extends LightningElement {
     }
 
     redirectToRecord(event){
-        window.location = '/RLCS/' + event.currentTarget.dataset.id;
+        const recordId = event.currentTarget.dataset.id;
+        // Use proper Community navigation format
+        window.location = '/RLCS/s/producer-placed-on-market/' + recordId;
     }
 
     renderedCallback() {

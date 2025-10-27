@@ -1,0 +1,6 @@
+<aura:component implements="force:lightningQuickAction,lightning:availableForFlowActions,lightning:availableForFlowScreens" access="global">
+   <aura:attribute name="recordId" type="String" /> 
+    <aura:attribute name="prefix" type="String" default="" /> 
+    
+    <lightning:workspaceAPI aura:id="workspaceAPI" />
+</aura:component>

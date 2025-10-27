@@ -34,9 +34,18 @@ public class rlcs_connectedHomePageLinksTest {
             Account__c = testAccount.Id
         );
 
+        // Create signature required record
+        Producer_Placed_on_Market__c signatureRequired = new Producer_Placed_on_Market__c(
+            Quarter__c = 'Q3',
+            Compliance_Year__c = '2024',
+            Status__c = 'Pending Director Review',
+            Account__c = testAccount.Id
+        );
+
         testRecords.add(upcoming);
         testRecords.add(pastDue);
         testRecords.add(acknowledged);
+        testRecords.add(signatureRequired);
 
         insert testRecords;
     }
@@ -56,6 +65,17 @@ public class rlcs_connectedHomePageLinksTest {
     static void testGetPastDue() {
         Test.startTest();
         List<Producer_Placed_on_Market__c> results = rlcs_connectedHomePageLinks.getPastDue();
+        Test.stopTest();
+
+        // In test context, current user has no contact, so should return empty list
+        System.assertNotEquals(null, results, 'Results should not be null');
+        System.assertEquals(0, results.size(), 'Should return empty list when user has no account');
+    }
+
+    @isTest
+    static void testGetSignatureRequired() {
+        Test.startTest();
+        List<Producer_Placed_on_Market__c> results = rlcs_connectedHomePageLinks.getSignatureRequired();
         Test.stopTest();
 
         // In test context, current user has no contact, so should return empty list
@@ -125,14 +145,32 @@ public class rlcs_connectedHomePageLinksTest {
             Producer_Obligation_Yype__c = 'B2C'
         );
         insert testAccount;
-        
+
         Test.startTest();
         rlcs_connectedHomePageLinks.AccountInfo accountInfo = new rlcs_connectedHomePageLinks.AccountInfo(testAccount);
         Test.stopTest();
-        
+
         System.assertEquals(testAccount.Id, accountInfo.accountId, 'Account ID should match');
         System.assertEquals(testAccount.Name, accountInfo.accountName, 'Account name should match');
         System.assertEquals('B2C', accountInfo.producerObligationType, 'Producer obligation type should match');
         System.assertEquals(true, accountInfo.showReportsLink, 'Should show reports link for B2C');
+    }
+
+    @isTest
+    static void testAccountInfoAccountConstructor_B2B() {
+        Account testAccount = new Account(
+            Name = 'Test Account B2B',
+            Producer_Obligation_Yype__c = 'B2B'
+        );
+        insert testAccount;
+
+        Test.startTest();
+        rlcs_connectedHomePageLinks.AccountInfo accountInfo = new rlcs_connectedHomePageLinks.AccountInfo(testAccount);
+        Test.stopTest();
+
+        System.assertEquals(testAccount.Id, accountInfo.accountId, 'Account ID should match');
+        System.assertEquals(testAccount.Name, accountInfo.accountName, 'Account name should match');
+        System.assertEquals('B2B', accountInfo.producerObligationType, 'Producer obligation type should match');
+        System.assertEquals(false, accountInfo.showReportsLink, 'Should not show reports link for B2B');
     }
 }

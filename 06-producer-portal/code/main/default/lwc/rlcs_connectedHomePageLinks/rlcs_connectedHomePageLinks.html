@@ -74,6 +74,42 @@
                         </div>
                     </div>
                 </template>
+
+                <!-- Signature Required Section - Only show for directors if there are items -->
+                <template lwc:if={isSignatureRequiredAvailable}>
+                    <div class="signature-required-section signature-alert">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <img src="https://recyclinglives.file.force.com//servlet/servlet.ImageServer?id=015Sj000001fCsh&oid=00D24000000j5Yh" alt="Signature Required">
+                            </div>
+                            <div class="section-title">
+                                <strong>✍️ Signature Required</strong>
+                            </div>
+                        </div>
+                        <div class="section-content">
+                            <div class="dates-list scrollable-list">
+                                <template for:each={signatureRequired} for:item="signatureItem">
+                                    <div key={signatureItem.Id} class="date-item signature-item clickable-item"
+                                         data-id={signatureItem.Id} onclick={redirectToRecord}>
+                                        <div class="date-value">
+                                            <lightning-formatted-date-time
+                                                value={signatureItem.Action_Date__c}
+                                                year="numeric"
+                                                month="2-digit"
+                                                day="2-digit">
+                                            </lightning-formatted-date-time>
+                                        </div>
+                                        <div class="date-description">
+                                            <span class="clickable-link">
+                                                Placed on Market Data for {signatureItem.Quarter_With_Year__c}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </template>
             </div>
 
             <!-- Navigation Links Section -->
