@@ -1,0 +1,130 @@
+<template>
+    <div class="rls-navigation-wrapper">
+        <div class="navigation-container">
+            <!-- Calendar/Dates Section -->
+            <div class="calendar-dates-container">
+                <!-- Upcoming Dates Section -->
+                <div class="upcoming-dates-section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <img src="https://recyclinglives.file.force.com//servlet/servlet.ImageServer?id=015Sj000001fCsh&oid=00D24000000j5Yh" alt="Upcoming Dates">
+                        </div>
+                        <div class="section-title">
+                            <strong>Upcoming</strong>
+                        </div>
+                    </div>
+                    <div class="section-content">
+                        <template lwc:if={isUpcomingDatesAvailable}>
+                            <div class="dates-list scrollable-list">
+                                <template for:each={upcomingDates} for:item="upcomingDate">
+                                    <div key={upcomingDate.Action_Date__c} class="date-item">
+                                        <div class="date-value">
+                                            <lightning-formatted-date-time
+                                                value={upcomingDate.Action_Date__c} 
+                                                year="numeric"
+                                                month="2-digit" 
+                                                day="2-digit">
+                                            </lightning-formatted-date-time>
+                                        </div>
+                                        <div class="date-description">
+                                            Placed on Market Data for {upcomingDate.Quarter_With_Year__c}
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                        <template lwc:else>
+                            <div class="no-data-message">No upcoming data available.</div>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Past Due Section - Only show if there are past due items -->
+                <template lwc:if={isPastDuesAvaialble}>
+                    <div class="past-due-section overdue-alert">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <img src="https://recyclinglives.file.force.com//servlet/servlet.ImageServer?id=015Sj000001fBmw&oid=00D24000000j5Yh" alt="Past Due">
+                            </div>
+                            <div class="section-title">
+                                <strong>⚠️ Overdue - Action Required</strong>
+                            </div>
+                        </div>
+                        <div class="section-content">
+                            <div class="dates-list scrollable-list">
+                                <template for:each={pastDues} for:item="pastDue">
+                                    <div key={pastDue.Action_Date__c} class="date-item overdue-item clickable-item" 
+                                         data-id={pastDue.Id} onclick={redirectToRecord}>
+                                        <div class="date-value">
+                                            <lightning-formatted-date-time 
+                                                value={pastDue.Action_Date__c}
+                                                year="numeric" 
+                                                month="2-digit" 
+                                                day="2-digit">
+                                            </lightning-formatted-date-time>
+                                        </div>
+                                        <div class="date-description">
+                                            <span class="clickable-link">
+                                                Placed on Market Data for {pastDue.Quarter_With_Year__c}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Signature Required Section - Only show for directors if there are items -->
+                <template lwc:if={isSignatureRequiredAvailable}>
+                    <div class="signature-required-section signature-alert">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <img src="https://recyclinglives.file.force.com//servlet/servlet.ImageServer?id=015Sj000001fCsh&oid=00D24000000j5Yh" alt="Signature Required">
+                            </div>
+                            <div class="section-title">
+                                <strong>✍️ Signature Required</strong>
+                            </div>
+                        </div>
+                        <div class="section-content">
+                            <div class="dates-list scrollable-list">
+                                <template for:each={signatureRequired} for:item="signatureItem">
+                                    <div key={signatureItem.Id} class="date-item signature-item clickable-item"
+                                         data-id={signatureItem.Id} onclick={redirectToRecord}>
+                                        <div class="date-value">
+                                            <lightning-formatted-date-time
+                                                value={signatureItem.Action_Date__c}
+                                                year="numeric"
+                                                month="2-digit"
+                                                day="2-digit">
+                                            </lightning-formatted-date-time>
+                                        </div>
+                                        <div class="date-description">
+                                            <span class="clickable-link">
+                                                Placed on Market Data for {signatureItem.Quarter_With_Year__c}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Navigation Links Section -->
+            <div class="navigation-links-container">
+                <div class="sub-menu-container">
+                <div class="sub-menu">
+                    <template for:each={subMenuItems} for:item="item">
+                        <a key={item.label} href={item.url} class="sub-menu-item" data-label={item.label}
+                            data-image={item.image} data-hoverimage={item.hoverImage}>
+                            <span class="slds-assistive-text">{item.label}</span>
+                        </a>
+                    </template>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

@@ -34,12 +34,12 @@ public with sharing class ProducerPomAcknowledgeController {
     public static Map<String, Object> getNextActions(String recordId) {
         try {
             // Get current user's profile name
-            User currentUser = [SELECT Id, Profile_Name__c FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
+            User currentUser = [SELECT Id, Profile.Name FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
 
             // Check if user is a Director
-            Boolean isDirector = currentUser.Profile_Name__c == 'Producer Director User' ||
-                                currentUser.Profile_Name__c == 'Producer Director User Login' ||
-                                currentUser.Profile_Name__c == 'RLCC - RLCS Producer Director';
+            Boolean isDirector = currentUser.Profile.Name == 'Producer Director User' ||
+                                currentUser.Profile.Name == 'Producer Director User Login' ||
+                                currentUser.Profile.Name == 'RLCC - RLCS Producer Director';
 
             // Get record details
             Producer_Placed_on_Market__c pom = [

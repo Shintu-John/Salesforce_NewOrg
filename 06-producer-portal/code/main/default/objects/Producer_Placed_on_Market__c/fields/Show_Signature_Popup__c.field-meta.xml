@@ -6,9 +6,9 @@ Show_Acknowledgement_PopUp__c = FALSE,
 Show_Popup_For_Validation_Question__c = FALSE,
 ISPICKVAL(Status__c, &quot;Pending Director Review&quot;),
 OR(
-  $User.Profile_Name__c = &quot;Producer Director User&quot;,
-  $User.Profile_Name__c = &quot;Producer Director User Login&quot;,
-  $User.Profile_Name__c = &quot;RLCC - RLCS Producer Director&quot;
+  $Profile.Name = &quot;Producer Director User&quot;,
+  $Profile.Name = &quot;Producer Director User Login&quot;,
+  $Profile.Name = &quot;RLCC - RLCS Producer Director&quot;
 )
 
 )</formula>

@@ -96,7 +96,7 @@ Successfully deployed Producer Portal sharing functionality and UX improvements 
 
 ### Phase 6: Signature Status Update Fix (Oct 27, 2025)
 **Date:** October 27, 2025 (late afternoon)
-**Deploy ID:** `0AfSj000000zMDJKAM`
+**Deploy ID:** `0AfSj000000zMDJKA2`
 **Duration:** 4m 0.23s
 
 **Components Updated:**
@@ -119,6 +119,54 @@ if(sObjectType == Schema.Producer_Placed_on_Market__c.SObjectType){
 ```
 
 **Test Results:** SignatureLwcHelperTest passed with 100% coverage
+
+### Phase 7: Signature Popup Visibility Fix (Oct 28, 2025)
+**Date:** October 28, 2025 (morning)
+**Deploy ID:** `0AfSj000000zMq1KAE` (OldOrg only)
+**Duration:** ~2 minutes
+
+**Components Updated:**
+- Show_Signature_Popup__c formula field on Producer_Placed_on_Market__c
+
+**Issue Resolved:** Signature popup appearing for normal producers instead of only Directors
+
+**Root Cause:**
+- Formula field used `$User.Profile_Name__c` (custom formula field on User)
+- Formula fields on User object can have evaluation context issues
+- Normal producers were seeing signature popup when they shouldn't
+
+**Fix Applied:**
+Changed formula from:
+```apex
+$User.Profile_Name__c = "Producer Director User"
+```
+To:
+```apex
+$Profile.Name = "Producer Director User"
+```
+
+**Full Fixed Formula:**
+```apex
+AND(
+  Show_Acknowledgement_PopUp__c = FALSE,
+  Show_Popup_For_Validation_Question__c = FALSE,
+  ISPICKVAL(Status__c, "Pending Director Review"),
+  OR(
+    $Profile.Name = "Producer Director User",
+    $Profile.Name = "Producer Director User Login",
+    $Profile.Name = "RLCC - RLCS Producer Director"
+  )
+)
+```
+
+**Impact:** Normal producers will no longer see signature popup. Only Director profiles will see it.
+
+**Testing Required:**
+- Test with Producer Standard User Login → Should NOT see signature popup
+- Test with Producer Director User Login → Should see signature popup
+- Verify status update flow still works correctly
+
+**NewOrg Status:** Pending deployment after OldOrg testing completes
 
 ---
 
@@ -265,15 +313,15 @@ The Producer Portal signature workflow involves:
 
 | Metric | Value |
 |--------|-------|
-| **Total Components Deployed** | 20 |
-| **Apex Classes** | 6 (4 helpers + 2 tests) |
+| **Total Components Deployed** | 22 |
+| **Apex Classes** | 7 (5 helpers + 2 tests) |
 | **Apex Triggers** | 5 (4 sharing + 1 backfill) |
 | **Flows** | 7 (5 activated + 2 UX improvements) |
 | **LWC Components** | 1 (captureSignature) |
 | **Aura Components** | 1 (redirectToRecordId, already existed) |
 | **Custom Fields** | 1 (Status__c picklist) |
-| **Total Deployment Phases** | 6 |
-| **Total Deployment Time** | ~20 minutes (across 3 days) |
+| **Total Deployment Phases** | 7 |
+| **Total Deployment Time** | ~25 minutes (across 4 days) |
 | **Tests Passed** | 20/20 (100%) |
 | **Code Coverage** | 100% |
 | **Business Risk Mitigated** | £1.5M+ compliance fees |
@@ -307,6 +355,10 @@ The Producer Portal signature workflow involves:
 - 0AfSj000000zLqjKAU - Signature Best Action flow + captureSignature LWC
 - 0AfSj000000zLsLKAM - SignatureLwcHelper Apex class
 - 0AfSj000000zMDJKA2 - SignatureLwcHelper fix (Is_Record_Signed__c)
+
+**Phase 7-8 (Oct 28):**
+- 0AfSj000000zMq1KAE - Show_Signature_Popup__c formula fix (OldOrg)
+- 0AfSj000000zMrdKAE - ProducerPomAcknowledgeController.cls fix (OldOrg)
 
 ### Documentation
 - **OldOrg Documentation**: `/tmp/Salesforce_OldOrg_State/producer-portal/`

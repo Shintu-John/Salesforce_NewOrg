@@ -37,7 +37,7 @@ sf apex run -f 04-scenario-name/tests/test_scenario.apex -o NewOrg
 **Overall:** 5 of 12 scenarios deployed (42%)
 **Status:** ✅ Active deployment phase
 **Target Org:** NewOrg (Production)
-**Latest:** Producer Portal COMPLETE with signature workflow - All components deployed, tested, working (Oct 27)
+**Latest:** Producer Portal COMPLETE - Signature popup profile check fixed, tested successfully (Oct 28)
 
 ### ✅ Completed Deployments
 
@@ -47,7 +47,7 @@ sf apex run -f 04-scenario-name/tests/test_scenario.apex -o NewOrg
 | 02 | [transport-charges](02-transport-charges/) | Oct 23 | `0AfSq000003nQO7KAM` | £1.7M+ financial protection | [📊](02-transport-charges/DEPLOYMENT_HISTORY.md) |
 | 03 | [secondary-transport](03-secondary-transport/) | Oct 23 | `0AfSq000003nQR3KAM` | Fixed £19K-£29K CSV bug | [📊](03-secondary-transport/DEPLOYMENT_HISTORY.md) |
 | 05 | [email-to-case-assignment](05-email-to-case-assignment/) | Oct 23 | `0AfSq000003nVNVKA2` | Automated case assignment | [📊](05-email-to-case-assignment/DEPLOYMENT_HISTORY.md) |
-| 06 | [producer-portal](06-producer-portal/) | Oct 24-27 | `0AfSj000000zMDJKA2` | **P0 CRITICAL** - Signature workflow fixed | [📊](06-producer-portal/DEPLOYMENT_HISTORY.md) |
+| 06 | [producer-portal](06-producer-portal/) | Oct 24-28 | `0AfSj000000zMrdKAE` | **P0 CRITICAL** - Signature + profile fix | [📊](06-producer-portal/DEPLOYMENT_HISTORY.md) |
 
 ### 📋 Pending Deployments (6 scenarios)
 
