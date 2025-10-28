@@ -4,7 +4,10 @@ private class ProducerPomAcknowledgeControllerTest {
     @isTest
     static void testGetRecordStatus() {
         // Create test account
-        Account acc = new Account(Name = 'Test Account');
+        Account acc = new Account(
+            Name = 'Test Account',
+            comp_house__Company_Number__c = '12345678'
+        );
         insert acc;
 
         // Create test Producer POM record
@@ -41,7 +44,10 @@ private class ProducerPomAcknowledgeControllerTest {
     @isTest
     static void testGetNextActions() {
         // Create test account
-        Account acc = new Account(Name = 'Test Account');
+        Account acc = new Account(
+            Name = 'Test Account',
+            comp_house__Company_Number__c = '12345678'
+        );
         insert acc;
 
         // Create test Producer POM record
@@ -50,6 +56,36 @@ private class ProducerPomAcknowledgeControllerTest {
             Quarter__c = 'Q1',
             Compliance_Year__c = '2025',
             Status__c = 'Acknowledge Market Data',
+            Category_1_Household__c = 100,
+            Category_2_Household__c = 100,
+            Category_3_Household__c = 100,
+            Category_4_Household__c = 100,
+            Category_5_Household__c = 100,
+            Category_6_Household__c = 100,
+            Category_7_Household__c = 100,
+            Category_8_Household__c = 100,
+            Category_9_Household__c = 100,
+            Category_10_Household__c = 100,
+            Category_11_Household__c = 100,
+            Category_12_Household__c = 100,
+            Category_13_Household__c = 100,
+            Category_14_Household__c = 100,
+            Category_15_Household__c = 100,
+            Category_1_Non_Household__c = 100,
+            Category_2_Non_Household__c = 100,
+            Category_3_Non_Household__c = 100,
+            Category_4_Non_Household__c = 100,
+            Category_5_Non_Household__c = 100,
+            Category_6_Non_Household__c = 100,
+            Category_7_Non_Household__c = 100,
+            Category_8_Non_Household__c = 100,
+            Category_9_Non_Household__c = 100,
+            Category_10_Non_Household__c = 100,
+            Category_11_Non_Household__c = 100,
+            Category_12_Non_Household__c = 100,
+            Category_13_Non_Household__c = 100,
+            Category_14_Non_Household__c = 100,
+            Category_15_Non_Household__c = 100,
             Acknowledgement_of_Statements__c = true
         );
         insert pom;
