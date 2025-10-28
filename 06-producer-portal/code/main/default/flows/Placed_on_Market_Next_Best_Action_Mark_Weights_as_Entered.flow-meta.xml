@@ -10,21 +10,7 @@
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Yes</name>
-            <conditionLogic>(1 OR 2) AND 3</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.Category_Household_Total__c</leftValueReference>
-                <operator>GreaterThan</operator>
-                <rightValue>
-                    <numberValue>0.0</numberValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.Category_Non_Household_Total__c</leftValueReference>
-                <operator>GreaterThan</operator>
-                <rightValue>
-                    <numberValue>0.0</numberValue>
-                </rightValue>
-            </conditions>
+            <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.Weights_Entered__c</leftValueReference>
                 <operator>EqualTo</operator>
@@ -36,35 +22,6 @@
                 <targetReference>Set_to_true</targetReference>
             </connector>
             <label>Yes</label>
-        </rules>
-        <rules>
-            <name>Need_to_Update_to_False</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.Weights_Entered__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.Category_Household_Total__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <numberValue>0.0</numberValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.Category_Non_Household_Total__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <numberValue>0.0</numberValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Set_to_false</targetReference>
-            </connector>
-            <label>Need to Update to False</label>
         </rules>
     </decisions>
     <environments>Default</environments>
@@ -89,19 +46,6 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
-    <recordUpdates>
-        <name>Set_to_false</name>
-        <label>Set to false</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <inputAssignments>
-            <field>Weights_Entered__c</field>
-            <value>
-                <booleanValue>false</booleanValue>
-            </value>
-        </inputAssignments>
-        <inputReference>$Record</inputReference>
-    </recordUpdates>
     <recordUpdates>
         <name>Set_to_true</name>
         <label>Set to true</label>

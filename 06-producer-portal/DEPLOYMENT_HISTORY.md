@@ -168,6 +168,48 @@ AND(
 
 **NewOrg Status:** Pending deployment after OldOrg testing completes
 
+### Phase 9: Zero Values Popup Not Showing Fix (Oct 28, 2025)
+**Date:** October 28, 2025 (afternoon)
+**Deploy ID:** `0AfSj000000zO5RKAU` (OldOrg only)
+**Duration:** ~9 seconds
+
+**Components Updated:**
+- Placed_on_Market_Next_Best_Action_Mark_Weights_as_Entered.flow-meta.xml
+
+**Issue Resolved:** Acknowledgement popup not showing when users enter all zero values for categories
+
+**Root Cause:**
+- Flow had two decision branches:
+  1. Set Weights_Entered__c = true IF (Household Total > 0 OR Non-Household Total > 0) AND Weights_Entered__c = false
+  2. Set Weights_Entered__c = false IF Weights_Entered__c = true AND both totals = 0
+- When user entered all zeros, totals = 0, so branch #1 didn't execute
+- Even worse, branch #2 would reset Weights_Entered__c back to false if it was previously true
+- Show_Acknowledgement_PopUp__c formula requires Weights_Entered__c = true to display popup
+- Result: No popup displayed even though user had entered data
+
+**Fix Applied:**
+- Removed the > 0 condition checks from the flow
+- Simplified logic to: Set Weights_Entered__c = true whenever it's currently false (on any save)
+- Removed the branch that resets Weights_Entered__c back to false
+- Now any data entry (including all zeros) will set the flag and trigger the popup
+
+**Updated Flow Logic:**
+```xml
+<conditions>
+    <leftValueReference>$Record.Weights_Entered__c</leftValueReference>
+    <operator>EqualTo</operator>
+    <rightValue>
+        <booleanValue>false</booleanValue>
+    </rightValue>
+</conditions>
+```
+
+**Test Results:** ProducerPomPortalSharingTest passed with 100% coverage
+
+**Business Impact:** Producers can now legitimately submit quarterly reports with all zero values (when they have no activity for that quarter) and still see the acknowledgement popup
+
+**NewOrg Status:** Pending deployment after OldOrg testing completes
+
 ---
 
 ## Critical Issues Resolved
@@ -212,6 +254,15 @@ if(sObjectType == Schema.Producer_Placed_on_Market__c.SObjectType){
 ```
 
 **Final Deployment:** Successfully deployed with Deploy ID: 0AfSj000000zMDJKA2, test passed with 100% coverage.
+
+### Issue 5: Acknowledgement Popup Not Showing for Zero Values (Oct 28)
+**Symptom:** User reported: "when user entered 0 in one category and clicked on save, it saved - but did not trigger the pop-up with the acknowledgement or validation questions"
+
+**Root Cause:** The "Placed on Market: Next Best Action - Mark Weights as Entered" flow only set `Weights_Entered__c = true` if either household or non-household total was greater than 0. When all category values were 0, both totals equaled 0, so the flag wasn't set. Additionally, a second branch in the flow would reset the flag back to false if both totals were 0.
+
+**Fix:** Modified flow to set `Weights_Entered__c = true` on any save operation where it's currently false, regardless of the actual values entered. Removed the branch that resets the flag to false. The Force_Positive_Value validation rule already prevents negative values.
+
+**Deployment:** Deploy ID 0AfSj000000zO5RKAU, test passed with 100% coverage using ProducerPomPortalSharingTest.
 
 ---
 
@@ -320,8 +371,8 @@ The Producer Portal signature workflow involves:
 | **LWC Components** | 1 (captureSignature) |
 | **Aura Components** | 1 (redirectToRecordId, already existed) |
 | **Custom Fields** | 1 (Status__c picklist) |
-| **Total Deployment Phases** | 7 |
-| **Total Deployment Time** | ~25 minutes (across 4 days) |
+| **Total Deployment Phases** | 9 |
+| **Total Deployment Time** | ~26 minutes (across 4 days) |
 | **Tests Passed** | 20/20 (100%) |
 | **Code Coverage** | 100% |
 | **Business Risk Mitigated** | £1.5M+ compliance fees |
@@ -356,9 +407,11 @@ The Producer Portal signature workflow involves:
 - 0AfSj000000zLsLKAM - SignatureLwcHelper Apex class
 - 0AfSj000000zMDJKA2 - SignatureLwcHelper fix (Is_Record_Signed__c)
 
-**Phase 7-8 (Oct 28):**
+**Phase 7-9 (Oct 28):**
 - 0AfSj000000zMq1KAE - Show_Signature_Popup__c formula fix (OldOrg)
 - 0AfSj000000zMrdKAE - ProducerPomAcknowledgeController.cls fix (OldOrg)
+- 0AfSj000000zNu9KAE - Is_Ready_To_Acknowledge__c formula fix for zero values (OldOrg)
+- 0AfSj000000zO5RKAU - Placed_on_Market_Next_Best_Action_Mark_Weights_as_Entered flow fix for zero values (OldOrg)
 
 ### Documentation
 - **OldOrg Documentation**: `/tmp/Salesforce_OldOrg_State/producer-portal/`
