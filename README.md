@@ -2,8 +2,8 @@
 
 > **Production deployment repository** for migrating customizations from OldOrg (Recycling Lives Service) to NewOrg (Recycling Lives Group)
 
-[![Deployment Progress](https://img.shields.io/badge/Deployed-5%2F12%20(42%25)-yellow)](https://github.com/Shintu-John/Salesforce_NewOrg)
-[![Last Deployment](https://img.shields.io/badge/Last%20Deployment-Oct%2024%2C%202025-green)](https://github.com/Shintu-John/Salesforce_NewOrg)
+[![Deployment Progress](https://img.shields.io/badge/Deployed-6%2F12%20(50%25)-yellow)](https://github.com/Shintu-John/Salesforce_NewOrg)
+[![Last Deployment](https://img.shields.io/badge/Last%20Deployment-Oct%2029%2C%202025-green)](https://github.com/Shintu-John/Salesforce_NewOrg)
 [![Status](https://img.shields.io/badge/Status-Active-brightgreen)](https://github.com/Shintu-John/Salesforce_NewOrg)
 
 ---
@@ -34,10 +34,10 @@ sf apex run -f 04-scenario-name/tests/test_scenario.apex -o NewOrg
 
 ## 📊 Deployment Progress
 
-**Overall:** 5 of 12 scenarios deployed (42%)
+**Overall:** 6 of 12 scenarios deployed (50%)
 **Status:** ✅ Active deployment phase
 **Target Org:** NewOrg (Production)
-**Latest:** Producer Portal COMPLETE - Signature popup profile check fixed, tested successfully (Oct 28)
+**Latest:** Portal Exchange Email COMPLETE - SPF/DMARC fix deployed with OldOrg verification (Oct 29)
 
 ### ✅ Completed Deployments
 
@@ -46,10 +46,11 @@ sf apex run -f 04-scenario-name/tests/test_scenario.apex -o NewOrg
 | 01 | [cs-invoicing](01-cs-invoicing/) | Oct 23 | `0AfSq000003nOU5KAM` | CS invoice automation | [📊](01-cs-invoicing/DEPLOYMENT_HISTORY.md) |
 | 02 | [transport-charges](02-transport-charges/) | Oct 23 | `0AfSq000003nQO7KAM` | £1.7M+ financial protection | [📊](02-transport-charges/DEPLOYMENT_HISTORY.md) |
 | 03 | [secondary-transport](03-secondary-transport/) | Oct 23 | `0AfSq000003nQR3KAM` | Fixed £19K-£29K CSV bug | [📊](03-secondary-transport/DEPLOYMENT_HISTORY.md) |
+| 04 | [portal-exchange-email](04-portal-exchange-email/) | Oct 29 | `0AfSq000003pK9RKAU` | Portal SPF/DMARC fix | [📊](04-portal-exchange-email/DEPLOYMENT_HISTORY.md) |
 | 05 | [email-to-case-assignment](05-email-to-case-assignment/) | Oct 23 | `0AfSq000003nVNVKA2` | Automated case assignment | [📊](05-email-to-case-assignment/DEPLOYMENT_HISTORY.md) |
 | 06 | [producer-portal](06-producer-portal/) | Oct 24-28 | `0AfSj000000zMrdKAE` | **P0 CRITICAL** - Signature + profile fix | [📊](06-producer-portal/DEPLOYMENT_HISTORY.md) |
 
-### 📋 Pending Deployments (6 scenarios)
+### 📋 Pending Deployments (5 scenarios)
 
 <details>
 <summary><b>View Pending Scenarios</b></summary>
@@ -57,7 +58,6 @@ sf apex run -f 04-scenario-name/tests/test_scenario.apex -o NewOrg
 #### High Priority
 | # | Scenario | Description | Status |
 |---|----------|-------------|--------|
-| 04 | [portal-exchange-email](04-portal-exchange-email/) | Email exchange workflow fixes | ⏳ Awaiting email verification |
 | 07 | [sage-api-integration](07-sage-api-integration/) | Sage API authentication fixes | 📋 Ready to deploy |
 
 #### Medium Priority
