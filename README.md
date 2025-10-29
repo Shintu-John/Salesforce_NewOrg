@@ -2,7 +2,7 @@
 
 > **Production deployment repository** for migrating customizations from OldOrg (Recycling Lives Service) to NewOrg (Recycling Lives Group)
 
-[![Deployment Progress](https://img.shields.io/badge/Deployed-9%2F12%20(75%25)-yellow)](https://github.com/Shintu-John/Salesforce_NewOrg)
+[![Deployment Progress](https://img.shields.io/badge/Deployed-10%2F12%20(83%25)-yellow)](https://github.com/Shintu-John/Salesforce_NewOrg)
 [![Last Deployment](https://img.shields.io/badge/Last%20Deployment-Oct%2029%2C%202025-green)](https://github.com/Shintu-John/Salesforce_NewOrg)
 [![Status](https://img.shields.io/badge/Status-Active-brightgreen)](https://github.com/Shintu-John/Salesforce_NewOrg)
 
@@ -34,10 +34,10 @@ sf apex run -f 04-scenario-name/tests/test_scenario.apex -o NewOrg
 
 ## 📊 Deployment Progress
 
-**Overall:** 9 of 12 scenarios deployed (75%)
+**Overall:** 10 of 12 scenarios deployed (83%)
 **Status:** ✅ Active deployment phase
 **Target Org:** NewOrg (Production)
-**Latest:** PO Consumption Email Notifications COMPLETE - Multi-threshold monitoring at 50%, 75%, 90% with automated alerts (Oct 29)
+**Latest:** Invoice Email Portal Access DEPLOYED - ContentDistribution automation for portal users (Oct 29)
 
 ### ✅ Completed Deployments
 
@@ -51,6 +51,7 @@ sf apex run -f 04-scenario-name/tests/test_scenario.apex -o NewOrg
 | 06 | [producer-portal](06-producer-portal/) | Oct 24-28 | `0AfSj000000zMrdKAE` | **P0 CRITICAL** - Signature + profile fix | [📊](06-producer-portal/DEPLOYMENT_HISTORY.md) |
 | 08 | [daily-reminder-emails](08-daily-reminder-emails/) | Oct 29 | `0AfSq000003pNP3KAM` | Prevents 556 daily emails, two-tier system | [📊](08-daily-reminder-emails/DEPLOYMENT_HISTORY.md) |
 | 09 | [po-consumption-emails](09-po-consumption-emails/) | Oct 29 | `0AfSq000003pOPMKA2` | Multi-threshold PO monitoring (50%, 75%, 90%) | [📊](09-po-consumption-emails/DEPLOYMENT_HISTORY.md) |
+| 10 | [invoice-email-portal-access](10-invoice-email-portal-access/) | Oct 29 | `0AfSq000003pQhvKAE` | Invoice PDF portal access via ContentDistribution | [📊](10-invoice-email-portal-access/DEPLOYMENT_HISTORY.md) |
 | 11 | [job-charge-credit-on-account](11-job-charge-credit-on-account/) | Oct 29 | `0AfSq000003pNyXKAU` | **CRITICAL BUGFIX** - Prevents Cost__c corruption on 263 COA charges | [📊](11-job-charge-credit-on-account/DEPLOYMENT_HISTORY.md) |
 
 ### 📋 Pending Deployments (2 scenarios)
@@ -62,11 +63,6 @@ sf apex run -f 04-scenario-name/tests/test_scenario.apex -o NewOrg
 | # | Scenario | Description | Status |
 |---|----------|-------------|--------|
 | 07 | [sage-api-integration](07-sage-api-integration/) | Sage API authentication fixes | 📋 Ready to deploy |
-
-#### Medium Priority
-| # | Scenario | Description |
-|---|----------|-------------|
-| 10 | [invoice-email-portal-access](10-invoice-email-portal-access/) | Invoice email access controls |
 
 #### Low Priority
 | # | Scenario | Description |
