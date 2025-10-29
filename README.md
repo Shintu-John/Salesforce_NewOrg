@@ -2,7 +2,7 @@
 
 > **Production deployment repository** for migrating customizations from OldOrg (Recycling Lives Service) to NewOrg (Recycling Lives Group)
 
-[![Deployment Progress](https://img.shields.io/badge/Deployed-10%2F12%20(83%25)-yellow)](https://github.com/Shintu-John/Salesforce_NewOrg)
+[![Deployment Progress](https://img.shields.io/badge/Deployed-11%2F12%20(92%25)-brightgreen)](https://github.com/Shintu-John/Salesforce_NewOrg)
 [![Last Deployment](https://img.shields.io/badge/Last%20Deployment-Oct%2029%2C%202025-green)](https://github.com/Shintu-John/Salesforce_NewOrg)
 [![Status](https://img.shields.io/badge/Status-Active-brightgreen)](https://github.com/Shintu-John/Salesforce_NewOrg)
 
@@ -34,10 +34,10 @@ sf apex run -f 04-scenario-name/tests/test_scenario.apex -o NewOrg
 
 ## 📊 Deployment Progress
 
-**Overall:** 10 of 12 scenarios deployed (83%)
+**Overall:** 11 of 12 scenarios deployed (92%)
 **Status:** ✅ Active deployment phase
 **Target Org:** NewOrg (Production)
-**Latest:** Invoice Email Portal Access DEPLOYED - ContentDistribution automation for portal users (Oct 29)
+**Latest:** SmartWaste Validation Fix DEPLOYED - Critical bug fix unblocking 149 jobs (Oct 29)
 
 ### ✅ Completed Deployments
 
@@ -53,8 +53,9 @@ sf apex run -f 04-scenario-name/tests/test_scenario.apex -o NewOrg
 | 09 | [po-consumption-emails](09-po-consumption-emails/) | Oct 29 | `0AfSq000003pOPMKA2` | Multi-threshold PO monitoring (50%, 75%, 90%) | [📊](09-po-consumption-emails/DEPLOYMENT_HISTORY.md) |
 | 10 | [invoice-email-portal-access](10-invoice-email-portal-access/) | Oct 29 | `0AfSq000003pQhvKAE` | Invoice PDF portal access via ContentDistribution | [📊](10-invoice-email-portal-access/DEPLOYMENT_HISTORY.md) |
 | 11 | [job-charge-credit-on-account](11-job-charge-credit-on-account/) | Oct 29 | `0AfSq000003pNyXKAU` | **CRITICAL BUGFIX** - Prevents Cost__c corruption on 263 COA charges | [📊](11-job-charge-credit-on-account/DEPLOYMENT_HISTORY.md) |
+| 12 | [smartwaste-integration](12-smartwaste-integration/) | Oct 29 | `0AfSq000003pUqLKAU` | **CRITICAL BUGFIX** - Removed incorrect Depot WCL validation (unblocks 149 jobs) | [📊](12-smartwaste-integration/DEPLOYMENT_HISTORY.md) |
 
-### 📋 Pending Deployments (2 scenarios)
+### 📋 Pending Deployments (1 scenario)
 
 <details>
 <summary><b>View Pending Scenarios</b></summary>
@@ -62,12 +63,7 @@ sf apex run -f 04-scenario-name/tests/test_scenario.apex -o NewOrg
 #### High Priority
 | # | Scenario | Description | Status |
 |---|----------|-------------|--------|
-| 07 | [sage-api-integration](07-sage-api-integration/) | Sage API authentication fixes | 📋 Ready to deploy |
-
-#### Low Priority
-| # | Scenario | Description |
-|---|----------|-------------|
-| 12 | [smartwaste-integration](12-smartwaste-integration/) | SmartWaste integration analysis |
+| 07 | [sage-api-integration](07-sage-api-integration/) | Sage API OAuth re-authentication | 📋 Configuration only (no code deployment) |
 
 </details>
 

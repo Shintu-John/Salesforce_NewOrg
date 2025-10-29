@@ -1,25 +1,36 @@
 # SmartWaste Integration - NewOrg Configuration Plan
 
-⚠️ **SCENARIO TYPE: CONFIGURATION/ANALYSIS ONLY - NOT A CODE DEPLOYMENT**
+⚠️ **SCENARIO TYPE: CONFIGURATION/ANALYSIS + BUG FIX DEPLOYMENT**
 
 **Configuration Date**: October 22, 2025
+**Bug Fix Deployment**: October 29, 2025
 **Source**: OldOrg (Recycling Lives Service)
 **Target**: NewOrg (Recycling Lives Group)
-**Status**: 📋 Configuration-Only (Code Already Deployed)
+**Status**: ✅ Bug Fix Deployed to Both Orgs | 📋 Configuration Pending
 
 ---
 
-## ⚠️ Important: This is NOT a Deployment Scenario
+## ⚠️ Important: Mixed Scenario Type
+
+### October 29, 2025 Update: Bug Fix Deployed
+
+**Critical Bug Fix**: Incorrect validation logic in `SmartWasteIntegrationBatch` was identified and fixed:
+- **Issue**: Depot Account WCL validation blocking 149 jobs
+- **Fix**: Removed incorrect validation, added missing address validations
+- **Status**: ✅ **DEPLOYED to both OldOrg and NewOrg**
+- **Details**: See [DEPLOYMENT_HISTORY.md](./DEPLOYMENT_HISTORY.md)
+
+### Original Configuration Scenario (Still Pending)
 
 **What This Document Is**:
 - Configuration guide to activate EXISTING SmartWaste Integration in NewOrg
 - Analysis of configuration gaps (inactive flows, missing scheduled jobs)
 - Step-by-step activation procedure
 
-**What This Is NOT**:
-- NOT a code deployment (all 11 Apex classes already exist in NewOrg)
-- NOT a bug fix implementation
-- NOT new feature development
+**What Has Changed**:
+- ✅ Code deployment completed (October 29 bug fix)
+- 📋 Configuration still needed (activate flows, schedule jobs)
+- ✅ All code now consistent between OldOrg and NewOrg
 
 **SmartWaste Integration Code**:
 - Already deployed in NewOrg (all classes present, matching OldOrg)
