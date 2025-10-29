@@ -3,8 +3,25 @@ public class JobDeliveryConfirmationReminderBatchTest {
 
     @isTest
     static void testDailyReportGeneration() {
-        // Create test Account
-        Account testAccount = new Account(Name = 'Test Account');
+        // Get Customer record type for NewOrg lookup filter
+        Id customerRecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName()
+            .get('Customer').getRecordTypeId();
+
+        // Create a valid test depot for NewOrg
+        Depot__c testDepot = new Depot__c(
+            Name = '(TD1) - Test Depot (WEX123456)',
+            Permit_Reference__c = 'WEX123456',  // Required format for validation
+            Valid__c = true,
+            Status_Description__c = 'Active'
+        );
+        insert testDepot;
+
+        // Create test Account with required NewOrg field and record type
+        Account testAccount = new Account(
+            Name = 'Test Account',
+            comp_house__Company_Number__c = '12345678',  // Required in NewOrg
+            RecordTypeId = customerRecordTypeId  // Required by Job__c lookup filter
+        );
         insert testAccount;
 
         // Create test Jobs with various delivery dates (all unconfirmed)
@@ -15,7 +32,8 @@ public class JobDeliveryConfirmationReminderBatchTest {
             Account__c = testAccount.Id,
             Delivery_Date__c = Date.today().addDays(-35),
             Delivery_Confirmed__c = false,
-            Waste_Type_2__c = 'Mixed Municipal Waste'
+            Waste_Type_2__c = 'Mixed Municipal Waste',
+            Depot_Dispose__c = testDepot.Id  // Required to avoid Red Scar/RLL validation
         ));
 
         // High Priority: 8-29 days overdue
@@ -23,7 +41,8 @@ public class JobDeliveryConfirmationReminderBatchTest {
             Account__c = testAccount.Id,
             Delivery_Date__c = Date.today().addDays(-15),
             Delivery_Confirmed__c = false,
-            Waste_Type_2__c = 'Mixed Municipal Waste'
+            Waste_Type_2__c = 'Mixed Municipal Waste',
+            Depot_Dispose__c = testDepot.Id
         ));
 
         // Medium Priority: 4-7 days overdue
@@ -31,7 +50,8 @@ public class JobDeliveryConfirmationReminderBatchTest {
             Account__c = testAccount.Id,
             Delivery_Date__c = Date.today().addDays(-5),
             Delivery_Confirmed__c = false,
-            Waste_Type_2__c = 'Mixed Municipal Waste'
+            Waste_Type_2__c = 'Mixed Municipal Waste',
+            Depot_Dispose__c = testDepot.Id
         ));
 
         // Recent: 1-3 days overdue
@@ -39,7 +59,8 @@ public class JobDeliveryConfirmationReminderBatchTest {
             Account__c = testAccount.Id,
             Delivery_Date__c = Date.today().addDays(-2),
             Delivery_Confirmed__c = false,
-            Waste_Type_2__c = 'Mixed Municipal Waste'
+            Waste_Type_2__c = 'Mixed Municipal Waste',
+            Depot_Dispose__c = testDepot.Id
         ));
 
         insert testJobs;
@@ -81,8 +102,25 @@ public class JobDeliveryConfirmationReminderBatchTest {
 
     @isTest
     static void testNoReportForConfirmedDelivery() {
-        // Create test Account
-        Account testAccount = new Account(Name = 'Test Account');
+        // Get Customer record type for NewOrg lookup filter
+        Id customerRecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName()
+            .get('Customer').getRecordTypeId();
+
+        // Create a valid test depot for NewOrg
+        Depot__c testDepot = new Depot__c(
+            Name = '(TD1) - Test Depot (WEX123456)',
+            Permit_Reference__c = 'WEX123456',  // Required format for validation
+            Valid__c = true,
+            Status_Description__c = 'Active'
+        );
+        insert testDepot;
+
+        // Create test Account with required NewOrg field and record type
+        Account testAccount = new Account(
+            Name = 'Test Account',
+            comp_house__Company_Number__c = '12345678',  // Required in NewOrg
+            RecordTypeId = customerRecordTypeId  // Required by Job__c lookup filter
+        );
         insert testAccount;
 
         // Create test Job with past delivery date AND confirmed
@@ -91,7 +129,8 @@ public class JobDeliveryConfirmationReminderBatchTest {
             Account__c = testAccount.Id,
             Delivery_Date__c = Date.today().addDays(-5),
             Delivery_Confirmed__c = true, // CONFIRMED - should be excluded
-            Waste_Type_2__c = 'Mixed Municipal Waste'
+            Waste_Type_2__c = 'Mixed Municipal Waste',
+            Depot_Dispose__c = testDepot.Id
         );
         insert testJob;
 
@@ -113,8 +152,25 @@ public class JobDeliveryConfirmationReminderBatchTest {
 
     @isTest
     static void testReportWithMultipleJobsInSameCategory() {
-        // Create test Account
-        Account testAccount = new Account(Name = 'Test Account Multi');
+        // Get Customer record type for NewOrg lookup filter
+        Id customerRecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName()
+            .get('Customer').getRecordTypeId();
+
+        // Create a valid test depot for NewOrg
+        Depot__c testDepot = new Depot__c(
+            Name = '(TD1) - Test Depot (WEX123456)',
+            Permit_Reference__c = 'WEX123456',  // Required format for validation
+            Valid__c = true,
+            Status_Description__c = 'Active'
+        );
+        insert testDepot;
+
+        // Create test Account with required NewOrg field and record type
+        Account testAccount = new Account(
+            Name = 'Test Account Multi',
+            comp_house__Company_Number__c = '12345678',  // Required in NewOrg
+            RecordTypeId = customerRecordTypeId  // Required by Job__c lookup filter
+        );
         insert testAccount;
 
         // Create multiple Jobs in the same category (Critical)
@@ -124,7 +180,8 @@ public class JobDeliveryConfirmationReminderBatchTest {
                 Account__c = testAccount.Id,
                 Delivery_Date__c = Date.today().addDays(-40 - i),
                 Delivery_Confirmed__c = false,
-                Waste_Type_2__c = 'Mixed Municipal Waste'
+                Waste_Type_2__c = 'Mixed Municipal Waste',
+                Depot_Dispose__c = testDepot.Id
             ));
         }
         insert testJobs;
