@@ -3,6 +3,7 @@ public class ContentDistributionHelperTest {
     public static testmethod void testContentDistributionHelper(){
         //Create Document Parent Record
         Account acc = new Account(Name='Test Account');
+        acc.comp_house__Company_Number__c = '12345678';  // Required in NewOrg
         Insert acc; 
         
         //Create Document
@@ -16,6 +17,7 @@ public class ContentDistributionHelperTest {
         
         // Create a supplier
         Account supplier = TestFactory.createSupplier('Vendor 1');
+        supplier.comp_house__Company_Number__c = '12345678';  // Required in NewOrg
         insert supplier;
         
         // Create some clients
@@ -90,11 +92,25 @@ public class ContentDistributionHelperTest {
             jobMap.put(jobRec.Id, jobRec);
         }
         update jobMap.values();
+
+        // Call the ContentDistributionHelper to create distributions for job paperwork
+        Test.startTest();
+        ContentDistributionHelper.manageContentDistribution(jobMap);
+        Test.stopTest();
+
+        // Verify ContentDistribution records were created
+        List<ContentDistribution> distributions = [
+            SELECT Id, Name, RelatedRecordId
+            FROM ContentDistribution
+            WHERE RelatedRecordId IN :jobMap.keySet()
+        ];
+        System.assert(distributions.size() > 0, 'Should create ContentDistribution records for job paperwork');
     }
 
     public static testmethod void testInvoiceContentDistributionHelper(){
         // Create test account
         Account acc = new Account(Name='Test Account');
+        acc.comp_house__Company_Number__c = '12345678';  // Required in NewOrg
         insert acc;
 
         // Create a test invoice (Name is auto-number, can't be set)
