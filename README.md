@@ -67,6 +67,12 @@ sf apex run -f 04-scenario-name/tests/test_scenario.apex -o NewOrg
 
 </details>
 
+### 📚 Analysis & Configuration Scenarios
+
+| # | Scenario | Description | Type |
+|---|----------|-------------|------|
+| 35 | [smartwaste-new-site-setup](35-smartwaste-new-site-setup/) | SmartWaste integration configuration for new accounts/sites | 📖 Configuration Guide |
+
 ---
 
 ## 📁 Repository Structure
