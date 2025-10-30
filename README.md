@@ -69,9 +69,17 @@ sf apex run -f 04-scenario-name/tests/test_scenario.apex -o NewOrg
 
 ### 📚 Analysis & Configuration Scenarios
 
+These scenarios document configuration procedures, OAuth authentication, and system analysis without code deployment.
+
 | # | Scenario | Description | Type |
 |---|----------|-------------|------|
-| 35 | [smartwaste-new-site-setup](35-smartwaste-new-site-setup/) | SmartWaste integration configuration for new accounts/sites | 📖 Configuration Guide |
+| 07 | [sage-api-integration](07-sage-api-integration/) | Sage API OAuth re-authentication (60-day cycle) | ⚙️ Configuration |
+| 12 | [smartwaste-integration](12-smartwaste-integration/) | SmartWaste validation configuration + bug fix deployment | ⚙️ Config + Deploy |
+| 17 | [fred-certificate-renewal](17-fred-certificate-renewal/) | FRED integration certificate renewal procedure | 🔐 Certificate Renewal |
+| 22 | [quote-pricing-notification](22-quote-pricing-notification/) | Quote pricing notification email configuration | ⚙️ Configuration |
+| 34 | [waste-vapes-analysis](34-waste-vapes-analysis/) | Waste vapes stream analysis and reference | 📊 Analysis |
+| 35 | [smartwaste-new-site-setup](35-smartwaste-new-site-setup/) | SmartWaste integration configuration for new accounts/sites | 📖 Configuration |
+| 36 | [kam-budget-management](36-kam-budget-management/) | KAM Budget system: object structure, automation, data management | 📖 System Documentation |
 
 ---
 
