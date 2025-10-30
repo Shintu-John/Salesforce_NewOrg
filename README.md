@@ -34,7 +34,8 @@ sf apex run -f 04-scenario-name/tests/test_scenario.apex -o NewOrg
 
 ## 📊 Deployment Progress
 
-**Overall:** 11 of 12 scenarios deployed (92%)
+**Total Scenarios:** 36 (11 deployed, 2 pending, 6 configuration, 17 reference)
+**Deployment Rate:** 11 of 13 code scenarios deployed (85%)
 **Status:** ✅ Active deployment phase
 **Target Org:** NewOrg (Production)
 **Latest:** SmartWaste Validation Fix DEPLOYED - Critical bug fix unblocking 149 jobs (Oct 29)
@@ -57,29 +58,85 @@ sf apex run -f 04-scenario-name/tests/test_scenario.apex -o NewOrg
 
 ### 📋 Pending Deployments (1 scenario)
 
-<details>
-<summary><b>View Pending Scenarios</b></summary>
+| # | Scenario | Description | Priority |
+|---|----------|-------------|----------|
+| 13 | [bam-construct-portal-license](13-bam-construct-portal-license/) | BAM Construct Portal License Visibility | 🟡 Medium |
 
-#### High Priority
+<details>
+<summary><b>View Low Priority / On-Hold Deployments (1 scenario)</b></summary>
+
 | # | Scenario | Description | Status |
 |---|----------|-------------|--------|
-| 07 | [sage-api-integration](07-sage-api-integration/) | Sage API OAuth re-authentication | 📋 Configuration only (no code deployment) |
+| 26 | [rlcs-vendor-invoice-sage](26-rlcs-vendor-invoice-sage/) | RLCS Vendor Invoice - Sage Export Fix | ⏸️ On Hold |
 
 </details>
 
-### 📚 Analysis & Configuration Scenarios
+### 📚 Configuration & System Documentation (7 scenarios)
 
-These scenarios document configuration procedures, OAuth authentication, and system analysis without code deployment.
+These scenarios document configuration procedures, OAuth authentication, certificate management, and system architecture.
 
 | # | Scenario | Description | Type |
 |---|----------|-------------|------|
 | 07 | [sage-api-integration](07-sage-api-integration/) | Sage API OAuth re-authentication (60-day cycle) | ⚙️ Configuration |
-| 12 | [smartwaste-integration](12-smartwaste-integration/) | SmartWaste validation configuration + bug fix deployment | ⚙️ Config + Deploy |
-| 17 | [fred-certificate-renewal](17-fred-certificate-renewal/) | FRED integration certificate renewal procedure | 🔐 Certificate Renewal |
+| 17 | [fred-certificate-renewal](17-fred-certificate-renewal/) | FRED integration certificate renewal procedure | 🔐 Certificate |
 | 22 | [quote-pricing-notification](22-quote-pricing-notification/) | Quote pricing notification email configuration | ⚙️ Configuration |
-| 34 | [waste-vapes-analysis](34-waste-vapes-analysis/) | Waste vapes stream analysis and reference | 📊 Analysis |
-| 35 | [smartwaste-new-site-setup](35-smartwaste-new-site-setup/) | SmartWaste integration configuration for new accounts/sites | 📖 Configuration |
-| 36 | [kam-budget-management](36-kam-budget-management/) | KAM Budget system: object structure, automation, data management | 📖 System Documentation |
+| 33 | [user-lorna-barsby-email](33-user-lorna-barsby-email/) | User email correction procedure | 📝 User Admin |
+| 35 | [smartwaste-new-site-setup](35-smartwaste-new-site-setup/) | SmartWaste integration configuration for new accounts/sites | 📖 Setup Guide |
+| 36 | [kam-budget-management](36-kam-budget-management/) | KAM Budget system: object structure, automation, data management | 📖 System Docs |
+
+### 📖 Reference Documentation & Guides (22 scenarios)
+
+These scenarios document incidents, troubleshooting procedures, user training, and system analysis for reference purposes.
+
+<details>
+<summary><b>View All Reference Scenarios</b></summary>
+
+#### Incident Prevention & Troubleshooting
+| # | Scenario | Description |
+|---|----------|-------------|
+| 14 | [case-reopening-incident](14-case-reopening-incident/) | Case reopening incident prevention guide |
+| 16 | [domestic-customer-email](16-domestic-customer-email/) | Domestic customer email issue prevention |
+| 21 | [producer-portal-troubleshooting](21-producer-portal-troubleshooting/) | Producer Portal troubleshooting guide |
+| 32 | [test-failure-guide](32-test-failure-guide/) | Test failure fix guide and best practices |
+
+#### Data Model & System Analysis
+| # | Scenario | Description |
+|---|----------|-------------|
+| 19 | [orderitem-data-model](19-orderitem-data-model/) | OrderItem data model analysis and reference |
+| 30 | [si13024-rollup](30-si13024-rollup/) | SI13024 rollup issue analysis and resolution |
+| 34 | [waste-vapes-analysis](34-waste-vapes-analysis/) | Waste vapes stream analysis |
+
+#### User Training & Process Documentation
+| # | Scenario | Description |
+|---|----------|-------------|
+| 23 | [quote-to-order-process](23-quote-to-order-process/) | Quote to Order process - user training guide |
+
+#### Dashboard & Reporting Access
+| # | Scenario | Description |
+|---|----------|-------------|
+| 15 | [dashboard-access](15-dashboard-access/) | Dashboard access configuration reference |
+
+#### Integration & External System Reference
+| # | Scenario | Description |
+|---|----------|-------------|
+| 20 | [outlook-email-sync](20-outlook-email-sync/) | Outlook email sync reference |
+| 27 | [sharepoint-file-access](27-sharepoint-file-access/) | SharePoint file access reference |
+| 28 | [sharepoint-file-sync](28-sharepoint-file-sync/) | SharePoint file sync reference |
+
+#### Contact & Supplier Management
+| # | Scenario | Description |
+|---|----------|-------------|
+| 31 | [supplier-contact-access](31-supplier-contact-access/) | Supplier contact access reference |
+
+#### User-Specific Issue Reference
+| # | Scenario | Description |
+|---|----------|-------------|
+| 18 | [nathan-blake-adoc](18-nathan-blake-adoc/) | Nathan Blake ADOC reference |
+| 24 | [rebekah-stewart-quote](24-rebekah-stewart-quote/) | Rebekah Stewart quote reference |
+| 25 | [rebekah-stewart-smartwaste](25-rebekah-stewart-smartwaste/) | Rebekah Stewart SmartWaste reference |
+| 29 | [shn-website-quotes](29-shn-website-quotes/) | SHN website quotes reference |
+
+</details>
 
 ---
 
