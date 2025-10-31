@@ -2,9 +2,9 @@
 
 > **Production deployment repository** for migrating customizations from OldOrg (Recycling Lives Service) to NewOrg (Recycling Lives Group)
 
-[![Deployment Progress](https://img.shields.io/badge/Deployed-13%2F13%20(100%25)-brightgreen)](https://github.com/Shintu-John/Salesforce_NewOrg)
+[![Deployment Progress](https://img.shields.io/badge/Deployed-14%2F14%20(100%25)-brightgreen)](https://github.com/Shintu-John/Salesforce_NewOrg)
 [![Last Deployment](https://img.shields.io/badge/Last%20Deployment-Oct%2031%2C%202025-green)](https://github.com/Shintu-John/Salesforce_NewOrg)
-[![Status](https://img.shields.io/badge/Status-Complete-brightgreen)](https://github.com/Shintu-John/Salesforce_NewOrg)
+[![Status](https://img.shields.io/badge/Status-Active-brightgreen)](https://github.com/Shintu-John/Salesforce_NewOrg)
 
 ---
 
@@ -34,11 +34,11 @@ sf apex run -f 04-scenario-name/tests/test_scenario.apex -o NewOrg
 
 ## 📊 Deployment Progress
 
-**Total Scenarios:** 36 (13 deployed, 0 pending, 6 configuration, 17 reference)
-**Deployment Rate:** 13 of 13 code scenarios deployed (100%)
-**Status:** ✅ All code deployments complete
-**Target Org:** NewOrg (Production)
-**Latest:** All 13 code scenarios verified deployed - Migration project complete (Oct 31)
+**Total Scenarios:** 37 (14 deployed, 0 pending, 7 configuration, 16 reference)
+**Deployment Rate:** 14 of 14 code/data scenarios deployed (100%)
+**Status:** ✅ All deployments complete (migration + ongoing operations)
+**Target Org:** NewOrg (Production) + OldOrg (Bulk Data Updates)
+**Latest:** Scenario 37 - Amey Group pricing bulk update (900 Order Products, OldOrg) - Oct 31
 
 ### ✅ Completed Deployments
 
@@ -57,10 +57,11 @@ sf apex run -f 04-scenario-name/tests/test_scenario.apex -o NewOrg
 | 12 | [smartwaste-integration](12-smartwaste-integration/) | Oct 29 | `0AfSq000003pUqLKAU` | **CRITICAL BUGFIX** - Removed incorrect Depot WCL validation (unblocks 149 jobs) | [📊](12-smartwaste-integration/DEPLOYMENT_HISTORY.md) |
 | 13 | [bam-construct-portal-license](13-bam-construct-portal-license/) | Oct 31 | `0AfSq000003q7fbKAA` | Portal license visibility for 137+ HQ users (compliance) | [📊](13-bam-construct-portal-license/DEPLOYMENT_HISTORY.md) |
 | 26 | [rlcs-vendor-invoice-sage](26-rlcs-vendor-invoice-sage/) | Oct 6 | `0AfSq000003hMunKAE` | **PRE-MIGRATION** - RLCS Sage export (test-first deployment) | [📊](26-rlcs-vendor-invoice-sage/README.md) |
+| 37 | [amey-group-pricing-bulk-update](37-amey-group-pricing-bulk-update/) | Oct 31 | `750Sj00000Ll865IAB` | **BULK DATA** - 900 Order Products pricing update (OldOrg), Nov 2025 rates | [📊](37-amey-group-pricing-bulk-update/DEPLOYMENT_HISTORY.md) |
 
 ### 📋 Pending Deployments (0 scenarios)
 
-**All code deployment scenarios complete!** ✅ **100% migration success!**
+**All code deployment scenarios complete!** ✅ **100% migration + operational updates success!**
 
 ### 📚 Configuration & System Documentation (7 scenarios)
 
