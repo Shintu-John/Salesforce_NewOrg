@@ -3,8 +3,8 @@
 **Created:** 2025-10-31
 **Scenario Type:** 🚀 Deployment (Bulk Data Update)
 **Scenario Number:** 37
-**Target Organizations:** OldOrg & NewOrg (Both require update)
-**Status:** ⏳ In Progress
+**Target Organizations:** OldOrg ✓ | NewOrg ⏳ Pending
+**Status:** ⏳ Ready for OldOrg Update
 
 [![Type](https://img.shields.io/badge/Type-Deployment-blue)](https://github.com/Shintu-John/Salesforce_NewOrg)
 [![Status](https://img.shields.io/badge/Status-In%20Progress-yellow)](https://github.com/Shintu-John/Salesforce_NewOrg)
@@ -13,11 +13,13 @@
 
 ## Executive Summary
 
-**What This Updates:** Bulk pricing update for 900 Order Products across 5 Amey Group accounts
+**What This Updates:** Bulk pricing update for 900 Order Products across 5 Amey Group accounts (OldOrg)
 
 **Business Problem:** Annual pricing review requires updating sales prices, transport charges, and tonnage rates for all Amey Group contracts effective November 1, 2025.
 
-**Solution:** Bulk data update using Data Loader to update OrderItem (Order Product) records in both OldOrg and NewOrg with new pricing rates.
+**Solution:** Bulk data update using Data Loader to update OrderItem (Order Product) records in OldOrg with new pricing rates.
+
+**⚠️ IMPORTANT NOTE:** NewOrg update is **PENDING** - Order Product Numbers differ between orgs. NewOrg requires composite key matching (PO Number + Site + Product) and will be handled in a separate future scenario.
 
 **Business Impact:**
 - Updates pricing for 900 Order Products across 281 Orders
@@ -26,6 +28,42 @@
 - No service disruption - purely data update
 
 **Deployment Timeline:** November 1, 2025 (before month-end billing cycle)
+
+---
+
+## ⚠️ OldOrg vs NewOrg Update Strategy
+
+### Current Status (As of 2025-10-31)
+
+**OldOrg:** ✅ READY FOR UPDATE
+- All 900 Order Products matched successfully
+- CSV files generated and validated
+- Master pricing report sourced from OldOrg
+- Can proceed with bulk update immediately
+
+**NewOrg:** ⏳ PENDING (Future Scenario)
+- Only 265/900 Order Products exist (29.4%)
+- Order Product Numbers **DIFFER** from OldOrg (auto-generated)
+- Excel file Order Product Numbers match OldOrg, not NewOrg
+- Requires **composite key matching** for the 265 that exist
+
+### Why This Approach?
+
+The master pricing report was generated from **OldOrg**, so all Order Product Numbers in the Excel file correspond to OldOrg records. When these same Orders were migrated to NewOrg, Salesforce generated **different** Order Product Numbers.
+
+**Matching Strategy:**
+- **OldOrg:** Use `OrderItemNumber` (direct match) ✅
+- **NewOrg:** Requires composite key (`PO Number` + `Site Name` + `Product Name` + `Waste Type`) ⏳
+
+### Next Steps for NewOrg
+
+1. Wait for more Order Products to be migrated (currently 635 missing)
+2. Create separate scenario with composite key matching logic
+3. Query NewOrg using composite keys to find matching OrderItem IDs
+4. Generate NewOrg-specific CSV with correct IDs
+5. Apply pricing updates
+
+**Estimated Effort:** Medium complexity (composite key matching + validation)
 
 ---
 

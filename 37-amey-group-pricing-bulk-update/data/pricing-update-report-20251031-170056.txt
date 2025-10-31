@@ -1,0 +1,46 @@
+AMEY GROUP PRICING UPDATE - PREPARATION REPORT
+======================================================================
+Generated: 2025-10-31 17:00:56
+Excel Source: /home/john/Projects/Salesforce/Documentation/Amey Group   Master Pricing Report-2025-10-31-12-57-26.xlsx
+
+DATA SUMMARY:
+  Excel Order Products: 900
+  OldOrg Records Found: 900
+  NewOrg: SKIPPED (Order Product Numbers differ)
+
+FIELDS TO UPDATE:
+  Sales_Price__c: 900 records
+  Sales_Transport__c: 35 records
+  Sales_Tonnage_charge_thereafter__c: 235 records
+
+ACCOUNT BREAKDOWN:
+  AMEY RAIL LIMITED: 379 Order Products
+  AMEY OW LIMITED: 289 Order Products
+  Amey Infrastructure Wales Limited: 104 Order Products
+  AMEY LG LIMITED: 80 Order Products
+  Amey Public Services LLP: 48 Order Products
+
+FILES GENERATED:
+  oldorg_backup: /home/john/Projects/Salesforce/deployment-execution/37-amey-group-pricing-bulk-update/data/amey-pricing-backup-oldorg.csv
+  oldorg_update: /home/john/Projects/Salesforce/deployment-execution/37-amey-group-pricing-bulk-update/data/amey-pricing-update-oldorg.csv
+
+NEXT STEPS:
+  1. Review generated CSV files for OldOrg
+  2. Verify backup file contains current pricing
+  3. Execute update in OldOrg
+  4. Run post-update verification queries
+  5. Document results in DEPLOYMENT_HISTORY.md
+  6. NewOrg update: Pending future scenario (requires composite key matching)
+
+DATA LOADER COMMAND:
+  # Update OldOrg:
+  sf data import bulk:upsert --sobject OrderItem \
+    --file /home/john/Projects/Salesforce/deployment-execution/37-amey-group-pricing-bulk-update/data/amey-pricing-update-oldorg.csv \
+    --external-id Id \
+    --target-org OldOrg
+
+NEWORG UPDATE:
+  Status: PENDING
+  Reason: Order Product Numbers differ between orgs
+  Solution: Requires composite key matching (PO + Site + Product)
+  Action: Create separate scenario for NewOrg update

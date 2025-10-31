@@ -67,8 +67,15 @@ def load_excel_data():
         # Filter out any rows with NULL Order Product Number
         valid_df = df[df['Order Product Number'].notna()].copy()
 
+        # Format Order Product Numbers with leading zeros to match Salesforce format
+        # Salesforce uses 10-digit format: 0000060338
+        valid_df['Order Product Number'] = valid_df['Order Product Number'].apply(
+            lambda x: str(int(x)).zfill(10) if pd.notna(x) else None
+        )
+
         print(f"✓ Valid Order Products: {len(valid_df)}")
         print(f"✓ Expected: 900 Order Products")
+        print(f"✓ Sample Order Product Number: {valid_df['Order Product Number'].iloc[0]} (formatted with leading zeros)")
 
         if len(valid_df) != 900:
             print(f"\n⚠️  WARNING: Expected 900 records, found {len(valid_df)}")
@@ -84,90 +91,106 @@ def query_salesforce_org(org_alias, order_product_numbers):
     """Query Salesforce org for OrderItem records"""
     print(f"\n  Querying {org_alias}...")
 
-    # Build SOQL query with IN clause for Order Product Numbers
-    order_product_list = "','".join([str(num) for num in order_product_numbers])
+    # Split into batches (SOQL IN clause has limits, use batches of 200)
+    BATCH_SIZE = 200
+    all_records = []
 
-    query = f"""
-    SELECT Id, Name, Sales_Price__c, Sales_Transport__c,
-           Sales_Tonnage_charge_thereafter__c, Order.Account.Name
-    FROM OrderItem
-    WHERE Name IN ('{order_product_list}')
-    """
+    for i in range(0, len(order_product_numbers), BATCH_SIZE):
+        batch = order_product_numbers[i:i+BATCH_SIZE]
+        order_product_list = "','".join([str(num) for num in batch])
 
-    try:
-        # Execute query using sf CLI
-        result = subprocess.run(
-            ['sf', 'data', 'query', '--query', query, '--target-org', org_alias, '--json'],
-            capture_output=True,
-            text=True,
-            timeout=120
-        )
+        query = f"""
+        SELECT Id, OrderItemNumber, Sales_Price__c, Sales_Transport__c,
+               Sales_Tonnage_charge_thereafter__c, Order.Account.Name
+        FROM OrderItem
+        WHERE OrderItemNumber IN ('{order_product_list}')
+        """
 
-        if result.returncode != 0:
-            print(f"  ❌ ERROR querying {org_alias}: {result.stderr}")
+        print(f"    Batch {i//BATCH_SIZE + 1}/{(len(order_product_numbers)-1)//BATCH_SIZE + 1} ({len(batch)} records)...", end=' ')
+
+        try:
+            # Execute query using sf CLI
+            result = subprocess.run(
+                ['sf', 'data', 'query', '--query', query, '--target-org', org_alias, '--json'],
+                capture_output=True,
+                text=True,
+                timeout=120
+            )
+
+            # Check if return code indicates actual error (not just warnings)
+            # sf CLI returns 0 even with warnings, so we check stdout for valid JSON
+            if result.returncode != 0:
+                print(f"❌ ERROR")
+                print(f"       stderr: {result.stderr}")
+                print(f"       stdout: {result.stdout}")
+                return None
+
+            # Parse JSON response (warnings go to stderr but don't affect stdout JSON)
+            try:
+                data = json.loads(result.stdout)
+            except json.JSONDecodeError as e:
+                print(f"❌ ERROR: Failed to parse JSON")
+                print(f"       stdout: {result.stdout}")
+                return None
+
+            if data['status'] != 0:
+                print(f"❌ ERROR: Query failed with status {data['status']}")
+                return None
+
+            batch_records = data['result']['records']
+            all_records.extend(batch_records)
+            print(f"✓ {len(batch_records)} found")
+
+        except subprocess.TimeoutExpired:
+            print(f"❌ ERROR: Query timed out")
+            return None
+        except Exception as e:
+            print(f"❌ ERROR: {e}")
             return None
 
-        # Parse JSON response
-        data = json.loads(result.stdout)
+    print(f"  ✓ Total: {len(all_records)} records retrieved from {org_alias}")
 
-        if data['status'] != 0:
-            print(f"  ❌ ERROR: Query failed with status {data['status']}")
-            return None
+    # Convert to DataFrame
+    df = pd.DataFrame(all_records)
 
-        records = data['result']['records']
+    # Remove 'attributes' column if it exists
+    if 'attributes' in df.columns:
+        df = df.drop('attributes', axis=1)
 
-        print(f"  ✓ Found {len(records)} records in {org_alias}")
-
-        # Convert to DataFrame
-        df = pd.DataFrame(records)
-
-        # Remove 'attributes' column if it exists
-        if 'attributes' in df.columns:
-            df = df.drop('attributes', axis=1)
-
-        return df
-
-    except subprocess.TimeoutExpired:
-        print(f"  ❌ ERROR: Query timed out for {org_alias}")
-        return None
-    except Exception as e:
-        print(f"  ❌ ERROR querying {org_alias}: {e}")
-        return None
+    return df
 
 
 def fetch_current_pricing(excel_df):
-    """Fetch current pricing from both OldOrg and NewOrg"""
-    print_section("STEP 2: Fetching Current Pricing from Salesforce")
+    """Fetch current pricing from OldOrg only"""
+    print_section("STEP 2: Fetching Current Pricing from Salesforce (OldOrg Only)")
 
     order_product_numbers = excel_df['Order Product Number'].tolist()
 
-    print(f"Querying for {len(order_product_numbers)} Order Products...")
+    print(f"Querying for {len(order_product_numbers)} Order Products in OldOrg...")
+    print("\n⚠️  NOTE: NewOrg update skipped - Order Product Numbers differ between orgs")
+    print("   NewOrg update will require composite key matching (future scenario)\n")
 
-    # Query both orgs
+    # Query OldOrg only
     oldorg_df = query_salesforce_org(OLDORG_ALIAS, order_product_numbers)
-    neworg_df = query_salesforce_org(NEWORG_ALIAS, order_product_numbers)
 
-    if oldorg_df is None or neworg_df is None:
-        print("\n❌ ERROR: Failed to fetch data from one or both orgs")
+    if oldorg_df is None:
+        print("\n❌ ERROR: Failed to fetch data from OldOrg")
         sys.exit(1)
 
     print(f"\n✓ OldOrg: {len(oldorg_df)} records retrieved")
-    print(f"✓ NewOrg: {len(neworg_df)} records retrieved")
 
-    return oldorg_df, neworg_df
+    return oldorg_df
 
 
-def validate_data(excel_df, oldorg_df, neworg_df):
-    """Validate that all Order Products exist in both orgs"""
-    print_section("STEP 3: Validating Data")
+def validate_data(excel_df, oldorg_df):
+    """Validate that all Order Products exist in OldOrg"""
+    print_section("STEP 3: Validating Data (OldOrg Only)")
 
     excel_products = set(excel_df['Order Product Number'].astype(str))
-    oldorg_products = set(oldorg_df['Name'].astype(str))
-    neworg_products = set(neworg_df['Name'].astype(str))
+    oldorg_products = set(oldorg_df['OrderItemNumber'].astype(str))
 
     print(f"Excel Order Products: {len(excel_products)}")
     print(f"OldOrg Order Products: {len(oldorg_products)}")
-    print(f"NewOrg Order Products: {len(neworg_products)}")
 
     # Check for missing in OldOrg
     missing_oldorg = excel_products - oldorg_products
@@ -178,45 +201,32 @@ def validate_data(excel_df, oldorg_df, neworg_df):
         if len(missing_oldorg) > 10:
             print(f"    ... and {len(missing_oldorg) - 10} more")
 
-    # Check for missing in NewOrg
-    missing_neworg = excel_products - neworg_products
-    if missing_neworg:
-        print(f"\n⚠️  WARNING: {len(missing_neworg)} Order Products NOT FOUND in NewOrg:")
-        for op in list(missing_neworg)[:10]:  # Show first 10
-            print(f"    - {op}")
-        if len(missing_neworg) > 10:
-            print(f"    ... and {len(missing_neworg) - 10} more")
-
     # Check for extra in Salesforce (shouldn't happen)
     extra_oldorg = oldorg_products - excel_products
-    extra_neworg = neworg_products - excel_products
 
     if extra_oldorg:
         print(f"\n⚠️  WARNING: {len(extra_oldorg)} extra Order Products in OldOrg (not in Excel)")
 
-    if extra_neworg:
-        print(f"\n⚠️  WARNING: {len(extra_neworg)} extra Order Products in NewOrg (not in Excel)")
-
     # Summary
     matched_oldorg = len(excel_products & oldorg_products)
-    matched_neworg = len(excel_products & neworg_products)
 
     print(f"\n{'─'*70}")
     print(f"VALIDATION SUMMARY:")
     print(f"  OldOrg: {matched_oldorg}/{len(excel_products)} matched ({matched_oldorg/len(excel_products)*100:.1f}%)")
-    print(f"  NewOrg: {matched_neworg}/{len(excel_products)} matched ({matched_neworg/len(excel_products)*100:.1f}%)")
     print(f"{'─'*70}")
 
-    if matched_oldorg < len(excel_products) or matched_neworg < len(excel_products):
-        print("\n⚠️  WARNING: Not all Order Products found in both orgs!")
-        response = input("Continue anyway? (yes/no): ")
-        if response.lower() != 'yes':
-            print("Aborted by user")
-            sys.exit(0)
+    if matched_oldorg < len(excel_products):
+        print(f"\n⚠️  WARNING: {len(missing_oldorg)} Order Products missing in OldOrg")
+        print("    This is unexpected - all Order Products should exist in OldOrg!")
+        print("    Aborting...")
+        sys.exit(1)
     else:
-        print("\n✓ All Order Products validated successfully!")
+        print("\n✓ All Order Products validated successfully in OldOrg!")
 
-    return missing_oldorg, missing_neworg
+    print(f"\n✓ Will generate CSV files:")
+    print(f"  - OldOrg: {matched_oldorg} records")
+
+    return missing_oldorg
 
 
 def create_update_csv(excel_df, salesforce_df, org_alias):
@@ -226,7 +236,7 @@ def create_update_csv(excel_df, salesforce_df, org_alias):
     # Merge Excel data with Salesforce IDs
     merged_df = salesforce_df.merge(
         excel_df,
-        left_on='Name',
+        left_on='OrderItemNumber',
         right_on='Order Product Number',
         how='inner'
     )
@@ -261,7 +271,7 @@ def create_backup_csv(salesforce_df, org_alias):
     print(f"\n  Creating backup CSV for {org_alias}...")
 
     # Select relevant fields
-    backup_df = salesforce_df[['Id', 'Name', 'Sales_Price__c',
+    backup_df = salesforce_df[['Id', 'OrderItemNumber', 'Sales_Price__c',
                                 'Sales_Transport__c',
                                 'Sales_Tonnage_charge_thereafter__c']].copy()
 
@@ -275,44 +285,38 @@ def create_backup_csv(salesforce_df, org_alias):
     return csv_filename
 
 
-def generate_csvs(excel_df, oldorg_df, neworg_df):
-    """Generate all CSV files for update and backup"""
-    print_section("STEP 4: Generating CSV Files")
+def generate_csvs(excel_df, oldorg_df):
+    """Generate CSV files for OldOrg only"""
+    print_section("STEP 4: Generating CSV Files (OldOrg Only)")
 
     # Ensure data directory exists
     DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-    # Create backup CSVs
-    print("Creating backup files...")
+    # Create backup CSV
+    print("Creating backup file...")
     oldorg_backup = create_backup_csv(oldorg_df, OLDORG_ALIAS)
-    neworg_backup = create_backup_csv(neworg_df, NEWORG_ALIAS)
 
-    # Create update CSVs
-    print("\nCreating update files...")
+    # Create update CSV
+    print("\nCreating update file...")
     oldorg_update = create_update_csv(excel_df, oldorg_df, OLDORG_ALIAS)
-    neworg_update = create_update_csv(excel_df, neworg_df, NEWORG_ALIAS)
 
     print(f"\n{'─'*70}")
-    print("CSV FILES GENERATED:")
-    print(f"  Backup Files:")
+    print("CSV FILES GENERATED (OldOrg Only):")
+    print(f"  Backup File:")
     print(f"    - {oldorg_backup}")
-    print(f"    - {neworg_backup}")
-    print(f"  Update Files:")
+    print(f"  Update File:")
     print(f"    - {oldorg_update}")
-    print(f"    - {neworg_update}")
     print(f"{'─'*70}")
 
     return {
         'oldorg_backup': oldorg_backup,
-        'neworg_backup': neworg_backup,
-        'oldorg_update': oldorg_update,
-        'neworg_update': neworg_update
+        'oldorg_update': oldorg_update
     }
 
 
-def generate_summary_report(excel_df, oldorg_df, neworg_df, csv_files):
+def generate_summary_report(excel_df, oldorg_df, csv_files):
     """Generate summary report"""
-    print_section("STEP 5: Summary Report")
+    print_section("STEP 5: Summary Report (OldOrg Only)")
 
     report_file = DATA_DIR / f"pricing-update-report-{datetime.now().strftime('%Y%m%d-%H%M%S')}.txt"
 
@@ -325,7 +329,7 @@ def generate_summary_report(excel_df, oldorg_df, neworg_df, csv_files):
         f.write("DATA SUMMARY:\n")
         f.write(f"  Excel Order Products: {len(excel_df)}\n")
         f.write(f"  OldOrg Records Found: {len(oldorg_df)}\n")
-        f.write(f"  NewOrg Records Found: {len(neworg_df)}\n\n")
+        f.write(f"  NewOrg: SKIPPED (Order Product Numbers differ)\n\n")
 
         f.write("FIELDS TO UPDATE:\n")
         for sf_field, excel_col in FIELDS_TO_UPDATE.items():
@@ -343,25 +347,25 @@ def generate_summary_report(excel_df, oldorg_df, neworg_df, csv_files):
             f.write(f"  {key}: {filepath}\n")
 
         f.write("\nNEXT STEPS:\n")
-        f.write("  1. Review generated CSV files\n")
-        f.write("  2. Verify backup files contain current pricing\n")
-        f.write("  3. Test update in OldOrg first\n")
-        f.write("  4. After OldOrg verification, update NewOrg\n")
-        f.write("  5. Run post-update verification queries\n")
-        f.write("  6. Document results in DEPLOYMENT_HISTORY.md\n")
+        f.write("  1. Review generated CSV files for OldOrg\n")
+        f.write("  2. Verify backup file contains current pricing\n")
+        f.write("  3. Execute update in OldOrg\n")
+        f.write("  4. Run post-update verification queries\n")
+        f.write("  5. Document results in DEPLOYMENT_HISTORY.md\n")
+        f.write("  6. NewOrg update: Pending future scenario (requires composite key matching)\n")
 
-        f.write("\nDATA LOADER COMMANDS:\n")
+        f.write("\nDATA LOADER COMMAND:\n")
         f.write(f"  # Update OldOrg:\n")
         f.write(f"  sf data import bulk:upsert --sobject OrderItem \\\n")
         f.write(f"    --file {csv_files['oldorg_update']} \\\n")
         f.write(f"    --external-id Id \\\n")
         f.write(f"    --target-org {OLDORG_ALIAS}\n\n")
 
-        f.write(f"  # Update NewOrg:\n")
-        f.write(f"  sf data import bulk:upsert --sobject OrderItem \\\n")
-        f.write(f"    --file {csv_files['neworg_update']} \\\n")
-        f.write(f"    --external-id Id \\\n")
-        f.write(f"    --target-org {NEWORG_ALIAS}\n")
+        f.write(f"NEWORG UPDATE:\n")
+        f.write(f"  Status: PENDING\n")
+        f.write(f"  Reason: Order Product Numbers differ between orgs\n")
+        f.write(f"  Solution: Requires composite key matching (PO + Site + Product)\n")
+        f.write(f"  Action: Create separate scenario for NewOrg update\n")
 
     print(f"✓ Summary report saved: {report_file}")
 
@@ -382,21 +386,21 @@ def main():
         # Step 1: Load Excel
         excel_df = load_excel_data()
 
-        # Step 2: Fetch current pricing
-        oldorg_df, neworg_df = fetch_current_pricing(excel_df)
+        # Step 2: Fetch current pricing (OldOrg only)
+        oldorg_df = fetch_current_pricing(excel_df)
 
-        # Step 3: Validate
-        validate_data(excel_df, oldorg_df, neworg_df)
+        # Step 3: Validate (OldOrg only)
+        validate_data(excel_df, oldorg_df)
 
-        # Step 4: Generate CSVs
-        csv_files = generate_csvs(excel_df, oldorg_df, neworg_df)
+        # Step 4: Generate CSVs (OldOrg only)
+        csv_files = generate_csvs(excel_df, oldorg_df)
 
         # Step 5: Summary report
-        generate_summary_report(excel_df, oldorg_df, neworg_df, csv_files)
+        generate_summary_report(excel_df, oldorg_df, csv_files)
 
-        print_section("✓ DATA PREPARATION COMPLETE")
-        print("Review the generated files and proceed with the update when ready.")
-        print("\nIMPORTANT: Test in OldOrg first, then update NewOrg after verification!")
+        print_section("✓ DATA PREPARATION COMPLETE (OldOrg Only)")
+        print("Review the generated files and proceed with the OldOrg update when ready.")
+        print("\n⚠️  IMPORTANT: NewOrg update pending - requires separate scenario with composite key matching")
 
     except KeyboardInterrupt:
         print("\n\n❌ Interrupted by user")
